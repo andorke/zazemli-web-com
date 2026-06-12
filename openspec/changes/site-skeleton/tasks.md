@@ -2,10 +2,10 @@
 
 ## 1. Scaffold проекта
 
-- [ ] 1.1 `create-next-app` (TS strict, App Router, `src/`, Tailwind) в корне репо; `next.config`: `output: 'export'`, `images.unoptimized: true`
-- [ ] 1.2 Инициализировать shadcn/ui (style: new-york, baseColor по теме); добавить примитивы button, sheet
-- [ ] 1.3 Настроить Vitest + React Testing Library и Playwright (конфиги, npm-скрипты `test`, `test:e2e`); smoke-тест «дев-сервер отдаёт /»
-- [ ] 1.4 ESLint + Prettier + prettier-plugin-tailwindcss; `npm run lint` зелёный
+- [x] 1.1 `create-next-app` (TS strict, App Router, `src/`, Tailwind) в корне репо; `next.config`: `output: 'export'`, `images.unoptimized: true`
+- [x] 1.2 Инициализировать shadcn/ui (style: new-york, baseColor по теме); добавить примитивы button, sheet
+- [x] 1.3 Настроить Vitest + React Testing Library и Playwright (конфиги, npm-скрипты `test`, `test:e2e`); smoke-тест «дев-сервер отдаёт /»
+- [x] 1.4 ESLint + Prettier + prettier-plugin-tailwindcss; `npm run lint` зелёный
 
 ## 2. Дизайн-система
 

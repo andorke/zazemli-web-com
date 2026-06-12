@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+docs
+example_docs
+openspec
+my_tasks
+coverage
+playwright-report
+test-results
+*.md
