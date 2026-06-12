@@ -16,9 +16,9 @@
 
 ## 3. Контент-слой
 
-- [ ] 3.1 TDD: типы (`Sku`, `NavItem`, `FooterInfo`) + `content/sku.ts` (7 SKU: N°001–007, имя, латынь, sku-цвет) — тест «SKU ровно 7, номера уникальны»
-- [ ] 3.2 TDD: `content/site.ts` (меню 3 пункта, футер: реквизиты-плейсхолдер ИП, дисклеймер дословно, контакты, QR-список без diary, `ozonStoreUrl: null`) — тесты «diary-signup отсутствует в меню/футере», «дисклеймер точный»
-- [ ] 3.3 TDD: `lib/utm.ts` (`buildOzonUrl`: `utm_source=site`, опц. `utm_content=sku00X`) — тесты на URL с/без существующих query-параметров
+- [x] 3.1 TDD: типы (`Sku`, `NavItem`, `FooterInfo`) + `content/sku.ts` (7 SKU: N°001–007, имя, латынь, sku-цвет) — тест «SKU ровно 7, номера уникальны»
+- [x] 3.2 TDD: `content/site.ts` (меню 3 пункта, футер: реквизиты-плейсхолдер ИП, дисклеймер дословно, контакты, QR-список без diary, `ozonStoreUrl: null`) — тесты «diary-signup отсутствует в меню/футере», «дисклеймер точный»
+- [x] 3.3 TDD: `lib/utm.ts` (`buildOzonUrl`: `utm_source=site`, опц. `utm_content=sku00X`) — тесты на URL с/без существующих query-параметров
 
 ## 4. Каркас сайта
 
