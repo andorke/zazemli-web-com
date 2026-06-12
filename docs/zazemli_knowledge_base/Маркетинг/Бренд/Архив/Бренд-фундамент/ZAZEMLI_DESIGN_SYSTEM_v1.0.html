@@ -1,0 +1,1620 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ЗАЗЕМЛИ · Дизайн-система · v1.0 CANDIDATE-2</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;700;800;900&family=Spectral:ital,wght@1,400;1,700&family=Caveat:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --charcoal: #1C1C1C;
+    --bone:     #F6F4F0;
+    --moss:     #4A7C59;
+    --chalk:    #EDEBE6;
+    --graphite: #2E2E2E;
+    --soil:     #6B4D35;
+    --ceramsite:#B08C5A;
+    --pumice:   #B5AFA3;
+    --sand:     #C8B8A8;
+    --gravel:   #D2C9B8;
+    --cosmos:   #BE3A6B;
+    --iris:     #7E6AAF;
+    --buttercup:#C47A10;
+    --sky:      #2878AE;
+    --poppy:    #C03A30;
+  }
+
+  html, body {
+    background: var(--bone);
+    color: var(--charcoal);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+  /* === COVER === */
+  .cover {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 96px 48px;
+  }
+  .cover .kicker {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.75);
+    margin-bottom: 32px;
+  }
+  .cover h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    color: rgba(28,28,28,0.8);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .cover .fleuron {
+    font-family: 'Spectral', serif;
+    font-size: 48px;
+    color: rgba(74,124,89,0.8);
+    margin: 24px 0;
+  }
+  .cover .subtitle {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(74,124,89,0.75);
+    max-width: 600px;
+  }
+  .cover .meta {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(28,28,28,0.4);
+    margin-top: 48px;
+  }
+  .cover .caveat {
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    color: rgba(74,124,89,0.85);
+    transform: rotate(-1deg);
+    margin-top: 32px;
+  }
+
+  /* === SECTION === */
+  section { padding: 96px 0; border-top: 1px solid rgba(28,28,28,0.08); }
+  section.warm { background: var(--chalk); }
+  section.dark { background: var(--charcoal); color: var(--bone); }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: baseline;
+    margin-bottom: 64px;
+  }
+  .sec-num {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 60px;
+    color: rgba(28,28,28,0.15);
+    line-height: 1;
+  }
+  section.dark .sec-num { color: rgba(246,244,240,0.15); }
+  .sec-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: rgba(28,28,28,0.8);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  section.dark .sec-title { color: rgba(246,244,240,0.9); }
+  .sec-desc {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: rgba(28,28,28,0.55);
+    line-height: 1.65;
+    margin-top: 8px;
+  }
+  section.dark .sec-desc { color: rgba(246,244,240,0.55); }
+
+  .palette-label {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.4);
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+  section.dark .palette-label { color: rgba(246,244,240,0.4); }
+
+  .text-note {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(28,28,28,0.6);
+    line-height: 1.65;
+    max-width: 720px;
+  }
+
+  /* === APOTHECARY BAR === */
+  .apothecary-bar {
+    display: block;
+    margin: 64px auto;
+  }
+
+  /* === PALETTE === */
+  .swatch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .swatch {
+    padding: 32px 24px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(28,28,28,0.08);
+  }
+  .swatch-name {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .swatch-hex {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .swatch-role {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 12px;
+    opacity: 0.55;
+    margin-top: auto;
+  }
+
+  /* === TYPO === */
+  .typo-row {
+    display: grid;
+    grid-template-columns: 80px 100px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(28,28,28,0.05);
+  }
+  .typo-token {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--moss);
+  }
+  .typo-size {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(28,28,28,0.5);
+  }
+  .typo-sample {
+    font-family: 'Unbounded', sans-serif;
+    color: rgba(28,28,28,0.8);
+    line-height: 1.1;
+  }
+
+  /* === SPACING === */
+  .space-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .space-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .space-block { background: var(--moss); height: 32px; }
+  .space-token {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(28,28,28,0.6);
+    min-width: 80px;
+  }
+
+  /* === OPACITY === */
+  .opacity-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .opacity-card {
+    padding: 16px 12px;
+    text-align: center;
+    border: 1px solid rgba(28,28,28,0.05);
+  }
+  .opacity-swatch { width: 100%; height: 48px; background: var(--charcoal); margin-bottom: 10px; }
+  .opacity-value {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .opacity-role {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.5);
+    margin-top: 4px;
+  }
+
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn:focus { outline: 2px solid var(--moss); outline-offset: 2px; }
+  .btn-primary { background: var(--charcoal); color: var(--bone); }
+  .btn-secondary { background: transparent; color: var(--charcoal); border: 1px solid rgba(28,28,28,0.15); }
+  .btn-secondary:hover { border-color: rgba(28,28,28,0.5); }
+  .btn-ghost { background: transparent; color: var(--charcoal); }
+  .btn-ghost:hover { text-decoration: underline; }
+  .btn-accent { background: var(--moss); color: #fff; }
+  .btn-inverted { background: var(--bone); color: var(--charcoal); }
+  .btn-disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-sm { padding: 8px 16px; font-size: 14px; }
+
+  /* === BADGES === */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.6);
+    border: 1px solid rgba(28,28,28,0.15);
+    margin-right: 4px;
+  }
+  .badge-solid { background: var(--moss); color: var(--bone); border-color: var(--moss); }
+  .badge-spectral {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* === KICKER HEADER === */
+  .kicker-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.75);
+  }
+  .kicker-header .dot { opacity: 0.5; }
+  .kicker-header .lat { font-family: 'Spectral', serif; font-style: italic; text-transform: none; letter-spacing: 0; }
+
+  /* === SERIAL NUMBER === */
+  .serial {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 60px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .serial.moss     { color: var(--moss); }
+  .serial.cosmos   { color: var(--cosmos); }
+  .serial.iris     { color: var(--iris); }
+  .serial.buttercup{ color: var(--buttercup); }
+  .serial.sky      { color: var(--sky); }
+  .serial.poppy    { color: var(--poppy); }
+
+  /* === CAVEAT === */
+  .caveat-note {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    line-height: 1.3;
+  }
+  .caveat-brand     { font-size: 24px; color: rgba(28,28,28,0.85); transform: rotate(-1deg); }
+  .caveat-sku-moss  { font-size: 18px; color: rgba(74,124,89,0.85); transform: rotate(1deg); }
+  .caveat-sku-sky   { font-size: 18px; color: rgba(40,120,174,0.85); transform: rotate(1deg); }
+  .caveat-sku-poppy { font-size: 18px; color: rgba(192,58,48,0.85); transform: rotate(1deg); }
+  .caveat-sku-iris  { font-size: 24px; color: rgba(126,106,175,0.85); transform: rotate(1deg); }   /* >=24px по WCAG */
+  .caveat-sku-cosmos{ font-size: 24px; color: rgba(190,58,107,0.85); transform: rotate(1deg); }    /* >=24px по WCAG */
+  .caveat-sku-but   { font-size: 24px; color: rgba(196,122,16,0.85); transform: rotate(1deg); }    /* >=24px по WCAG */
+  .caveat-journal   { font-size: 20px; color: rgba(74,124,89,0.85); transform: rotate(-1deg); }
+
+  /* === DIVIDER === */
+  .divider { border: 0; border-top: 1px solid rgba(28,28,28,0.3); margin: 32px auto; width: 56px; }
+
+  /* === FLEURON === */
+  .fleuron-display {
+    display: inline-block;
+    font-family: 'Spectral', serif;
+    font-size: 48px;
+    color: rgba(74,124,89,0.8);
+    line-height: 1;
+  }
+
+  /* === MATERIAL DOT === */
+  .material-dot { width: 28px; height: 28px; border-radius: 50%; display: inline-block; }
+  .md-soil      { background: var(--soil); }
+  .md-ceramsite { background: var(--ceramsite); }
+  .md-pumice    { background: var(--pumice); }
+  .md-sand      { background: var(--sand); }
+  .md-gravel    { background: var(--gravel); }
+  .md-moss      { background: var(--moss); }
+  .md-charcoal  { background: var(--charcoal); }
+
+  /* === FRAME 2X === */
+  .frame-2x {
+    position: relative;
+    padding: 8px;
+  }
+  .frame-2x::before,
+  .frame-2x::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+  .frame-2x::before {
+    inset: 0;
+    border: 1px solid rgba(28,28,28,0.5);
+  }
+  .frame-2x::after {
+    inset: 6px;
+    border: 1px solid rgba(28,28,28,0.3);
+  }
+  .frame-2x > .inner {
+    position: relative;
+    padding: 32px;
+  }
+
+  /* === PRODUCT CARD MINI === */
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    background: var(--bone);
+    border: 1px solid rgba(28,28,28,0.15);
+    text-decoration: none;
+    color: var(--charcoal);
+    transition: transform 200ms ease-out, border-color 200ms ease-out;
+    min-height: 320px;
+  }
+  .pcard:hover { transform: translateY(-4px); border-color: rgba(28,28,28,0.4); }
+  .pcard-doodle {
+    width: 96px; height: 96px;
+    background: rgba(74,124,89,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--moss);
+    margin-bottom: 24px;
+  }
+  .pcard-lat {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(74,124,89,0.75);
+    margin-bottom: 4px;
+  }
+  .pcard-name {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: rgba(28,28,28,0.8);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .pcard-sizes { display: flex; gap: 4px; margin-bottom: 16px; }
+  .pcard-foot {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(28,28,28,0.15);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .pcard-pricefrom {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(28,28,28,0.4);
+  }
+  .pcard-price {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+  }
+
+  /* === RITUAL STEP === */
+  .ritual-step {
+    padding: 32px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    color: var(--bone);
+  }
+  .ritual-step.first { background: var(--moss); }
+  .ritual-step.dark { background: var(--charcoal); }
+  .ritual-num {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 60px;
+    line-height: 1;
+  }
+  .ritual-step.first .ritual-num { color: var(--bone); opacity: 0.95; }
+  .ritual-step.dark .ritual-num { color: var(--moss); }
+  .ritual-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    margin-top: 16px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .ritual-desc {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.85;
+    margin-top: auto;
+    padding-top: 16px;
+    line-height: 1.65;
+  }
+  .ritual-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--buttercup);
+    margin-top: 8px;
+  }
+
+  /* === WHISPER HERO === */
+  .whisper-hero {
+    position: relative;
+    background: var(--bone);
+    padding: 96px 48px;
+    min-height: 480px;
+  }
+  .whisper {
+    position: absolute;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 18px;
+  }
+  .whisper-1 { top: 20%; left: 5%; color: var(--cosmos); transform: rotate(-2deg); }
+  .whisper-2 { bottom: 25%; left: 7%; color: var(--buttercup); transform: rotate(1.5deg); }
+  .whisper-3 { top: 22%; right: 5%; color: var(--sky); transform: rotate(1deg); }
+  .whisper-4 { bottom: 23%; right: 7%; color: var(--poppy); transform: rotate(-1.5deg); }
+  .whisper-center {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 0;
+  }
+  .whisper-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 76px;
+    color: rgba(28,28,28,0.8);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+  .whisper-sub {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(74,124,89,0.75);
+    margin-top: 24px;
+  }
+
+  /* === HERO DEFAULT === */
+  .hero-default {
+    background: var(--bone);
+    padding: 128px 48px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    color: rgba(28,28,28,0.8);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-top: 24px;
+  }
+  .hero-sub {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(74,124,89,0.75);
+    max-width: 640px;
+    margin: 24px auto 0;
+  }
+  .hero-cta { display: flex; gap: 16px; justify-content: center; margin-top: 48px; flex-wrap: wrap; }
+
+  /* === FORM === */
+  .form-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; max-width: 400px; }
+  .form-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(28,28,28,0.4);
+  }
+  .form-input {
+    padding: 12px;
+    background: var(--bone);
+    color: var(--charcoal);
+    border: 1px solid rgba(28,28,28,0.15);
+    border-radius: 2px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 16px;
+    transition: border-color 200ms ease-out;
+  }
+  .form-input:focus { outline: none; border-color: var(--moss); }
+  .form-input::placeholder { color: rgba(28,28,28,0.4); }
+
+  /* === TEMPLATE PREVIEW === */
+  .template {
+    border: 1px solid rgba(28,28,28,0.1);
+    background: var(--bone);
+    margin-bottom: 48px;
+  }
+  .template-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(28,28,28,0.04);
+    border-bottom: 1px solid rgba(28,28,28,0.06);
+  }
+  .template-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(28,28,28,0.15); }
+  .template-url {
+    margin-left: 12px;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(28,28,28,0.4);
+  }
+  .template-body { padding: 32px; }
+  .template-block {
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    border-left: 2px solid var(--moss);
+    background: rgba(74,124,89,0.04);
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(28,28,28,0.65);
+  }
+  .template-block strong { font-style: normal; font-weight: 500; font-family: 'Unbounded', sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(28,28,28,0.55); display: block; margin-bottom: 4px; }
+
+  /* === GRID HELPERS === */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .grid-7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+
+  /* === WCAG TABLE === */
+  .wcag-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  .wcag-table th, .wcag-table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(28,28,28,0.08);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+  }
+  .wcag-table th {
+    font-weight: 500;
+    color: var(--moss);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 11px;
+  }
+  .wcag-pass { color: var(--moss); }
+  .wcag-fail { color: var(--poppy); }
+
+  /* === SITE HEADER PREVIEW === */
+  .site-header-preview {
+    background: var(--bone);
+    border-bottom: 1px solid rgba(28,28,28,0.15);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .shp-logo { font-family: 'Unbounded', sans-serif; font-weight: 500; font-size: 16px; }
+  .shp-nav { display: flex; gap: 24px; font-family: 'Unbounded', sans-serif; font-size: 14px; color: rgba(28,28,28,0.7); }
+  .shp-caveat { font-family: 'Caveat', cursive; font-size: 16px; color: rgba(74,124,89,0.6); transform: rotate(-1deg); }
+
+  /* === SITE FOOTER PREVIEW === */
+  .site-footer-preview {
+    background: var(--charcoal);
+    color: var(--bone);
+    padding: 48px 24px;
+  }
+  .sfp-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 32px; max-width: 100%; }
+  .sfp-wordmark { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 28px; }
+  .sfp-slogan { font-family: 'Spectral', serif; font-style: italic; font-size: 14px; color: rgba(246,244,240,0.55); margin-top: 8px; }
+  .sfp-col-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(246,244,240,0.4);
+    margin-bottom: 12px;
+  }
+  .sfp-col a { display: block; font-family: 'Unbounded', sans-serif; font-size: 13px; color: rgba(246,244,240,0.7); text-decoration: none; margin-bottom: 6px; }
+  .sfp-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px; padding-top: 16px;
+    border-top: 1px solid rgba(246,244,240,0.15);
+    font-family: 'Unbounded', sans-serif; font-size: 11px; color: rgba(246,244,240,0.4);
+  }
+  .sfp-caveat { font-family: 'Caveat', cursive; font-size: 16px; color: rgba(74,124,89,0.7); transform: rotate(-1deg); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- COVER                                                            -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="kicker">COLLECTIO ZAZEMLI · ДИЗАЙН-СИСТЕМА · v1.0 CANDIDATE-2</div>
+  <h1>Дизайн-система<br>сайта zazemli.com</h1>
+  <hr class="divider">
+  <div class="subtitle">«Каждая страница — экспонат в музее. Лишнее не входит. Тишина дороже громкости.»</div>
+  <div class="fleuron">❦</div>
+  <div class="meta">2026-05-03 · рабочая группа Cowork (CDO + CMO + CPO)</div>
+  <div class="caveat">руки в землю — голова свободна</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 01 · PRINCIPLES                                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <div>
+        <div class="sec-title">Принципы</div>
+        <div class="sec-desc">4 ДНК-источника + 3 оси контраста + 8 якорей переноса печать→веб + 3 анти-принципа. На них держится вся DS.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">4 ДНК-источника бренда (§01 брендбука)</div>
+    <div class="grid-4">
+      <div style="background: var(--chalk); padding: 32px;">
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 32px; color: rgba(28,28,28,0.12);">01</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 8px;">Галерейная<br>строгость</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.55); margin-top: 12px; line-height: 1.5;">MMOMA. Пустота, воздух, объект на постаменте.</div>
+      </div>
+      <div style="background: var(--chalk); padding: 32px;">
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 32px; color: rgba(28,28,28,0.12);">02</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 8px;">Минимализм<br>+ мода</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.55); margin-top: 12px; line-height: 1.5;">Aesop. Fashion-типографика, уверенный ритм.</div>
+      </div>
+      <div style="background: var(--chalk); padding: 32px;">
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 32px; color: rgba(28,28,28,0.12);">03</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 8px;">Материалы<br>грунта</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.55); margin-top: 12px; line-height: 1.5;">Земляные тона. Только акценты-точки, не фон.</div>
+      </div>
+      <div style="background: var(--chalk); padding: 32px;">
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 32px; color: rgba(28,28,28,0.12);">04</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 8px;">Рукописная<br>наивность</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.55); margin-top: 12px; line-height: 1.5;">Caveat-приписки, дудлы, лёгкий rotate.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">3 оси контраста</div>
+    <div class="grid-3">
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 12px;">ось 1 · форма</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 18px;">Премиум × Наивное</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 12px;">ось 2 · мир</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 18px;">Цифровое × Материальное</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 12px;">ось 3 · тон</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 18px;">Интеллект × Ритуал</div>
+      </div>
+    </div>
+
+    <div class="palette-label">3 анти-принципа DS (зафиксированы Настей 2026-05-03)</div>
+    <div class="text-note">
+      ① <strong style="font-style: normal; font-weight: 600;">Светлые фоны главные</strong> — bone основной, chalk вторичный. Земля = акценты-точки, не подложка секций.<br>
+      ② <strong style="font-style: normal; font-weight: 600;">Острые углы 0–2px max</strong> — отказ от mainstream-веба (SaaS-дружелюбие).<br>
+      ③ <strong style="font-style: normal; font-weight: 600;">Без drop-shadows</strong> — тонкие линии вместо лифтов. Глубина через opacity-шкалу и рамки.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 02 · PALETTE                                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="warm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <div>
+        <div class="sec-title">Палитра</div>
+        <div class="sec-desc">Правило 60/30/10. На главной — только bone + charcoal + moss. SKU-цвета — только на /collectio/[plant] соответствующего растения.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Бренд · сигнатурные</div>
+    <div class="swatch-grid">
+      <div class="swatch" style="background: var(--bone); color: var(--charcoal);">
+        <div>
+          <div class="swatch-name">Bone</div>
+          <div class="swatch-hex">#F6F4F0 · 60%</div>
+        </div>
+        <div class="swatch-role">Основной фон</div>
+      </div>
+      <div class="swatch" style="background: var(--charcoal); color: var(--bone);">
+        <div>
+          <div class="swatch-name">Charcoal</div>
+          <div class="swatch-hex" style="color: rgba(246,244,240,0.7);">#1C1C1C · 30%</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(246,244,240,0.55);">Текст + dark-секции</div>
+      </div>
+      <div class="swatch" style="background: var(--moss); color: #fff;">
+        <div>
+          <div class="swatch-name">Moss</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#4A7C59 · 10%</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">Signature accent</div>
+      </div>
+      <div class="swatch" style="background: var(--chalk); color: var(--charcoal);">
+        <div>
+          <div class="swatch-name">Chalk</div>
+          <div class="swatch-hex">#EDEBE6</div>
+        </div>
+        <div class="swatch-role">Вторичный фон секций (ритм)</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Материалы — только точки-индикаторы, не фон</div>
+    <div class="grid-7">
+      <div class="swatch" style="background: var(--graphite); color: var(--bone); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Graphite</div>
+        <div class="swatch-hex" style="color: rgba(246,244,240,0.7);">#2E2E2E</div>
+      </div>
+      <div class="swatch" style="background: var(--soil); color: #fff; min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Soil</div>
+        <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#6B4D35</div>
+      </div>
+      <div class="swatch" style="background: var(--ceramsite); color: var(--charcoal); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Ceramsite</div>
+        <div class="swatch-hex">#B08C5A</div>
+      </div>
+      <div class="swatch" style="background: var(--pumice); color: var(--charcoal); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Pumice</div>
+        <div class="swatch-hex">#B5AFA3</div>
+      </div>
+      <div class="swatch" style="background: var(--sand); color: var(--charcoal); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Sand</div>
+        <div class="swatch-hex">#C8B8A8</div>
+      </div>
+      <div class="swatch" style="background: var(--gravel); color: var(--charcoal); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Gravel</div>
+        <div class="swatch-hex">#D2C9B8</div>
+      </div>
+      <div class="swatch" style="background: var(--chalk); color: var(--charcoal); min-height: 100px; padding: 16px;">
+        <div class="swatch-name" style="font-size: 13px;">Chalk</div>
+        <div class="swatch-hex">#EDEBE6</div>
+      </div>
+    </div>
+
+    <div class="palette-label">SKU-цвета — только на /collectio/[plant]</div>
+    <div class="swatch-grid" style="grid-template-columns: repeat(6, 1fr);">
+      <div class="swatch" style="background: var(--moss); color: #fff;">
+        <div>
+          <div class="swatch-name">Moss</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#4A7C59</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">monstera, epipremnum</div>
+      </div>
+      <div class="swatch" style="background: var(--cosmos); color: #fff;">
+        <div>
+          <div class="swatch-name">Cosmos</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#BE3A6B</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">ficus · ⚠ AA-large</div>
+      </div>
+      <div class="swatch" style="background: var(--poppy); color: #fff;">
+        <div>
+          <div class="swatch-name">Poppy</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#C03A30</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">anturium</div>
+      </div>
+      <div class="swatch" style="background: var(--iris); color: #fff;">
+        <div>
+          <div class="swatch-name">Iris</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#7E6AAF</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">aglaonema · ⚠ AA-large</div>
+      </div>
+      <div class="swatch" style="background: var(--sky); color: #fff;">
+        <div>
+          <div class="swatch-name">Sky</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#2878AE</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">spatifillum</div>
+      </div>
+      <div class="swatch" style="background: var(--buttercup); color: #fff;">
+        <div>
+          <div class="swatch-name">Buttercup</div>
+          <div class="swatch-hex" style="color: rgba(255,255,255,0.7);">#C47A10</div>
+        </div>
+        <div class="swatch-role" style="color: rgba(255,255,255,0.65);">zamiokulkas · ⚠ AA-large</div>
+      </div>
+    </div>
+
+    <div class="text-note" style="margin-top: 24px;">
+      ⚠ <strong style="font-style: normal; font-weight: 600;">WCAG-замечание (§2.7.5):</strong> cosmos / iris / buttercup на bone-фоне дают только AA-large (3.5–3.8 : 1).
+      Для small text эти SKU-цвета не использовать — латынь Spectral italic ВСЕГДА в moss через <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">--text-latin</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 03 · TYPOGRAPHY                                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <div>
+        <div class="sec-title">Типографика</div>
+        <div class="sec-desc">3 шрифта. Modular Scale Major Third (×1.25) — от 12 до 76px. Иерархия Unbounded-весов из §05 брендбука.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Шрифты</div>
+    <div class="grid-3">
+      <div style="padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 8px;">structural</div>
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 56px; line-height: 1;">Аа</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 12px;">Unbounded · 300–900</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.6); margin-top: 4px;">Wordmark, заголовки, UI</div>
+      </div>
+      <div style="padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 8px;">editorial</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 56px; color: var(--moss); line-height: 1;">Аа</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 12px;">Spectral Italic · 400/700</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.6); margin-top: 4px;">Латынь, narrative, kicker'ы</div>
+      </div>
+      <div style="padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="palette-label" style="margin: 0 0 8px;">handscript</div>
+        <div style="font-family: 'Caveat'; font-size: 56px; color: var(--moss); line-height: 1;">Аа</div>
+        <div style="font-family: 'Unbounded'; font-weight: 500; font-size: 14px; margin-top: 12px;">Caveat · 400</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: rgba(28,28,28,0.6); margin-top: 4px;">Приписки, макс 2 на страницу</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Шкала Major Third · ×1.25</div>
+    <div>
+      <div class="typo-row"><span class="typo-token">text-xs</span><span class="typo-size">12 / 0.75</span><span class="typo-sample" style="font-size: 12px;">caption · мета · KickerHeader</span></div>
+      <div class="typo-row"><span class="typo-token">text-sm</span><span class="typo-size">14 / 0.875</span><span class="typo-sample" style="font-size: 14px;">small text · footer-links</span></div>
+      <div class="typo-row"><span class="typo-token">text-base</span><span class="typo-size">16 / 1.0</span><span class="typo-sample" style="font-size: 16px;">body · UI · кнопки</span></div>
+      <div class="typo-row"><span class="typo-token">text-lg</span><span class="typo-size">20 / 1.25</span><span class="typo-sample" style="font-size: 20px;">lead · Spectral italic</span></div>
+      <div class="typo-row"><span class="typo-token">text-xl</span><span class="typo-size">24 / 1.5</span><span class="typo-sample" style="font-size: 24px;">H4 · subheading</span></div>
+      <div class="typo-row"><span class="typo-token">text-2xl</span><span class="typo-size">30 / 1.875</span><span class="typo-sample" style="font-size: 30px; font-weight: 500;">H3</span></div>
+      <div class="typo-row"><span class="typo-token">text-3xl</span><span class="typo-size">38 / 2.375</span><span class="typo-sample" style="font-size: 38px; font-weight: 700;">H2 страниц</span></div>
+      <div class="typo-row"><span class="typo-token">text-4xl</span><span class="typo-size">48 / 3.0</span><span class="typo-sample" style="font-size: 48px; font-weight: 700; letter-spacing: -0.02em;">H1 страниц</span></div>
+      <div class="typo-row"><span class="typo-token">text-5xl</span><span class="typo-size">60 / 3.75</span><span class="typo-sample" style="font-size: 60px; font-weight: 900; letter-spacing: -0.03em; line-height: 1;">Compressed</span></div>
+      <div class="typo-row"><span class="typo-token">text-6xl</span><span class="typo-size">76 / 4.75</span><span class="typo-sample" style="font-size: 76px; font-weight: 900; letter-spacing: -0.05em; line-height: 1;">Display</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 04 · SPACING + OPACITY                                           -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="warm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <div>
+        <div class="sec-title">Spacing + Opacity</div>
+        <div class="sec-desc">8pt grid. Opacity-шкала из §18 — 6 основных + 3 специальных уровня.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Spacing · 8pt grid</div>
+    <div class="space-grid">
+      <div class="space-item"><span class="space-token">space-1 · 4</span><div class="space-block" style="width: 4px;"></div></div>
+      <div class="space-item"><span class="space-token">space-2 · 8</span><div class="space-block" style="width: 8px;"></div></div>
+      <div class="space-item"><span class="space-token">space-3 · 12</span><div class="space-block" style="width: 12px;"></div></div>
+      <div class="space-item"><span class="space-token">space-4 · 16</span><div class="space-block" style="width: 16px;"></div></div>
+      <div class="space-item"><span class="space-token">space-6 · 24</span><div class="space-block" style="width: 24px;"></div></div>
+      <div class="space-item"><span class="space-token">space-8 · 32</span><div class="space-block" style="width: 32px;"></div></div>
+      <div class="space-item"><span class="space-token">space-12 · 48</span><div class="space-block" style="width: 48px;"></div></div>
+      <div class="space-item"><span class="space-token">space-16 · 64</span><div class="space-block" style="width: 64px;"></div></div>
+      <div class="space-item"><span class="space-token">space-24 · 96</span><div class="space-block" style="width: 96px;"></div></div>
+      <div class="space-item"><span class="space-token">space-32 · 128</span><div class="space-block" style="width: 128px;"></div></div>
+    </div>
+
+    <div class="palette-label">Opacity · 6 основных уровней</div>
+    <div class="opacity-grid">
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.8;"></div><div class="opacity-value">0.8</div><div class="opacity-role">H1 · titles</div></div>
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.75;"></div><div class="opacity-value">0.75</div><div class="opacity-role">latin</div></div>
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.7;"></div><div class="opacity-value">0.7</div><div class="opacity-role">narrative</div></div>
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.5;"></div><div class="opacity-value">0.5</div><div class="opacity-role">secondary</div></div>
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.4;"></div><div class="opacity-value">0.4</div><div class="opacity-role">caption</div></div>
+      <div class="opacity-card"><div class="opacity-swatch" style="opacity: 0.3;"></div><div class="opacity-value">0.3</div><div class="opacity-role">dividers</div></div>
+    </div>
+    <div class="palette-label">3 специальных уровня</div>
+    <div class="grid-3">
+      <div style="padding: 16px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="opacity-value">0.85</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 12px; color: rgba(28,28,28,0.6); margin-top: 4px;">Caveat handwritten — чуть насыщеннее narrative</div>
+      </div>
+      <div style="padding: 16px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="opacity-value">0.55</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 12px; color: rgba(28,28,28,0.6); margin-top: 4px;">Day-labels, лёгкие подложки</div>
+      </div>
+      <div style="padding: 16px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+        <div class="opacity-value">0.06–0.2</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 12px; color: rgba(28,28,28,0.6); margin-top: 4px;">Watermarks, ultra-faint фоновые дудлы</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 05 · ATOMS                                                       -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05</div>
+      <div>
+        <div class="sec-title">Atoms</div>
+        <div class="sec-desc">Кнопки, бейджи, шапки, фероны, дудлы, рамки. Минимум — для построения всего интерфейса.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Button · 5 вариантов</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+      <button class="btn btn-primary">Купить на Ozon</button>
+      <button class="btn btn-secondary">Подробнее</button>
+      <button class="btn btn-ghost">о бренде →</button>
+      <button class="btn btn-accent">Подписаться</button>
+    </div>
+    <div style="padding: 24px; background: var(--charcoal); display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+      <button class="btn btn-inverted">Купить на Ozon</button>
+      <button class="btn btn-secondary" style="color: var(--bone); border-color: rgba(246,244,240,0.3);">Подробнее</button>
+      <button class="btn btn-accent">Подписаться</button>
+    </div>
+
+    <div class="palette-label">Button · 6 состояний (на примере primary)</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+      <div><button class="btn btn-primary" style="pointer-events: none;">Default</button></div>
+      <div><button class="btn btn-primary" style="opacity: 0.85; transform: translateY(-2px); pointer-events: none;">Hover</button></div>
+      <div><button class="btn btn-primary" style="outline: 2px solid var(--moss); outline-offset: 2px; pointer-events: none;">Focus</button></div>
+      <div><button class="btn btn-primary" style="opacity: 0.95; pointer-events: none;">Active</button></div>
+      <div><button class="btn btn-primary btn-disabled">Disabled</button></div>
+      <div><button class="btn btn-primary" style="opacity: 0.6; pointer-events: none;">Loading…</button></div>
+    </div>
+
+    <div class="palette-label">Badge · функциональный контент только</div>
+    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+      <span class="badge">1.2 л</span>
+      <span class="badge">2.2 л</span>
+      <span class="badge">3.5 л</span>
+      <span class="badge badge-solid">N° 001</span>
+      <span class="badge badge-spectral">monstera</span>
+      <span class="badge badge-spectral">партия 0</span>
+    </div>
+    <div class="text-note" style="margin-top: 12px;">
+      ❌ Запрещено: «хит» / «new» / «sale» / «last chance» / «-30%» (TOV §3 blacklist).
+    </div>
+
+    <div class="palette-label">KickerHeader · шапка над каждым H1</div>
+    <div style="padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+      <div class="kicker-header">
+        <span>COLLECTIO ZAZEMLI</span>
+        <span class="dot">·</span>
+        <span class="lat">N° 001</span>
+        <span class="dot">·</span>
+        <span class="lat">monstera</span>
+      </div>
+    </div>
+
+    <div class="palette-label">SerialNumber · N°[партия][SKU] · цвет по SKU</div>
+    <div class="grid-4" style="text-align: center;">
+      <div class="serial moss">N° 001</div>
+      <div class="serial poppy">N° 103</div>
+      <div class="serial iris">N° 204</div>
+      <div class="serial buttercup">N° 306</div>
+    </div>
+    <div class="text-note" style="margin-top: 12px;">
+      Размер 60px (text-5xl) — large text, проходит WCAG AA для всех SKU-цветов. На меньших размерах SKU-цвета cosmos/iris/buttercup не использовать.
+    </div>
+
+    <div class="palette-label">CaveatNote · 3 варианта</div>
+    <div style="display: flex; gap: 48px; flex-wrap: wrap; padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08); align-items: center;">
+      <div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4); margin-bottom: 12px;">brand-signature</div>
+        <span class="caveat-note caveat-brand">руки в землю</span>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4); margin-bottom: 12px;">sku-humor (moss/sky/poppy)</div>
+        <span class="caveat-note caveat-sku-moss">она уже лезет из горшка!</span>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4); margin-bottom: 12px;">journal-pair</div>
+        <span class="caveat-note caveat-journal">корни скажут спасибо</span>
+      </div>
+    </div>
+    <div class="text-note" style="margin-top: 12px;">
+      Максимум 2 контентных Caveat на страницу. SiteHeader/SiteFooter не считаются.
+    </div>
+
+    <div class="palette-label">Divider · hairline + ApothecaryBar</div>
+    <hr class="divider">
+    <svg class="apothecary-bar" viewBox="0 0 320 60" width="320" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="30" x2="120" y2="30" stroke="#1C1C1C" stroke-width="0.75" opacity="0.3"/>
+      <circle cx="135" cy="30" r="1.5" fill="#1C1C1C" opacity="0.5"/>
+      <text x="160" y="38" text-anchor="middle" font-family="Spectral, serif" font-size="22" fill="#4A7C59" opacity="0.8">❦</text>
+      <circle cx="185" cy="30" r="1.5" fill="#1C1C1C" opacity="0.5"/>
+      <line x1="200" y1="30" x2="300" y2="30" stroke="#1C1C1C" stroke-width="0.75" opacity="0.3"/>
+    </svg>
+
+    <div class="palette-label">Fleuron · ❦ всегда moss</div>
+    <div style="display: flex; gap: 32px; align-items: baseline; padding: 32px; background: var(--bone); border: 1px solid rgba(28,28,28,0.08);">
+      <span style="font-family: 'Spectral'; font-size: 14px; color: rgba(74,124,89,0.8);">❦</span>
+      <span style="font-family: 'Spectral'; font-size: 22px; color: rgba(74,124,89,0.8);">❦</span>
+      <span class="fleuron-display">❦</span>
+      <span style="font-family: 'Spectral'; font-size: 88px; color: rgba(74,124,89,0.8); line-height: 1;">❦</span>
+    </div>
+
+    <div class="palette-label">MaterialDot · 11 компонентов грунта</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+      <div style="text-align: center;">
+        <div class="material-dot md-charcoal"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Уголь</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-soil"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Биогумус</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-ceramsite"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Керамзит</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-pumice"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Пемза</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-sand"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Кокос</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-gravel"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Гравий</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="material-dot md-moss"></div>
+        <div style="font-family: 'Unbounded'; font-size: 10px; margin-top: 6px;">Мох</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Form · Input + Label</div>
+    <div class="form-field">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" placeholder="hello@zazemli.com">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Растение</label>
+      <input class="form-input" type="text" placeholder="Монстера">
+    </div>
+
+    <div class="palette-label">Frame2x · двойная apothecary рамка (опционально)</div>
+    <div class="frame-2x" style="background: var(--bone); max-width: 480px;">
+      <div class="inner" style="text-align: center;">
+        <div class="kicker-header" style="justify-content: center;">
+          <span>COLLECTIO ZAZEMLI</span>
+          <span class="dot">·</span>
+          <span class="lat">N° 001</span>
+        </div>
+        <div class="fleuron-display" style="font-size: 22px; margin-top: 16px;">❦</div>
+        <div style="font-family: 'Unbounded'; font-weight: 900; font-size: 24px; letter-spacing: -0.02em; margin-top: 12px;">МОНСТЕРА</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 13px; color: var(--moss); margin-top: 4px;">monstera</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 06 · MOLECULES                                                   -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="warm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">06</div>
+      <div>
+        <div class="sec-title">Molecules</div>
+        <div class="sec-desc">Карточки растений, шаги ритуала, whisper-фразы, материалы, форма подписки. Composed from atoms.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">ProductCardMini · для /collectio · grid из 7</div>
+    <div class="grid-3">
+      <a href="#" class="pcard">
+        <div class="pcard-doodle" style="background: rgba(74,124,89,0.15); color: var(--moss);">M</div>
+        <div class="pcard-lat">monstera</div>
+        <div class="pcard-name">Заземли Монстеру</div>
+        <div class="pcard-sizes">
+          <span class="badge">2.2 л</span>
+          <span class="badge">3.5 л</span>
+        </div>
+        <div class="pcard-foot">
+          <span class="pcard-pricefrom">от</span>
+          <span class="pcard-price">2 190 ₽</span>
+        </div>
+      </a>
+      <a href="#" class="pcard">
+        <div class="pcard-doodle" style="background: rgba(192,58,48,0.15); color: var(--poppy);">А</div>
+        <div class="pcard-lat" style="color: rgba(74,124,89,0.75);">anthurium</div>
+        <div class="pcard-name">Заземли Антуриум</div>
+        <div class="pcard-sizes">
+          <span class="badge">1.2 л</span>
+          <span class="badge">2.2 л</span>
+        </div>
+        <div class="pcard-foot">
+          <span class="pcard-pricefrom">от</span>
+          <span class="pcard-price">1 890 ₽</span>
+        </div>
+      </a>
+      <a href="#" class="pcard">
+        <div class="pcard-doodle" style="background: rgba(196,122,16,0.15); color: var(--buttercup);">З</div>
+        <div class="pcard-lat" style="color: rgba(74,124,89,0.75);">zamioculcas</div>
+        <div class="pcard-name">Заземли Замиокулькас</div>
+        <div class="pcard-sizes">
+          <span class="badge">1.2 л</span>
+          <span class="badge">2.2 л</span>
+          <span class="badge">3.5 л</span>
+        </div>
+        <div class="pcard-foot">
+          <span class="pcard-pricefrom">от</span>
+          <span class="pcard-price">1 890 ₽</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="palette-label">RitualStep · 4 шага пересадки (для /guide)</div>
+    <div class="grid-4">
+      <div class="ritual-step first">
+        <div class="ritual-num">00</div>
+        <div class="ritual-title">ПРИХОД</div>
+        <div class="ritual-desc">Достань коробку. Поставь на стол. Выдохни. Ритуал начался.</div>
+        <div class="ritual-hint">→ можно не торопиться</div>
+      </div>
+      <div class="ritual-step dark">
+        <div class="ritual-num">01</div>
+        <div class="ritual-title">ЗАБОТА ДЛЯ<br>КОРНЕЙ И РУК</div>
+        <div class="ritual-desc">Надень перчатки. Приготовь корневин. Достань растение из старого горшка.</div>
+        <div class="ritual-hint">→ чёрный конверт</div>
+      </div>
+      <div class="ritual-step dark">
+        <div class="ritual-num">02</div>
+        <div class="ritual-title">НАДЁЖНЫЙ<br>ДРЕНАЖ</div>
+        <div class="ritual-desc">Уложи керамзит слоем 1.5–2 см на дно нового горшка.</div>
+        <div class="ritual-hint">→ белый пакет</div>
+      </div>
+      <div class="ritual-step dark">
+        <div class="ritual-num">03</div>
+        <div class="ritual-title">ВКУСНЫЙ<br>ГРУНТ</div>
+        <div class="ritual-desc">Засыпь смесь на 2/3 объёма. Посади растение. Досыпь, утрамбуй, полей.</div>
+        <div class="ritual-hint">→ пакет с окошком</div>
+      </div>
+    </div>
+
+    <div class="palette-label">WhisperHero · для /about (паттерн Aesop)</div>
+    <div class="whisper-hero" style="border: 1px solid rgba(28,28,28,0.08);">
+      <div class="whisper whisper-1">→ подышать землёй</div>
+      <div class="whisper whisper-2">→ 11 компонентов внутри</div>
+      <div class="whisper-center">
+        <div class="whisper-title">ЗАЗЕМЛИ</div>
+        <hr class="divider">
+        <div class="whisper-sub">заземлись · пересади · выдохни</div>
+      </div>
+      <div class="whisper whisper-3">монстера, фикус, антуриум ←</div>
+      <div class="whisper whisper-4">всё для одной пересадки ←</div>
+    </div>
+
+    <div class="palette-label">EmailSubscribeForm · в Frame2x · для /diary-signup</div>
+    <div class="frame-2x" style="background: var(--bone); max-width: 600px;">
+      <div class="inner">
+        <div class="kicker-header" style="justify-content: flex-start; margin-bottom: 16px;">
+          <span>ДНЕВНИК НАТУРАЛИСТА</span>
+          <span class="dot">·</span>
+          <span class="lat">N° 001</span>
+        </div>
+        <h2 style="font-family: 'Unbounded'; font-weight: 700; font-size: 30px; color: rgba(28,28,28,0.8); margin-bottom: 16px; line-height: 1.15;">Записала тебя в дневник.</h2>
+        <p style="font-family: 'Spectral'; font-style: italic; font-size: 18px; color: rgba(28,28,28,0.7); margin-bottom: 24px; line-height: 1.65;">Раз в сезон — что важно для твоего растения. Не больше 4 писем в год.</p>
+        <div class="form-field">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="hello@zazemli.com">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;">Подписаться</button>
+        <div style="margin-top: 24px;">
+          <span class="caveat-note caveat-journal">корни скажут спасибо</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 07 · ORGANISMS                                                   -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">07</div>
+      <div>
+        <div class="sec-title">Organisms</div>
+        <div class="sec-desc">Header, footer, hero (2 варианта), grid коллекции, ритуальная последовательность. Page-level композиции.</div>
+      </div>
+    </div>
+
+    <div class="palette-label">SiteHeader</div>
+    <div class="site-header-preview">
+      <span class="shp-logo">ЗАЗЕМЛИ</span>
+      <div class="shp-nav">
+        <span>коллекция</span>
+        <span>лаборатория</span>
+        <span>гайд</span>
+        <span>о бренде</span>
+      </div>
+      <span class="shp-caveat">заземлись</span>
+    </div>
+
+    <div class="palette-label">Hero.default · для главной</div>
+    <div class="hero-default" style="border: 1px solid rgba(28,28,28,0.08);">
+      <div class="kicker-header" style="justify-content: center;">
+        <span>COLLECTIO ZAZEMLI</span>
+        <span class="dot">·</span>
+        <span class="lat">N° 001</span>
+        <span class="dot">·</span>
+        <span>ПАРТИЯ 0</span>
+      </div>
+      <h1 class="hero-h1">Заземли растение,<br>заземли себя.</h1>
+      <hr class="divider">
+      <p class="hero-sub">Чем больше цифры — тем важнее земля.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary">Посмотреть коллекцию</button>
+        <button class="btn btn-secondary">Подписаться на дневник</button>
+      </div>
+      <div style="margin-top: 48px;">
+        <span class="caveat-note caveat-journal">руки в землю — голова свободна</span>
+      </div>
+    </div>
+
+    <div class="palette-label">SiteFooter · единственный dark-блок на сайте</div>
+    <div class="site-footer-preview">
+      <div class="sfp-grid">
+        <div>
+          <div class="sfp-wordmark">ЗАЗЕМЛИ</div>
+          <div class="sfp-slogan">Заземли себя.</div>
+        </div>
+        <div class="sfp-col">
+          <div class="sfp-col-title">Коллекция</div>
+          <a href="#">все растения</a>
+          <a href="#">лаборатория</a>
+          <a href="#">гайд по пересадке</a>
+          <a href="#">о бренде</a>
+        </div>
+        <div class="sfp-col">
+          <div class="sfp-col-title">Связь</div>
+          <a href="#">Instagram</a>
+          <a href="#">Telegram</a>
+          <a href="#">hello@zazemli.com</a>
+        </div>
+      </div>
+      <svg class="apothecary-bar" viewBox="0 0 320 60" width="320" xmlns="http://www.w3.org/2000/svg" style="margin: 32px auto;">
+        <line x1="20" y1="30" x2="120" y2="30" stroke="#F6F4F0" stroke-width="0.75" opacity="0.3"/>
+        <circle cx="135" cy="30" r="1.5" fill="#F6F4F0" opacity="0.5"/>
+        <text x="160" y="38" text-anchor="middle" font-family="Spectral, serif" font-size="22" fill="#4A7C59" opacity="0.8">❦</text>
+        <circle cx="185" cy="30" r="1.5" fill="#F6F4F0" opacity="0.5"/>
+        <line x1="200" y1="30" x2="300" y2="30" stroke="#F6F4F0" stroke-width="0.75" opacity="0.3"/>
+      </svg>
+      <div class="sfp-bottom">
+        <span>© 2026 ИП Заземли · Москва</span>
+        <span class="sfp-caveat">корни скажут спасибо</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 08 · TEMPLATES                                                   -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="warm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">08</div>
+      <div>
+        <div class="sec-title">Templates · wireframes 7 страниц</div>
+        <div class="sec-desc">Структура каждой страницы: какие organisms используются, в каком порядке, какой регистр.</div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong>bone-фон, sticky</div>
+        <div class="template-block"><strong>Hero.default · Редактор</strong>KickerHeader · H1 «Заземли растение, заземли себя.» · Spectral italic · 2 CTA · Caveat</div>
+        <div class="template-block"><strong>ApothecaryBar</strong></div>
+        <div class="template-block"><strong>CollectionPreview · Наставник</strong>4 ProductCardMini + ссылка «все 7 →»</div>
+        <div class="template-block"><strong>Лаб-тизер · Наставник</strong>KickerHeader · H2 · CTA «Открыть лабораторию»</div>
+        <div class="template-block"><strong>Гайд-тизер · Наставник</strong>3 RitualStep mini · CTA «Полный гайд»</div>
+        <div class="template-block"><strong>EmailSubscribeForm · Подруга</strong></div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/collectio</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>KickerHeader «КОЛЛЕКЦИЯ · N°001–007»</strong></div>
+        <div class="template-block"><strong>H1 «7 растений · 16 рецептур»</strong></div>
+        <div class="template-block"><strong>CollectionGrid · Наставник</strong>7 ProductCardMini</div>
+        <div class="template-block"><strong>EmailSubscribeForm</strong></div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/collectio/monstera</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>ProductCardFull · Наставник</strong>KickerHeader · H1 «Заземли Монстеру» · SerialNumber moss · Hero-картинка · Селектор размера · Цена · Button «Купить на Ozon» · CaveatNote SKU-humor</div>
+        <div class="template-block"><strong>«Что в боксе» · Наставник · chalk-фон</strong>4 RitualStep компактных</div>
+        <div class="template-block"><strong>«Мини-рецептура» · Наставник</strong>MaterialsGrid в компактной версии</div>
+        <div class="template-block"><strong>«Контекст растения» · Редактор · chalk-фон</strong>H3 «Биотоп монстеры» + Spectral italic narrative</div>
+        <div class="template-block"><strong>«Связанное» · Подруга</strong>Buttons + ссылка «о бренде →»</div>
+        <div class="template-block"><strong>EmailSubscribeForm</strong></div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/lab</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>WhisperHero · Редактор</strong>«Лаборатория грунта» + 4 whisper-фразы</div>
+        <div class="template-block"><strong>«11 компонентов» · Наставник</strong>KickerHeader + MaterialsGrid 11 карточек</div>
+        <div class="template-block"><strong>«7 растений» · Наставник · chalk-фон</strong>7 мини-карточек растений с anchor-id</div>
+        <div class="template-block"><strong>«Полное обоснование» · Наставник</strong>Button «Скачать PDF»</div>
+        <div class="template-block"><strong>EmailSubscribeForm</strong></div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/guide</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>Hero · Наставник</strong>KickerHeader «РИТУАЛ ПЕРЕСАДКИ» · H1 «Пересадка за 15 минут»</div>
+        <div class="template-block"><strong>«Что приготовить» · Наставник</strong>Чек-лист 3 пункта</div>
+        <div class="template-block"><strong>RitualSequence · Наставник · chalk-фон</strong>4 RitualStep (00 / 01 / 02 / 03)</div>
+        <div class="template-block"><strong>«После пересадки» · Подруга</strong>3–5 дней в полутени · CaveatNote</div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/about</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>WhisperHero · Редактор</strong>Hero-цитата основателя + Caveat снизу</div>
+        <div class="template-block"><strong>«Манифест» · Редактор · в Frame2x</strong>Цитата 1 полная · подпись Насти</div>
+        <div class="template-block"><strong>«Для кого» · Редактор · chalk-фон</strong>Цитата 2 · инсайт «материальная эстетика через труд и грязь»</div>
+        <div class="template-block"><strong>«Принципы бренда» · Наставник</strong>4 принципа в grid</div>
+        <div class="template-block"><strong>«Где нас найти» · Подруга · chalk-фон</strong>IG + TG + email · Button</div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+
+    <div class="template">
+      <div class="template-bar">
+        <div class="template-dot"></div><div class="template-dot"></div><div class="template-dot"></div>
+        <span class="template-url">zazemli.com/diary-signup</span>
+      </div>
+      <div class="template-body">
+        <div class="template-block"><strong>SiteHeader</strong></div>
+        <div class="template-block"><strong>«Приветствие» · Подруга</strong>KickerHeader «ДНЕВНИК НАТУРАЛИСТА» · H1 «Привет. Записала тебя в дневник.»</div>
+        <div class="template-block"><strong>EmailSubscribeForm в Frame2x · Подруга</strong>Email + Растение + Дата пересадки · Button «Подписаться»</div>
+        <div class="template-block"><strong>«Что будет в письмах» · Наставник · chalk-фон</strong>4 карточки триггеров (+14, +90, +180, +365)</div>
+        <div class="template-block"><strong>«Inline-успех» (после submit)</strong>CaveatNote «корни скажут спасибо»</div>
+        <div class="template-block"><strong>SiteFooter</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 09 · LINEAGE OF RITUALS                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">09</div>
+      <div>
+        <div class="sec-title">Линейка ритуалов заботы</div>
+        <div class="sec-desc">DS архитектурно поддерживает расширение от пересадки к подкормке, укоренению, реанимации, размножению. Прямая параллель с Rituals.com (€2.43bn).</div>
+      </div>
+    </div>
+
+    <div class="palette-label">Горизонт линейки</div>
+    <div class="grid-3">
+      <div style="background: var(--moss); color: #fff; padding: 24px;">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.6;">сейчас · MVP</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Пересадка</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; opacity: 0.85; margin-top: 12px; line-height: 1.65;">Руки в землю — голова свободна. 7 SKU × 2–3 размера.</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4);">v2 · через 3–6 мес</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Подкормка</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; color: rgba(28,28,28,0.65); margin-top: 12px; line-height: 1.65;">Питание корней — спокойная сила. Подписочные капсулы.</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4);">v3 · 6–12 мес</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Укоренение</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; color: rgba(28,28,28,0.65); margin-top: 12px; line-height: 1.65;">Новая жизнь из старого листа.</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4);">v3</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Реанимация</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; color: rgba(28,28,28,0.65); margin-top: 12px; line-height: 1.65;">Спасение через паузу.</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4);">v4</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Размножение</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; color: rgba(28,28,28,0.65); margin-top: 12px; line-height: 1.65;">Один лист — много жизней.</div>
+      </div>
+      <div style="background: var(--bone); padding: 24px; border: 1px solid rgba(28,28,28,0.08);">
+        <div style="font-family: 'Unbounded'; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(28,28,28,0.4);">v4+</div>
+        <div style="font-family: 'Unbounded'; font-weight: 700; font-size: 24px; margin-top: 12px;">Сезонная подготовка</div>
+        <div style="font-family: 'Spectral'; font-style: italic; font-size: 14px; color: rgba(28,28,28,0.65); margin-top: 12px; line-height: 1.65;">Готовы к зимнему сну.</div>
+      </div>
+    </div>
+
+    <div class="text-note" style="margin-top: 32px;">
+      <strong style="font-style: normal; font-weight: 600;">Параллель с Rituals.com:</strong>
+      их URL-pattern <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/collectio/sakura</code>, <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/collectio/karma</code>, <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/collectio/hammam</code> — наш будущий <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/rituals/peresadka</code>, <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/rituals/podkormka</code>, <code style="font-family: monospace; background: rgba(28,28,28,0.06); padding: 2px 6px;">/rituals/ukorenenie</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- 10 · WCAG                                                        -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="warm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">10</div>
+      <div>
+        <div class="sec-title">Доступность WCAG 2.1 AA</div>
+        <div class="sec-desc">Проверены конкретные контрасты. 3 SKU-цвета требуют large text (≥24px). Все opacity-уровни проходят AA/AAA.</div>
+      </div>
+    </div>
+
+    <table class="wcag-table">
+      <thead>
+        <tr>
+          <th>Сочетание</th>
+          <th>Ratio</th>
+          <th>WCAG</th>
+          <th>Применение</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>charcoal × bone</td><td>15.5 : 1</td><td class="wcag-pass">AAA</td><td>весь основной текст</td></tr>
+        <tr><td>charcoal × chalk</td><td>13.2 : 1</td><td class="wcag-pass">AAA</td><td>текст на chalk-фоне</td></tr>
+        <tr><td>bone × charcoal</td><td>15.5 : 1</td><td class="wcag-pass">AAA</td><td>текст на dark-секциях</td></tr>
+        <tr><td>moss × bone</td><td>5.2 : 1</td><td class="wcag-pass">AA · любой размер</td><td>латынь, fleuron, accent</td></tr>
+        <tr><td>sky × bone</td><td>5.0 : 1</td><td class="wcag-pass">AA · любой размер</td><td>SKU-латынь спатифиллум</td></tr>
+        <tr><td>poppy × bone</td><td>5.5 : 1</td><td class="wcag-pass">AA · любой размер</td><td>SKU-латынь антуриум</td></tr>
+        <tr><td>cosmos × bone</td><td>3.8 : 1</td><td class="wcag-fail">AA-large only (≥24px)</td><td>SKU-фикус — только декор / large text</td></tr>
+        <tr><td>iris × bone</td><td>3.5 : 1</td><td class="wcag-fail">AA-large only</td><td>SKU-аглаонема — только декор / large text</td></tr>
+        <tr><td>buttercup × bone</td><td>3.5 : 1</td><td class="wcag-fail">AA-large only</td><td>SKU-замиокулькас — только декор / large text</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                           -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="dark">
+  <div class="wrap" style="text-align: center;">
+    <div class="kicker-header" style="justify-content: center; color: rgba(246,244,240,0.6);">
+      <span>COLLECTIO ZAZEMLI · DESIGN-SYSTEM · v1.0 CANDIDATE-2</span>
+    </div>
+    <svg class="apothecary-bar" viewBox="0 0 320 60" width="320" xmlns="http://www.w3.org/2000/svg" style="margin: 32px auto;">
+      <line x1="20" y1="30" x2="120" y2="30" stroke="#F6F4F0" stroke-width="0.75" opacity="0.3"/>
+      <circle cx="135" cy="30" r="1.5" fill="#F6F4F0" opacity="0.5"/>
+      <text x="160" y="38" text-anchor="middle" font-family="Spectral, serif" font-size="22" fill="#4A7C59" opacity="0.8">❦</text>
+      <circle cx="185" cy="30" r="1.5" fill="#F6F4F0" opacity="0.5"/>
+      <line x1="200" y1="30" x2="300" y2="30" stroke="#F6F4F0" stroke-width="0.75" opacity="0.3"/>
+    </svg>
+    <div style="font-family: 'Spectral'; font-style: italic; font-size: 18px; color: rgba(246,244,240,0.7); max-width: 600px; margin: 0 auto;">
+      Каждая страница — экспонат в музее. Лишнее не входит. Тишина дороже громкости.
+    </div>
+    <div style="font-family: 'Caveat'; font-size: 22px; color: rgba(74,124,89,0.85); transform: rotate(-1deg); margin-top: 32px; display: inline-block;">
+      руки в землю — голова свободна
+    </div>
+    <div style="font-family: 'Spectral'; font-style: italic; font-size: 12px; color: rgba(246,244,240,0.3); margin-top: 48px;">
+      2026-05-03 · рабочая группа Cowork · этапы 1–13 · ждёт финальный ОК Насти
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

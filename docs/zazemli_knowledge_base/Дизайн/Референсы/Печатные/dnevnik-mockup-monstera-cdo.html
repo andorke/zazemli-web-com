@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ЗАЗЕМЛИ · Дневник «Один год рядом» · МОНСТЕРА · мокап CDO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700;900&family=Spectral:ital,wght@0,400;1,400;1,700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* Палитра брендбука §04 */
+  :root {
+    --bone: #F6F4F0;
+    --charcoal: #1C1C1C;
+    --moss: #4A7C59;
+    --cosmos: #BE3A6B;
+    --poppy: #C03A30;
+    --iris: #7E6AAF;
+    --sky: #2878AE;
+    --buttercup: #C47A10;
+    /* SKU-цвет МОНСТЕРЫ = moss (по §03.6) */
+    --sku: var(--moss);
+    --line: rgba(28,28,28,0.18);
+    --line-soft: rgba(28,28,28,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #B5B0A6;
+    font-family: 'Spectral', serif;
+    color: var(--charcoal);
+    padding: 30px;
+  }
+
+  /* Каждая страница (148×195 мм) — книжный буклет */
+  .a5 {
+    width: 148mm;
+    height: 195mm;
+    background: var(--bone);
+    margin: 0 auto 32px;
+    padding: 14mm 12mm;
+    position: relative;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+    color: var(--charcoal);
+  }
+  /* Книжный разворот: 2 страницы рядом без gap, общая тень, корешок по центру */
+  .spread {
+    display: flex;
+    width: 296mm;
+    margin: 0 auto 32px;
+    gap: 0;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.20);
+    position: relative;
+  }
+  .spread .a5 {
+    margin: 0;
+    box-shadow: none;
+  }
+  /* Левая страница разворота: gutter справа (у корешка) */
+  .a5.page-left {
+    padding: 14mm 16mm 14mm 12mm;
+  }
+  /* Правая страница разворота: gutter слева (у корешка) */
+  .a5.page-right {
+    padding: 14mm 12mm 14mm 16mm;
+  }
+  /* Корешок — лёгкая центральная линия и тень изгиба */
+  .spread::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 4mm;
+    transform: translateX(-50%);
+    background: linear-gradient(to right,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0.08) 45%,
+      rgba(0,0,0,0.12) 50%,
+      rgba(0,0,0,0.08) 55%,
+      rgba(0,0,0,0) 100%);
+    pointer-events: none;
+  }
+
+  /* Типографика брендбука §05 */
+  .unb { font-family: 'Unbounded', sans-serif; }
+  .spc { font-family: 'Spectral', serif; font-style: italic; }
+  .cav { font-family: 'Caveat', cursive; font-weight: 400; }
+
+  /* Footer N° — фиксированная позиция на всех страницах через absolute от .a5 */
+  .pg-num {
+    position: absolute;
+    bottom: 11mm;
+    left: 14mm;
+    right: 14mm;
+    text-align: center;
+    font-family: 'DejaVu Sans', 'Spectral', serif;
+    font-style: italic;
+    font-size: 8pt;
+    color: #6E6E6E;
+    opacity: 1;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  /* Левая страница разворота: pg-num у левого обреза с ❦ справа */
+  .page-left .pg-num {
+    text-align: left;
+  }
+  .page-left .pg-num::after {
+    content: '  ❦';
+    color: var(--moss);
+    opacity: 0.85;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+  /* Правая страница разворота: pg-num у правого обреза с ❦ слева */
+  .page-right .pg-num {
+    text-align: right;
+  }
+  .page-right .pg-num::before {
+    content: '❦  ';
+    color: var(--moss);
+    opacity: 0.85;
+    margin-right: 4px;
+    letter-spacing: 0;
+  }
+  /* Header книги — тема главы курсивом, только на правых сезонных календарях */
+  .book-header {
+    text-align: center;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    color: var(--moss);
+    opacity: 0.7;
+    letter-spacing: 5px;
+    margin: 0 0 4mm;
+    text-transform: lowercase;
+  }
+  .book-header::after {
+    content: '';
+    display: block;
+    width: 22mm;
+    height: 0.3px;
+    background: var(--charcoal);
+    opacity: 0.2;
+    margin: 1.5mm auto 0;
+  }
+
+  /* Apothecary двойная рамка §03.5 — соответствует брендбуку, асимметрия под gutter */
+  /* Apothecary frame — параметры реальной листовки партии 0 (печать 2026-04-29):
+     внешняя 0.25мм op 0.55 + внутренняя 0.25мм op 0.35 + отступ 2мм */
+  .frame-double {
+    position: absolute;
+    top: 7mm; left: 7mm; right: 7mm; bottom: 7mm;
+    border: 0.25mm solid rgba(28,28,28,0.55);
+    pointer-events: none;
+  }
+  .frame-double::before {
+    content: '';
+    position: absolute;
+    top: 2mm; left: 2mm; right: 2mm; bottom: 2mm;
+    border: 0.25mm solid rgba(28,28,28,0.35);
+  }
+  /* На разворотах рамка не используется — она остаётся как identity-marker
+     только на обложке (стр I) и заднике (стр XII).
+     Внутри книги работает footer-фриз с pg-num у внешнего обреза. */
+  .page-left .frame-double,
+  .page-right .frame-double {
+    display: none;
+  }
+
+  /* Стандартные элементы */
+  .fleuron {
+    font-family: 'DejaVu Sans', 'Spectral', serif;
+    color: var(--moss);
+    font-size: 14pt;
+    text-align: center;
+    line-height: 1;
+    opacity: 0.8;
+  }
+  .fleuron-large { font-size: 22pt; }
+  .divider {
+    width: 18mm;
+    height: 0;
+    border-top: 1px solid var(--charcoal);
+    opacity: 0.4;
+    margin: 3mm auto;
+  }
+  .label {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 8pt;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #5C5C5C;
+    opacity: 1;
+  }
+  .h-section {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 10pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-align: center;
+    margin: 6mm 0 3mm;
+    line-height: 1.4;
+  }
+  .h-sub {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    opacity: 0.6;
+    text-align: center;
+    margin-top: 1.5mm;
+    line-height: 1.4;
+  }
+  .fleuron-h { margin: 2mm 0 5mm; }
+  .nar {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 11pt;
+    line-height: 1.55;
+    opacity: 0.85;
+  }
+  .field {
+    border-bottom: 0.7px solid var(--line);
+    height: 5mm;
+    margin: 1.5mm 0 4mm;
+  }
+  .field-inline {
+    display: inline-block;
+    border-bottom: 0.7px solid var(--line);
+    min-width: 30mm;
+    padding-bottom: 0.5mm;
+  }
+  .field-meta {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 8.5pt;
+    color: #5C5C5C;
+    opacity: 1;
+    margin-top: 1.2mm;
+  }
+
+  /* Чек-листы — стиль брендбука */
+  ul.check {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.check li {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    line-height: 1.55;
+    padding: 1.5mm 0 1.5mm 6mm;
+    position: relative;
+    opacity: 0.88;
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+  ul.check li::before {
+    content: '·';
+    position: absolute;
+    left: 2mm;
+    top: 1.5mm;
+    color: var(--moss);
+    font-weight: 700;
+    font-size: 14pt;
+    line-height: 1;
+  }
+
+  /* SKU-плашка ★ */
+  .sku-badge {
+    background: rgba(74,124,89,0.07);
+    border-left: 1mm solid var(--moss);
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+  }
+  .sku-badge .badge-label {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 8pt;
+    letter-spacing: 2px;
+    color: var(--moss);
+    text-transform: uppercase;
+    margin-bottom: 1mm;
+  }
+  .sku-badge .badge-text {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--charcoal);
+  }
+
+  /* Чекбоксы */
+  .checkbox-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4mm;
+    margin: 1.5mm 0 4mm;
+    align-items: center;
+  }
+  .checkbox-label {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 400;
+    font-size: 8pt;
+    letter-spacing: 1.5px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    margin-right: 3mm;
+  }
+  .cbx {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2mm;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    opacity: 0.85;
+  }
+  .cbx::before {
+    content: '';
+    width: 2.5mm;
+    height: 2.5mm;
+    border: 0.7px solid var(--charcoal);
+    display: inline-block;
+  }
+
+  /* Календарь заботы */
+  .care-cal {
+    margin-top: 4mm;
+  }
+  .care-row {
+    display: grid;
+    grid-template-columns: 22mm 1fr;
+    gap: 2mm;
+    align-items: center;
+    margin-bottom: 2.5mm;
+  }
+  .care-icon {
+    display: flex;
+    align-items: center;
+    gap: 1.5mm;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 8pt;
+    opacity: 0.75;
+  }
+  .care-icon-svg {
+    width: 4mm; height: 4mm;
+    flex-shrink: 0;
+  }
+  .care-circles {
+    display: flex;
+    gap: 0.7mm;
+    flex-wrap: wrap;
+  }
+  .circle {
+    width: 5mm; height: 5mm;
+    border: 0.7px solid var(--charcoal);
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.75;
+    margin: 0.3mm;
+  }
+  .circle.filled {
+    background: var(--moss);
+    color: white;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8pt;
+    font-weight: 700;
+    text-align: center;
+    line-height: 5mm;
+    border-color: var(--moss);
+    opacity: 1;
+  }
+  .month-grid {
+    display: grid;
+    grid-template-columns: 22mm 1fr 1fr 1fr;
+    gap: 1mm;
+    align-items: end;
+    padding-bottom: 1mm;
+    border-bottom: 0.7px solid var(--line);
+    margin-bottom: 2mm;
+  }
+  .month-grid .month {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 10pt;
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-transform: lowercase;
+    color: #5C5C5C;
+  }
+
+  /* Заметки */
+  .notes-block {
+    margin-top: 4mm;
+  }
+  .notes-line {
+    border-bottom: 0.7px solid var(--line);
+    height: 4.5mm;
+    margin-bottom: 1mm;
+  }
+
+  /* QR placeholder */
+  .qr {
+    display: inline-flex;
+    align-items: center;
+    gap: 3mm;
+    margin-top: 4mm;
+  }
+  .qr-box {
+    width: 14mm; height: 14mm;
+    border: 0.7px solid var(--charcoal);
+    background: linear-gradient(45deg, transparent 48%, var(--charcoal) 48% 52%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, var(--charcoal) 48% 52%, transparent 52%),
+                #fff;
+    background-size: 3mm 3mm;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .qr-box::after {
+    content: 'QR';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 6pt;
+    font-weight: 700;
+    background: rgba(255,255,255,0.85);
+    width: 4.5mm; height: 4mm;
+    margin: auto;
+    border-radius: 1mm;
+  }
+  .qr-text {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+  .qr-text .url {
+    font-family: 'Unbounded', sans-serif;
+    font-style: normal;
+    font-size: 8pt;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-top: 0.7mm;
+  }
+
+  /* COVER */
+  .cover {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24mm 14mm 20mm;
+    z-index: 1;
+    position: relative;
+  }
+  .cover .col-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8pt;
+    letter-spacing: 3px;
+    opacity: 0.55;
+    margin-bottom: 2mm;
+  }
+  .cover .num {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    color: var(--moss);
+    margin-bottom: 14mm;
+  }
+  .cover .title-1 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 11pt;
+    letter-spacing: 3px;
+    margin: 4mm 0 1.5mm;
+  }
+  .cover .title-2 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 11pt;
+    letter-spacing: 3px;
+    margin-bottom: 12mm;
+  }
+  .cover .ru {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 28pt;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 1.5mm;
+  }
+  .cover .latin {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 14pt;
+    color: var(--moss);
+    margin-bottom: 6mm;
+  }
+  .cover .doodle-wrap {
+    margin: 4mm 0 8mm;
+    height: 38mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover .doodle-wrap svg { height: 100%; width: auto; }
+  .cover .footer {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    opacity: 0.45;
+    margin-top: auto;
+    letter-spacing: 1.5px;
+  }
+
+  /* Сезонные заголовки */
+  .season-h {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 22pt;
+    letter-spacing: 4px;
+    color: var(--moss);
+    text-align: center;
+    margin: 4mm 0 0.5mm;
+  }
+  .season-sub {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 10pt;
+    text-align: center;
+    opacity: 0.6;
+    margin-bottom: 2mm;
+  }
+
+  /* Caveat handscript акцент */
+  .handscript {
+    font-family: 'Caveat', cursive;
+    font-weight: 500;
+    font-size: 18pt;
+    color: var(--moss);
+    text-align: center;
+    margin: 3mm 0;
+    transform: rotate(-2deg);
+  }
+
+  /* Heading метка sponsor */
+  .meta-cdo {
+    max-width: 920px;
+    margin: 0 auto 36px;
+    background: var(--bone);
+    padding: 18px 24px;
+    border-left: 4px solid var(--moss);
+    font-family: 'Spectral', serif;
+    color: var(--charcoal);
+    font-size: 13px;
+    line-height: 1.6;
+    border-radius: 2px;
+  }
+  .meta-cdo h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
+  .meta-cdo p { margin: 0 0 6px; }
+  .meta-cdo small { display: block; opacity: 0.6; margin-top: 8px; font-size: 12px; }
+
+  @media print {
+    @page { size: 148mm 195mm; margin: 0; }
+    html, body { background: white !important; padding: 0 !important; margin: 0 !important; }
+    body > .meta-cdo { display: none; }
+    .a5 {
+      width: 148mm; height: 195mm;
+      box-shadow: none !important;
+      margin: 0 !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      display: block;
+      overflow: hidden !important;
+    }
+    .spread {
+      display: block !important;
+      width: 148mm !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+    }
+    .spread::after { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="meta-cdo">
+  <h1>Мокап CDO · ЗАЗЕМЛИ Дневник «Один год рядом» · МОНСТЕРА (N°&nbsp;001)</h1>
+  <p><strong>Источники:</strong> брендбук v3 §03.5 (apothecary), §03.6 (SKU), §04 (палитра), §05 (типографика), §10 (токены) · TOV v1.2 (голос на «ты», без персонификации) · DIARY_SPEC v7 (структура 12 стр и контент) · научное обоснование рецептур (биотоп МОНСТЕРЫ для ★ плашек) · v11 (структурный референс).</p>
+  <p><strong>Шрифты:</strong> Unbounded, Spectral italic, Caveat (для handscript-фраз).</p>
+  <p><strong>Размер:</strong> A5 148×195 мм (распоряжение Насти, отступление от брендбука §15.5). Все 12 страниц снизу.</p>
+  <small>v1 · 2026-05-02 · черновик мокапа в Рабочей группе. После «да» Насти → раскатываю на 6 SKU.</small>
+</div>
+
+<!-- ============================================================
+     СТР I · ОБЛОЖКА
+============================================================ -->
+<div class="a5">
+  <div class="frame-double"></div>
+  <div class="cover">
+    <div class="col-name">COLLECTIO ZAZEMLI</div>
+    <div class="divider"></div>
+    <div class="num">N°&nbsp;001 · партия 0</div>
+
+    <div class="fleuron fleuron-large">❦</div>
+    <div class="title-1">ДНЕВНИК</div>
+    <div class="title-2">ОДИН ГОД РЯДОМ</div>
+
+    <div class="ru">МОНСТЕРА</div>
+    <div class="latin">monstera</div>
+
+    <div class="doodle-wrap">
+      <img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/colored/monstera-moss.svg" alt="монстера" style="height: 100%; width: auto;">
+    </div>
+
+    <div class="footer">ЗАЗЕМЛИ · 2026</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     РАЗВОРОТ 1 · СТР II–III · ЗНАКОМСТВО + ПЕРВЫЕ 14 ДНЕЙ
+============================================================ -->
+<div class="spread">
+<div class="a5 page-left">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Знакомство</div>
+      <div class="spc" style="font-size: 10pt; opacity: 0.6; margin-top: 1.5mm;">— первое впечатление —</div>
+      <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+    </div>
+
+    <div style="margin-top: 6mm; display: grid; grid-template-columns: 1fr 1fr; gap: 8mm;">
+      <div>
+        <div class="label">Имя и сорт</div>
+        <div class="field" style="height: 6mm; margin: 1.5mm 0 1mm;"></div>
+        <div class="field-meta" style="font-size: 8pt;">если уже есть; если нет — может быть позже</div>
+      </div>
+      <div>
+        <div class="label">Дата заземления</div>
+        <div class="field" style="height: 6mm; margin: 1.5mm 0 1mm;"></div>
+        <div class="field-meta" style="font-size: 8pt;">день пересадки в нашу землю</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="h-section">Заметки про монстеру</div>
+      <ul class="check">
+        <li>Расщепления на листьях — адаптация многоярусной лианы: свет проходит сквозь дыры к листьям ниже. У молодой монстеры листья цельные, расщепления приходят с возрастом и хорошим светом.</li>
+        <li>У монстеры воздушные корни двух типов: якорные держатся за дерево, тянут стебель ввысь к солнцу, а питающие тянутся к воде. С опорой из мха якорные корни найдут поддержку, а питающие — воду: листья станут выше и крупнее. Важно не забывать увлажнять опору.</li>
+        <li>В природе у лианы нет своей земли: корни обвивают ствол дерева, а не разрастаются вширь. Поэтому в большом горшке силы уходят в корни, листья замирают. В тесном горшке при достаточном свете появляются новые расщеплённые листья.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: auto;">
+      <div class="qr">
+        <img src="qr-padded/qr-zazemli-diary-signup.svg" alt="QR zazemli.com/diary-signup" style="width: 15mm; height: 15mm; flex-shrink: 0; display: block;">
+        <div class="qr-text">
+          подпишись — семь писем в год не дадут забыть про этот дневник<br>потом будет что вспомнить
+          <span class="url">zazemli.com/diary-signup</span>
+        </div>
+      </div>
+    </div>
+  <div class="pg-num">N°&nbsp;001 · II</div>
+  </div>
+</div>
+
+<!-- СТР III · ПЕРВЫЕ 14 ДНЕЙ (правая в развороте 1) -->
+<div class="a5 page-right">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Первые 14 дней</div>
+      <div class="spc" style="font-size: 10pt; opacity: 0.6; margin-top: 1.5mm;">— тишина первых дней —</div>
+      <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+    </div>
+
+    <div>
+      <div class="h-section">Правила адаптации</div>
+            <ul class="check">
+        <li>Корни привыкают к новому месту. Двинешь горшок — придётся начинать заново. Оставь на две недели, потом поворачивай к свету.</li>
+        <li>Двух пересадок подряд тонкие корни не выдержат: первая их уже повредила, вторая лишит вовсе. Если горшок не тот — дождись следующего сезона.</li>
+        <li>Удобрение в свежей земле помешает восстановлению. Первые 14&nbsp;дней — только чистая вода, потом подкормка.</li>
+        <li>Корни первое время пьют медленно, а листья теряют влагу как обычно. Ежедневное опрыскивание выравнивает баланс.</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="h-section">Когда поливать</div>
+      <div class="nar" style="text-align: center; max-width: 115mm; margin: 0 auto;">
+        Потрогай землю пальцем на глубине двух фаланг.<br>
+        Не чувствуешь влагу — пора поливать.
+      </div>
+      <div class="cav" style="text-align: center; color: var(--moss); font-size: 16pt; margin: 3mm 0; transform: rotate(-1.5deg);">эмпирика надёжнее любого расписания</div>
+      <div class="nar" style="text-align: center; max-width: 115mm; margin: 0 auto; font-size: 10pt; opacity: 0.75;">
+        На просыхание земли влияют свет, влажность, размер и материал горшка. Универсального расписания не может быть.
+      </div>
+    </div>
+
+  <div class="pg-num">N°&nbsp;001 · III</div>
+  </div>
+</div>
+</div><!-- /разворот 1 -->
+
+<!-- ============================================================
+     РАЗВОРОТ 2 · СТР IV–V · ВЕСНА
+============================================================ -->
+<div class="spread">
+<div class="a5 page-left">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div class="season-h">ВЕСНА</div>
+    <div class="season-sub">— просыпается —</div>
+    <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+
+    <div class="h-section">Что важно весной</div>
+          <ul class="check">
+        <li>Пыль на окнах после зимы задерживает до трети света. Вымой окна перед стартом сезона: каждый процент света сейчас идёт в рост.</li>
+        <li>Появляется солнечный свет, крона начнёт тянуться за ним. Пару раз в месяц поворачивай горшок — рост распределится равномерно.</li>
+        <li>Чтобы не перегрузить корни, возвращай подкормку постепенно: раз в 2–3&nbsp;недели половинной дозой, пока не пойдёт новый прирост.</li>
+        <li>Жёлтый лист растение всё ещё подкармливает, хотя восстановить не получится. Срежь — силы пойдут в новые.</li>
+        <li>Весна — лучшее время для плановой пересадки. Корни активно растут и приживаются за 2–3&nbsp;недели. Меняй землю полностью, отмершие корни обрезай — растение получит свежее питание для нового сезона.</li>
+      </ul>
+
+    <!-- ★ заметка для монстеры — apothecary-bar + italic -->
+    <!-- apothecary-bar в фиксированной позиции (синхронно с правой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (italic) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.55; opacity: 0.9; text-align: center; max-width: 110mm; margin: 0 auto;">
+        Весной монстера легче переносит обрезку: после холодов запас сил высокий, раны затягиваются за пару дней. Если хочешь сделать растение пышнее — срежь верхушку прямо над узлом, и из узла снизу пойдут две новые ветки.
+      </div>
+      </div>
+
+  <div class="pg-num">N°&nbsp;001 · IV</div>
+  </div>
+</div>
+
+<!-- СТР V · КАЛЕНДАРЬ ЗАБОТЫ ВЕСНА (правая в развороте 2) -->
+<div class="a5 page-right">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Календарь заботы</div>
+    </div>
+
+    <div class="month-grid" style="margin-top: 4mm;">
+      <div></div>
+      <div class="month">МАР</div>
+      <div class="month">АПР</div>
+      <div class="month">МАЙ</div>
+    </div>
+
+    <div class="care-cal">
+      <div class="care-row">
+        <div class="care-icon">
+          <img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/капля.svg" alt="полив">
+          <span>полив<br><em style="font-size: 7pt;">5–7&nbsp;дн</em></span>
+        </div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+
+      <div class="care-row">
+        <div class="care-icon">
+          <img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/листик.svg" alt="подкормка">
+          <span>подкормка<br><em style="font-size: 7pt;">2–3&nbsp;нед</em></span>
+        </div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+
+      <div class="care-row">
+        <div class="care-icon">
+          <img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/сердечко.svg" alt="тёплый душ">
+          <span>тёплый душ<br><em style="font-size: 7pt;">1–2&nbsp;нед</em></span>
+        </div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+
+      <div class="care-row">
+        <div class="care-icon">
+          <img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/загогуля.svg" alt="поворот">
+          <span>поворот<br><em style="font-size: 7pt;">2&nbsp;нед</em></span>
+        </div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="display: flex; align-items: center; gap: 2mm;">
+        <img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/крестик.svg" alt="обработка" style="width: 4mm; height: 4mm;">
+        обработка от паразитов <em style="opacity: 0.6;">(если нужно)</em>
+      </div>
+      <div style="margin-top: 2mm; display: grid; grid-template-columns: 14mm 1fr 1fr 1fr 1fr; column-gap: 3mm; row-gap: 3mm; align-items: end;">
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">когда</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">чем</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="margin-bottom: 2.5mm;">измерения весны</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; margin-bottom: 3mm;">
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">высота, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">ширина, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">листьев / побегов</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+      </div>
+      </div>
+
+      <!-- apothecary-bar в фиксированной позиции (синхронно с левой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (наблюдения) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; gap: 2mm;"><img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/colored/monstera-moss.svg" alt="" style="width: 5mm; height: 5mm; flex-shrink: 0;"><div class="field-meta" style="font-size: 8pt; margin: 0; color: var(--moss); font-weight: 500; opacity: 1; letter-spacing: 1.5px; text-transform: uppercase;">наблюдения весны</div></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 2mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+      </div>
+
+    <div class="pg-num">N°&nbsp;001 · V</div>
+  </div>
+</div>
+</div><!-- /разворот 2 -->
+
+<!-- ============================================================
+     РАЗВОРОТ 3 · СТР VI–VII · ЛЕТО
+============================================================ -->
+<div class="spread">
+<div class="a5 page-left">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div class="season-h">ЛЕТО</div>
+    <div class="season-sub">— растёт —</div>
+    <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+
+    <div class="h-section">Что важно летом</div>
+    <ul class="check">
+      <li>В тепле земля сохнет в 2–3 раза быстрее, и листья тоже тратят воду активнее. Поливай раз в 5–7&nbsp;дней по сухости и держи влажность 60%+ — опрыскивай или поставь увлажнитель.</li>
+      <li>Летом всё ускоряется, и удобрение усваивается полностью. Подкармливай раз в две недели обычной дозой — оптимальный темп без перекорма.</li>
+      <li>Солнце летом выше, без поворота раз в неделю крона уйдёт в одну сторону. На южном окне в полдень притеняй: стекло греет лист на 10–15&nbsp;°C сильнее — иначе ожоги.</li>
+      <li>Тёплый душ раз в две недели смывает пыль и сбивает паутинного клеща, который любит сухие запылённые листья.</li>
+    </ul>
+
+    <!-- ★ заметка для монстеры — apothecary-bar + italic -->
+    <!-- apothecary-bar в фиксированной позиции (синхронно с правой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (italic) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.55; opacity: 0.9; text-align: center; max-width: 110mm; margin: 0 auto;">
+        Монстера в природе живёт под пологом джунглей, в полутени. Восточное или западное окно — её комфорт. На южном летом обязательно притеняй или отодвинь вглубь: прямое полуденное солнце оставляет ожоги на листьях.
+      </div>
+      </div>
+
+  <div class="pg-num">N°&nbsp;001 · VI</div>
+  </div>
+</div>
+
+<!-- СТР VII · КАЛЕНДАРЬ ЗАБОТЫ ЛЕТО (правая в развороте 3) -->
+<div class="a5 page-right">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Календарь заботы</div>
+    </div>
+
+    <div class="month-grid" style="margin-top: 4mm;">
+      <div></div>
+      <div class="month">ИЮН</div>
+      <div class="month">ИЮЛ</div>
+      <div class="month">АВГ</div>
+    </div>
+
+    <div class="care-cal">
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/капля.svg" alt="полив"><span>полив<br><em style="font-size: 7pt;">5–7&nbsp;дн</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/листик.svg" alt="подкормка"><span>подкормка<br><em style="font-size: 7pt;">2&nbsp;нед</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/сердечко.svg" alt="тёплый душ"><span>тёплый душ<br><em style="font-size: 7pt;">2&nbsp;нед</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/загогуля.svg" alt="поворот"><span>поворот<br><em style="font-size: 7pt;">1&nbsp;нед</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="display: flex; align-items: center; gap: 2mm;">
+        <img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/крестик.svg" alt="обработка" style="width: 4mm; height: 4mm;">
+        обработка от паразитов <em style="opacity: 0.6;">(если нужно)</em>
+      </div>
+      <div style="margin-top: 2mm; display: grid; grid-template-columns: 14mm 1fr 1fr 1fr 1fr; column-gap: 3mm; row-gap: 3mm; align-items: end;">
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">когда</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">чем</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="margin-bottom: 2.5mm;">измерения лета</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; margin-bottom: 3mm;">
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">высота, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">ширина, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">листьев / побегов</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+      </div>
+      </div>
+
+      <!-- apothecary-bar в фиксированной позиции (синхронно с левой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (наблюдения) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; gap: 2mm;"><img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/colored/monstera-moss.svg" alt="" style="width: 5mm; height: 5mm; flex-shrink: 0;"><div class="field-meta" style="font-size: 8pt; margin: 0; color: var(--moss); font-weight: 500; opacity: 1; letter-spacing: 1.5px; text-transform: uppercase;">наблюдения лета</div></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 2mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+      </div>
+
+    <div class="pg-num">N°&nbsp;001 · VII</div>
+  </div>
+</div>
+</div><!-- /разворот 3 -->
+
+<!-- ============================================================
+     РАЗВОРОТ 4 · СТР VIII–IX · ОСЕНЬ
+============================================================ -->
+<div class="spread">
+<div class="a5 page-left">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div class="season-h">ОСЕНЬ</div>
+    <div class="season-sub">— замедляется —</div>
+    <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+
+    <div class="h-section">Что важно осенью</div>
+    <ul class="check">
+      <li>Осенью земля сохнет то медленно от прохлады дома, то быстро от батарей. Подбирай новую интенсивность полива (см. стр III).</li>
+      <li>Световой день короче, растение замедляется. Удобрения всасываются медленнее, их надо сокращать — половина дозы один раз в месяц.</li>
+      <li>Ранняя осень — последняя возможность в году дать растению горшок побольше. В этом случае делай перевалку — вынимай растение с земляным комом и ставь в горшок чуть больше, добавив грунт только по бокам, не трогая корни. Стресс минимальный.</li>
+      <li>Сухой воздух от батарей разгоняет паутинного клеща — он размножается за 7–10&nbsp;дней. Раз в неделю смотри обратную сторону листьев: точки и тонкая паутинка между жилками — первый знак.</li>
+    </ul>
+
+    <!-- ★ заметка для монстеры — apothecary-bar + italic -->
+    <!-- apothecary-bar в фиксированной позиции (синхронно с правой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (italic) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.55; opacity: 0.9; text-align: center; max-width: 110mm; margin: 0 auto;">
+        Старые нижние листья желтеют — это естественный цикл роста. Срезай у основания, чтобы они не забирали питание у живых листьев. А если подсыхают воздушные корни, направь их в опору из мха — снова станут упругими.
+      </div>
+      </div>
+
+  <div class="pg-num">N°&nbsp;001 · VIII</div>
+  </div>
+</div>
+
+<!-- СТР IX · КАЛЕНДАРЬ ЗАБОТЫ ОСЕНЬ (правая в развороте 4) -->
+<div class="a5 page-right">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Календарь заботы</div>
+    </div>
+
+    <div class="month-grid" style="margin-top: 4mm;">
+      <div></div>
+      <div class="month">СЕН</div>
+      <div class="month">ОКТ</div>
+      <div class="month">НОЯ</div>
+    </div>
+
+    <div class="care-cal">
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/капля.svg" alt="полив"><span>полив<br><em style="font-size: 7pt;">7–10&nbsp;дн</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/листик.svg" alt="подкормка"><span>подкормка<br><em style="font-size: 7pt;">1/мес</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/сердечко.svg" alt="тёплый душ"><span>тёплый душ<br><em style="font-size: 7pt;">1&nbsp;мес</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/загогуля.svg" alt="поворот"><span>поворот<br><em style="font-size: 7pt;">2&nbsp;нед</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="display: flex; align-items: center; gap: 2mm;">
+        <img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/крестик.svg" alt="обработка" style="width: 4mm; height: 4mm;">
+        обработка от паразитов <em style="opacity: 0.6;">(если нужно)</em>
+      </div>
+      <div style="margin-top: 2mm; display: grid; grid-template-columns: 14mm 1fr 1fr 1fr 1fr; column-gap: 3mm; row-gap: 3mm; align-items: end;">
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">когда</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">чем</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="margin-bottom: 2.5mm;">измерения осени</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; margin-bottom: 3mm;">
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">высота, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">ширина, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">листьев / побегов</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+      </div>
+      </div>
+
+      <!-- apothecary-bar в фиксированной позиции (синхронно с левой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (наблюдения) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; gap: 2mm;"><img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/colored/monstera-moss.svg" alt="" style="width: 5mm; height: 5mm; flex-shrink: 0;"><div class="field-meta" style="font-size: 8pt; margin: 0; color: var(--moss); font-weight: 500; opacity: 1; letter-spacing: 1.5px; text-transform: uppercase;">наблюдения осени</div></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 2mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+      </div>
+
+    <div class="pg-num">N°&nbsp;001 · IX</div>
+  </div>
+</div>
+</div><!-- /разворот 4 -->
+
+<!-- ============================================================
+     РАЗВОРОТ 5 · СТР X–XI · ЗИМА
+============================================================ -->
+<div class="spread">
+<div class="a5 page-left">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div class="season-h">ЗИМА</div>
+    <div class="season-sub">— спит —</div>
+    <div class="fleuron" style="margin: 2mm 0 4mm;">❦</div>
+
+    <div class="h-section">Что важно зимой</div>
+    <ul class="check">
+      <li>Зимой растение пьёт меньше, испарение слабее. Поливай раз в 10–14&nbsp;дней по сухости. Не забывай сливать воду из поддона через 15&nbsp;минут — стоячая вода у холодных корней даёт гниль за 2–3&nbsp;дня.</li>
+      <li>Сухой воздух от батарей делает верх грунта коркой и забивает листья пылью. Раз в неделю рыхли верх — корни получат воздух. Раз в месяц протирай листья влажной губкой.</li>
+      <li>Зимний свет в средней полосе в 5–10 раз слабее летнего: солнце низко, чаще облачно. Передвинь горшок на самое светлое окно — без этого рост почти встанет.</li>
+      <li>Зимой корни в покое и не дают новых волосков — в свежей земле растение не закрепится. Пересадку откладывай до весны.</li>
+    </ul>
+
+    <!-- ★ заметка для монстеры — apothecary-bar + italic -->
+    <!-- apothecary-bar в фиксированной позиции (синхронно с правой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (italic) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.55; opacity: 0.9; text-align: center; max-width: 110mm; margin: 0 auto;">
+        Зимой при коротком дне монстера уходит в покой. Если есть фитолампа на 8–10&nbsp;часов — рост продолжается, поддержи подкормкой раз в месяц половинной дозой. Без подсветки оставь до весны: минимум полива, без удобрения.
+      </div>
+      </div>
+
+  <div class="pg-num">N°&nbsp;001 · X</div>
+  </div>
+</div>
+
+<!-- СТР XI · КАЛЕНДАРЬ ЗАБОТЫ ЗИМА (правая в развороте 5) -->
+<div class="a5 page-right">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 14mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="label">Календарь заботы</div>
+    </div>
+
+    <div class="month-grid" style="margin-top: 4mm;">
+      <div></div>
+      <div class="month">ДЕК</div>
+      <div class="month">ЯНВ</div>
+      <div class="month">ФЕВ</div>
+    </div>
+
+    <div class="care-cal">
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/капля.svg" alt="полив"><span>полив<br><em style="font-size: 7pt;">10–14&nbsp;дн</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/листик.svg" alt="подкормка"><span>подкормка<br><em style="font-size: 7pt;">пауза/мес</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/сердечко.svg" alt="тёплый душ"><span>тёплый душ<br><em style="font-size: 7pt;">1–2&nbsp;мес</em></span></div>
+        <div class="care-circles"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div>
+      </div>
+      <div class="care-row">
+        <div class="care-icon"><img class="care-icon-svg" src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/загогуля.svg" alt="поворот"><span>поворот<br><em style="font-size: 7pt;">пауза</em></span></div>
+        <div class="care-circles"><span style="font-family: 'Spectral', serif; font-style: italic; font-size: 8.5pt; opacity: 0.55;">— зимой не двигаем</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="display: flex; align-items: center; gap: 2mm;">
+        <img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/крестик.svg" alt="обработка" style="width: 4mm; height: 4mm;">
+        обработка от паразитов <em style="opacity: 0.6;">(если нужно)</em>
+      </div>
+      <div style="margin-top: 2mm; display: grid; grid-template-columns: 14mm 1fr 1fr 1fr 1fr; column-gap: 3mm; row-gap: 3mm; align-items: end;">
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">когда</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field-meta" style="font-size: 8pt; margin: 0;">чем</div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+        <div class="field" style="margin: 0;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label" style="margin-bottom: 2.5mm;">измерения зимы</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; margin-bottom: 3mm;">
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">высота, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">ширина, см</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+        <div style="text-align: center;"><div class="field-meta" style="font-size: 8pt; margin: 0;">листьев / побегов</div><div style="height: 7mm; max-width: 28mm; border: 0.7px solid var(--line); border-radius: 100mm; margin: 1mm auto 0;"></div></div>
+      </div>
+      </div>
+
+      <!-- apothecary-bar в фиксированной позиции (синхронно с левой стр) -->
+      <div style="position: absolute; bottom: 47mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4mm; margin: 0;">
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <span style="font-family: 'DejaVu Sans', 'Spectral', serif; color: var(--moss); font-size: 14pt; opacity: 0.8;">❦</span>
+          <span style="color: var(--charcoal); opacity: 0.4; font-size: 6pt;">·</span>
+          <div style="flex: 1; height: 0.25mm; background: var(--charcoal); opacity: 0.3;"></div>
+        </div>
+      </div>
+      <!-- content (наблюдения) в фиксированной позиции -->
+      <div style="position: absolute; bottom: 22mm; left: 12mm; right: 12mm;">
+        <div style="display: flex; align-items: center; gap: 2mm;"><img src="../ЗАЗЕМЛИ%20совет%20директоров/Дизайн/Бренд-фундамент/assets/doodles/colored/monstera-moss.svg" alt="" style="width: 5mm; height: 5mm; flex-shrink: 0;"><div class="field-meta" style="font-size: 8pt; margin: 0; color: var(--moss); font-weight: 500; opacity: 1; letter-spacing: 1.5px; text-transform: uppercase;">наблюдения зимы</div></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 2mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+        <div style="border-bottom: 0.7px solid var(--moss); height: 5mm; margin-top: 1mm; opacity: 0.6;"></div>
+      </div>
+
+    <div class="pg-num">N°&nbsp;001 · XI</div>
+  </div>
+</div>
+</div><!-- /разворот 5 -->
+
+<!-- ============================================================
+     СТР XII · ОДИН ГОД РЯДОМ · ФИНАЛ (задник, отдельный лист)
+============================================================ -->
+<div class="a5">
+  <div class="frame-double"></div>
+  <div style="padding: 4mm 2mm 8mm 2mm; height: 100%; display: flex; flex-direction: column;">
+    <div style="text-align: center;">
+      <div class="col-name" style="font-family: 'Unbounded', sans-serif; font-size: 8pt; letter-spacing: 3px; opacity: 0.55;">COLLECTIO ZAZEMLI · N°&nbsp;001</div>
+      <div class="title-1" style="font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 12pt; letter-spacing: 3px; margin: 3mm 0 1mm;">ОДИН ГОД РЯДОМ</div>
+      <div class="spc" style="font-size: 10pt; opacity: 0.6;">— что прожили вместе —</div>
+      <div class="fleuron" style="margin: 1mm 0 2mm;">❦</div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label">год в одной фразе</div>
+      <div class="field-meta">что осталось от этого года рядом — момент, цвет, чувство, имя</div>
+      <div style="border: 0.7px solid var(--moss); padding: 4mm; margin-top: 2mm; min-height: 18mm; background: rgba(74,124,89,0.04);">
+        <div style="border-bottom: 0.7px solid var(--line); height: 5mm; margin-bottom: 1.5mm;"></div>
+        <div style="border-bottom: 0.7px solid var(--line); height: 5mm; margin-bottom: 1.5mm;"></div>
+        <div style="border-bottom: 0.7px solid var(--line); height: 5mm;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 6mm;">
+      <div class="label">пора в новую землю — признаки</div>
+      <div style="margin-top: 3mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 8mm;">
+        <div style="padding-left: 6mm; position: relative;">
+          <span style="position: absolute; left: 0; top: 1.2mm; width: 2.8mm; height: 2.8mm; border: 0.7px solid var(--charcoal); display: inline-block;"></span>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.4; opacity: 0.88;">Земля сохнет за 1–2&nbsp;дня</div>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 8.5pt; opacity: 0.55; line-height: 1.4; margin-top: 0.5mm;">корни заполнили горшок — для воды нет места</div>
+        </div>
+        <div style="padding-left: 6mm; position: relative;">
+          <span style="position: absolute; left: 0; top: 1.2mm; width: 2.8mm; height: 2.8mm; border: 0.7px solid var(--charcoal); display: inline-block;"></span>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.4; opacity: 0.88;">Корни лезут через дренаж</div>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 8.5pt; opacity: 0.55; line-height: 1.4; margin-top: 0.5mm;">внутри уже некуда расти</div>
+        </div>
+        <div style="padding-left: 6mm; position: relative;">
+          <span style="position: absolute; left: 0; top: 1.2mm; width: 2.8mm; height: 2.8mm; border: 0.7px solid var(--charcoal); display: inline-block;"></span>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.4; opacity: 0.88;">Крона перевешивает горшок</div>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 8.5pt; opacity: 0.55; line-height: 1.4; margin-top: 0.5mm;">рост идёт только вверх</div>
+        </div>
+        <div style="padding-left: 6mm; position: relative;">
+          <span style="position: absolute; left: 0; top: 1.2mm; width: 2.8mm; height: 2.8mm; border: 0.7px solid var(--charcoal); display: inline-block;"></span>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 10pt; line-height: 1.4; opacity: 0.88;">Больше двух лет в одной земле</div>
+          <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 8.5pt; opacity: 0.55; line-height: 1.4; margin-top: 0.5mm;">питание вымылось, структура уплотнилась</div>
+        </div>
+      </div>
+          </div>
+
+    <div style="margin-top: auto;">
+
+      <!-- QR на витрину коллекции (объединённая ссылка) -->
+      <div class="qr" style="margin-top: 4mm;">
+        <img src="qr-padded/qr-zazemli-collectio.svg" alt="QR" style="width: 15mm; height: 15mm; flex-shrink: 0; display: block;">
+        <div class="qr-text">
+          пора пересаживать или появилось новое растение —<br>выбирай бокс в коллекции
+          <span class="url">zazemli.com/collectio</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 3mm; margin-top: 4mm;">
+        <img src="qr-padded/qr-zazemli-instagram.svg" alt="QR @zazemli.collectio" style="width: 10mm; height: 10mm; flex-shrink: 0; display: block;">
+        <div style="font-family: 'Spectral', serif; font-style: italic; font-size: 8pt; opacity: 0.7; line-height: 1.6;">
+          как замешиваем землю · @zazemli.collectio<br>
+          поделиться дневником · #zazemlidnevnik
+        </div>
+      </div>
+
+      <!-- Главный слоган бренда — закрывающий мазок дневника -->
+      <div style="font-family: 'Caveat', cursive; font-weight: 400; font-size: 18pt; color: var(--sku); opacity: 0.85; text-align: center; margin-top: 7mm; line-height: 1.3; transform: rotate(-1deg);">земля и забота — всё, что нужно</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>PRINT BRIEF · Заземли V4 · партия 0</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,700;1,400&family=Unbounded:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #F6F4F0;
+    --charcoal: #1C1C1C;
+    --moss: #4A7C59;
+    --cosmos: #BE3A6B;
+    --poppy: #C03A30;
+    --iris: #7E6AAF;
+    --sky: #2878AE;
+    --butter: #C47A10;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Spectral', serif;
+    background: var(--bone);
+    color: var(--charcoal);
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 48px 40px 100px;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    opacity: 0.65;
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--moss);
+    border-bottom: 0.5px solid rgba(28,28,28,0.25);
+    padding-bottom: 6px;
+    margin-top: 56px;
+    margin-bottom: 4px;
+  }
+  h2 .num {
+    display: inline-block;
+    width: 32px;
+    color: var(--charcoal);
+    opacity: 0.35;
+  }
+  h3 {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--moss);
+    margin: 24px 0 12px;
+  }
+  p { margin: 10px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 14px;
+    background: white;
+    border: 1px solid rgba(28,28,28,0.12);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(28,28,28,0.08);
+    vertical-align: top;
+  }
+  th {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    opacity: 0.7;
+    background: rgba(74,124,89,0.05);
+  }
+  td:first-child {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--charcoal);
+    width: 32%;
+    opacity: 0.75;
+  }
+  table.matrix td:first-child { width: auto; }
+  table.matrix td { text-align: center; }
+  table.matrix td:first-child { text-align: left; font-family: 'Spectral', serif; font-weight: 400; font-style: italic; opacity: 0.9; }
+  table.matrix tr.total td { font-weight: 700; background: rgba(74,124,89,0.08); font-style: normal; }
+  strong {
+    font-weight: 700;
+    font-style: normal;
+    color: var(--charcoal);
+  }
+  .num-hi {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    color: var(--moss);
+  }
+  .callout {
+    background: rgba(74,124,89,0.07);
+    border-left: 3px solid var(--moss);
+    padding: 14px 20px;
+    margin: 18px 0;
+    font-style: italic;
+    font-size: 14px;
+  }
+  .warning {
+    background: rgba(192,58,48,0.06);
+    border-left: 3px solid var(--poppy);
+    padding: 14px 20px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .sku-chip {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 0.5px solid rgba(0,0,0,0.2);
+  }
+  ul.checklist { list-style: none; padding-left: 0; }
+  ul.checklist li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    font-size: 14px;
+  }
+  ul.checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 6px;
+    font-size: 16px;
+    color: var(--moss);
+    font-family: 'Unbounded', sans-serif;
+  }
+  .divider {
+    text-align: center;
+    margin: 40px 0;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    color: var(--moss);
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    opacity: 0.6;
+  }
+  .header-block {
+    border: 0.5px solid rgba(28,28,28,0.35);
+    padding: 28px 32px;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  .header-block::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 0.3px solid rgba(28,28,28,0.2);
+    pointer-events: none;
+  }
+  .collectio {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  .fleuron {
+    text-align: center;
+    color: var(--moss);
+    font-size: 14px;
+    margin: 14px 0;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-block">
+  <div class="collectio">COLLECTIO ZAZEMLI · PRINT BRIEF V4</div>
+  <h1>Заземли · печатные макеты</h1>
+  <div class="subtitle">Партия 0 — <strong>500 боксов</strong> · спецификация для типографии</div>
+  <div class="fleuron">❦</div>
+  <p style="text-align:center;font-style:italic;opacity:0.7;font-size:14px;margin:0">
+    Базовый принцип — apothecary/гербарная материальность:<br>
+    uncoated дизайнерская бумага, кремовые тона, без глянца.
+  </p>
+</div>
+
+<!-- МАТРИЦА ПАРТИИ ══════════════════════════════════════ -->
+<h2><span class="num">00</span> МАТРИЦА ПАРТИИ 0 · 500 БОКСОВ</h2>
+<h3>+10% на брак заложено во все тиражи</h3>
+
+<table class="matrix">
+  <tr><th>Растение</th><th>1.2 л</th><th>2.2 л</th><th>3.5 л</th><th>Итого</th></tr>
+  <tr><td>Антуриум</td><td>45</td><td>25</td><td>—</td><td>70</td></tr>
+  <tr><td>Аглаонема</td><td>30</td><td>40</td><td>—</td><td>70</td></tr>
+  <tr><td>Эпипремнум</td><td>45</td><td>25</td><td>—</td><td>70</td></tr>
+  <tr><td>Спатифиллум</td><td>25</td><td>40</td><td>15</td><td>80</td></tr>
+  <tr><td>Замиокулькас</td><td>30</td><td>40</td><td>20</td><td>90</td></tr>
+  <tr><td>Монстера</td><td>—</td><td>30</td><td>35</td><td>65</td></tr>
+  <tr><td>Фикус</td><td>—</td><td>25</td><td>30</td><td>55</td></tr>
+  <tr class="total"><td>ИТОГО</td><td>175</td><td>225</td><td>100</td><td>500</td></tr>
+</table>
+
+<!-- 01 ЛИСТОВКА ═════════════════════════════════════════ -->
+<h2><span class="num">01</span> ЛИСТОВКА · 100×100 мм</h2>
+<h3>1 универсальный фронт + 7 оборотов (per SKU)</h3>
+
+<p><strong>Калькулятор:</strong> Листовки · «Есть готовый макет»</p>
+
+<table>
+  <tr><th colspan="2">Спецификация</th></tr>
+  <tr><td>Формат</td><td>100×100 мм</td></tr>
+  <tr><td>Вылеты</td><td>+3 мм → <strong>106×106 мм с вылетом</strong></td></tr>
+  <tr><td>Печать</td><td><strong>Двусторонняя</strong> (универсальный фронт + SKU-оборот)</td></tr>
+  <tr><td>Бумага</td><td><strong>«Лен» сл. кость, 300 гр</strong> (cream, тактильная фактура льна)</td></tr>
+  <tr><td>Ламинация</td><td>Не требуется</td></tr>
+  <tr><td>Биговка / скругление / перфорация / тиснение</td><td>Не требуется</td></tr>
+  <tr><td>Срок</td><td>3–5 рабочих дней</td></tr>
+  <tr><td>Пробный образец</td><td><strong>Взять</strong> (1000 ₽) — проверить линии 0.25–0.3 мм на льне</td></tr>
+  <tr><td><strong>Количество видов</strong></td><td><span class="num-hi">7</span> SKU-комбинаций (1 фронт × 7 SKU-оборотов)</td></tr>
+  <tr><td><strong>Общее количество единиц</strong></td><td><span class="num-hi">570 шт</span> (с +10% брак)</td></tr>
+  <tr><td>Комментарий</td><td>Фронт универсальный — один макет на все 570 штук. Оборот персонифицирован под каждое растение (имя + латынь + SKU-цвет + описание грунта + QR на гайды + рукописная шутка). Двусторонняя печать одним заказом.</td></tr>
+</table>
+
+<h3>Тираж по SKU (база × 1.1)</h3>
+<table class="matrix">
+  <tr><th>SKU</th><th>База</th><th>+10%</th><th>К печати</th></tr>
+  <tr><td>Антуриум</td><td>70</td><td>77</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Аглаонема</td><td>70</td><td>77</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Эпипремнум</td><td>70</td><td>77</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Спатифиллум</td><td>80</td><td>88</td><td><span class="num-hi">90</span></td></tr>
+  <tr><td>Замиокулькас</td><td>90</td><td>99</td><td><span class="num-hi">100</span></td></tr>
+  <tr><td>Монстера</td><td>65</td><td>72</td><td><span class="num-hi">75</span></td></tr>
+  <tr><td>Фикус</td><td>55</td><td>61</td><td><span class="num-hi">65</span></td></tr>
+  <tr class="total"><td>ВСЕГО</td><td>500</td><td>550</td><td><span class="num-hi">570</span></td></tr>
+</table>
+
+<div class="callout">
+  Фронт универсальный — один макет на все 570 штук. Оборот — 7 вариантов по SKU. Листовка двусторонняя, печатается одним заказом.
+</div>
+
+<!-- 02 МЕДАЛЬОН ═════════════════════════════════════════ -->
+<h2><span class="num">02</span> МЕДАЛЬОН · 3 размера × 7 SKU</h2>
+<h3>Круглая наклейка на крышку коробки · размер = объём грунта</h3>
+
+<p><strong>Калькулятор:</strong> Наклейки · «Есть готовый макет»</p>
+
+<table>
+  <tr><th colspan="2">Спецификация</th></tr>
+  <tr><td>Форма</td><td><strong>Круглая</strong></td></tr>
+  <tr><td>Размерная сетка</td><td>⌀80 мм (для 1.2 л) · ⌀100 мм (для 2.2 л) · ⌀120 мм (для 3.5 л)</td></tr>
+  <tr><td>Вылеты</td><td>+3 мм на каждый размер (⌀86 / ⌀106 / ⌀126 с вылетом)</td></tr>
+  <tr><td>Материал</td><td><strong>Бумажная самоклейка</strong></td></tr>
+  <tr><td>Ламинация</td><td><strong>Матовая 30 мкм</strong> (softtouch недоступен на круглой форме)</td></tr>
+  <tr><td>Тиснение</td><td>Не требуется</td></tr>
+  <tr><td>Срок</td><td>3–5 рабочих дней</td></tr>
+  <tr><td><strong>Количество видов</strong></td><td><span class="num-hi">16</span> макетов (7 SKU × 3 размера — не все SKU во всех объёмах · см. матрицу ниже)</td></tr>
+  <tr><td><strong>Общее количество единиц</strong></td><td><span class="num-hi">580 шт</span> (⌀80: 200 · ⌀100: 260 · ⌀120: 120 — с +10% брак)</td></tr>
+  <tr><td>Комментарий</td><td>Заказывается 3 отдельными заказами по размеру. Наклейка на верхнюю крышку коробки — первая точка касания. Матовая ламинация даёт apothecary-тактильность без глянца. COLLECTIO ZAZEMLI · N° 001..007 на верхней дуге кодирует партию (0) + SKU (01..07).</td></tr>
+</table>
+
+<h3>Матрица тиражей (база → +10% к печати)</h3>
+<table class="matrix">
+  <tr><th>SKU</th><th>⌀80 (1.2 л)</th><th>⌀100 (2.2 л)</th><th>⌀120 (3.5 л)</th><th>Итого SKU</th></tr>
+  <tr><td>Антуриум</td><td>45 → <span class="num-hi">50</span></td><td>25 → <span class="num-hi">30</span></td><td>—</td><td>80</td></tr>
+  <tr><td>Аглаонема</td><td>30 → <span class="num-hi">35</span></td><td>40 → <span class="num-hi">45</span></td><td>—</td><td>80</td></tr>
+  <tr><td>Эпипремнум</td><td>45 → <span class="num-hi">50</span></td><td>25 → <span class="num-hi">30</span></td><td>—</td><td>80</td></tr>
+  <tr><td>Спатифиллум</td><td>25 → <span class="num-hi">30</span></td><td>40 → <span class="num-hi">45</span></td><td>15 → <span class="num-hi">20</span></td><td>95</td></tr>
+  <tr><td>Замиокулькас</td><td>30 → <span class="num-hi">35</span></td><td>40 → <span class="num-hi">45</span></td><td>20 → <span class="num-hi">25</span></td><td>105</td></tr>
+  <tr><td>Монстера</td><td>—</td><td>30 → <span class="num-hi">35</span></td><td>35 → <span class="num-hi">40</span></td><td>75</td></tr>
+  <tr><td>Фикус</td><td>—</td><td>25 → <span class="num-hi">30</span></td><td>30 → <span class="num-hi">35</span></td><td>65</td></tr>
+  <tr class="total"><td>Итого по размеру</td><td><span class="num-hi">200</span></td><td><span class="num-hi">260</span></td><td><span class="num-hi">120</span></td><td><span class="num-hi">580</span></td></tr>
+</table>
+
+<div class="callout">
+  Заказ разбивается на 3 отдельных по размеру: <strong>⌀80мм — 200 шт (5 SKU)</strong> · <strong>⌀100мм — 260 шт (7 SKU)</strong> · <strong>⌀120мм — 120 шт (4 SKU)</strong>. COLLECTIO ZAZEMLI · N° 001..007 на верхней дуге кодирует партию (0) + SKU (01..07). Матовая ламинация даёт apothecary-тактильность.
+</div>
+
+<!-- 03 МИНИ ═════════════════════════════════════════════ -->
+<h2><span class="num">03</span> МИНИ-СТИКЕРЫ · ⌀35 мм</h2>
+<h3>3 универсальных варианта · на все боксы</h3>
+
+<p><strong>Калькулятор:</strong> Наклейки · «Есть готовый макет»</p>
+
+<table>
+  <tr><th colspan="2">Спецификация</th></tr>
+  <tr><td>Форма</td><td><strong>Круглая</strong></td></tr>
+  <tr><td>Размер</td><td>до 50×50 мм (⌀35 мм)</td></tr>
+  <tr><td>Вылеты</td><td>+3 мм → ⌀41 мм с вылетом</td></tr>
+  <tr><td>Материал</td><td>Бумажная самоклейка</td></tr>
+  <tr><td>Ламинация</td><td>Матовая 30 мкм (для согласованности с медальоном)</td></tr>
+  <tr><td>Срок</td><td>3–5 рабочих дней</td></tr>
+  <tr><td><strong>Количество видов</strong></td><td><span class="num-hi">3</span> универсальных варианта (01 ЗАБОТА · 02 ДРЕНАЖ · 03 ГРУНТ)</td></tr>
+  <tr><td><strong>Общее количество единиц</strong></td><td><span class="num-hi">1650 шт</span> (550 × 3 вида · в каждом боксе комплект из 3)</td></tr>
+  <tr><td>Комментарий</td><td>01 — на конверт с перчатками · 02 — на дренажный пакет (без окошка) · 03 — на грунтовый пакет (с окошком). Moss-кольцо по периметру — общий визуальный язык с медальоном. Универсальны на все 7 SKU.</td></tr>
+</table>
+
+<h3>Тираж · 3 мини на каждый бокс</h3>
+<table class="matrix">
+  <tr><th>Вариант</th><th>База (500)</th><th>К печати</th></tr>
+  <tr><td>01 · ЗАБОТА (на конверт)</td><td>500</td><td><span class="num-hi">550</span></td></tr>
+  <tr><td>02 · ДРЕНАЖ (на пакет без окошка)</td><td>500</td><td><span class="num-hi">550</span></td></tr>
+  <tr><td>03 · ГРУНТ (на пакет с окошком)</td><td>500</td><td><span class="num-hi">550</span></td></tr>
+  <tr class="total"><td>ВСЕГО</td><td>1500</td><td><span class="num-hi">1650</span></td></tr>
+</table>
+
+<!-- 04 BAND ════════════════════════════════════════════ -->
+<h2><span class="num">04</span> BAND · 60×22 мм</h2>
+<h3>«Заземли рекомендует» · 1 универсал</h3>
+
+<p><strong>Калькулятор:</strong> Наклейки · «Есть готовый макет»</p>
+
+<table>
+  <tr><th colspan="2">Спецификация</th></tr>
+  <tr><td>Форма</td><td><strong>Прямоугольная</strong></td></tr>
+  <tr><td>Размер</td><td>до 50×70 мм (фактически 60×22 мм)</td></tr>
+  <tr><td>Вылеты</td><td>+3 мм → 66×28 мм с вылетом</td></tr>
+  <tr><td>Материал</td><td>Бумажная самоклейка</td></tr>
+  <tr><td>Ламинация</td><td>Не требуется</td></tr>
+  <tr><td>Срок</td><td>3–5 рабочих дней</td></tr>
+  <tr><td><strong>Количество видов</strong></td><td><span class="num-hi">1</span> универсальный</td></tr>
+  <tr><td><strong>Общее количество единиц</strong></td><td><span class="num-hi">550 шт</span> (500 × 1.1)</td></tr>
+  <tr><td>Комментарий</td><td>Клеится на пакет корневина поверх стандартного tagline пакета. Маленький размер — в пробнике проверить что тонкие линии рамки не потеряются. Apothecary-стиль — единая визуальная связка с медальоном и журналом.</td></tr>
+</table>
+
+<div class="callout">
+  Клеится на пакет корневина (поверх tagline пакета). Маленький размер — проверить что тонкие линии рамок не потеряются.
+</div>
+
+<!-- 05 ЖУРНАЛ ══════════════════════════════════════════ -->
+<h2><span class="num">05</span> ДНЕВНИК НАТУРАЛИСТА · A5 bifold</h2>
+<h3>7 SKU · брошюра A4 с 1 сгибом (→ A5)</h3>
+
+<p><strong>Калькулятор:</strong> Буклеты с 1 сгибом · «Есть готовый макет»</p>
+
+<table>
+  <tr><th colspan="2">Спецификация</th></tr>
+  <tr><td>Формат</td><td><strong>Буклет A4</strong> (21×29.7 см) в разложенном → <strong>A5</strong> после сгиба</td></tr>
+  <tr><td>Вылеты</td><td>+3 мм</td></tr>
+  <tr><td>Бумага</td><td><strong>«Лен» сл. кость, 300 гр</strong> (тот же лен, что листовка)</td></tr>
+  <tr><td>Ламинация</td><td>Не требуется</td></tr>
+  <tr><td>Тиснение</td><td>Не требуется</td></tr>
+  <tr><td>Сложение продукта</td><td><strong>Сложить в формат</strong> (1 сгиб/биг)</td></tr>
+  <tr><td>Срок</td><td>3–5 рабочих дней</td></tr>
+  <tr><td>Пробный образец</td><td><strong>1500 ₽ — ОБЯЗАТЕЛЬНО</strong> (критично: календарные клетки 1.6 мм, stroke 0.18)</td></tr>
+  <tr><td><strong>Количество видов</strong></td><td><span class="num-hi">7</span> SKU (обложка + задняя персонализированы per SKU, внутренний разворот универсальный)</td></tr>
+  <tr><td><strong>Общее количество единиц</strong></td><td><span class="num-hi">570 шт</span> (с +10% брак)</td></tr>
+  <tr><td>Комментарий</td><td>Центральный артефакт набора — дневник натуралиста с календарями на год (апрель→март — цикл пробуждения растения), полями для характеристик через 1 и 7 месяцев, компасом направления окна. Тот же лен, что листовка — тактильная связка артефактов. Самая дорогая позиция печати (~51k ₽ = 53% бюджета).</td></tr>
+</table>
+
+<h3>Тираж по SKU (совпадает с листовками-оборотами)</h3>
+<table class="matrix">
+  <tr><th>SKU</th><th>База</th><th>К печати</th></tr>
+  <tr><td>Антуриум</td><td>70</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Аглаонема</td><td>70</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Эпипремнум</td><td>70</td><td><span class="num-hi">80</span></td></tr>
+  <tr><td>Спатифиллум</td><td>80</td><td><span class="num-hi">90</span></td></tr>
+  <tr><td>Замиокулькас</td><td>90</td><td><span class="num-hi">100</span></td></tr>
+  <tr><td>Монстера</td><td>65</td><td><span class="num-hi">75</span></td></tr>
+  <tr><td>Фикус</td><td>55</td><td><span class="num-hi">65</span></td></tr>
+  <tr class="total"><td>ВСЕГО</td><td>500</td><td><span class="num-hi">570</span></td></tr>
+</table>
+
+<div class="warning">
+  <strong>Критично для pre-press:</strong> календарные клетки 1.6×1.6 мм, stroke 0.18 — проверить dropout на льне. Февраль 29 — пунктирная обводка. Apothecary-штамп «ЗАЗЕМЛЁН» с SVG grunge-filter (feTurbulence + feDisplacementMap) — проверить рендер в PDF.
+</div>
+
+<!-- СВОДНАЯ ТАБЛИЦА ══════════════════════════════════════ -->
+<div class="divider">❦  общая сводка по заказам  ❦</div>
+
+<h2><span class="num">06</span> СВОДКА ПО ЗАКАЗАМ В ТИПОГРАФИЮ</h2>
+
+<table class="matrix">
+  <tr><th>Артефакт</th><th>Типов</th><th>Тираж</th></tr>
+  <tr><td>Листовка 106×106 · двусторонняя</td><td>7 комбинаций (1 фронт × 7 SKU)</td><td><span class="num-hi">570 шт</span></td></tr>
+  <tr><td>Медальоны ⌀80 мм</td><td>5 SKU</td><td><span class="num-hi">200 шт</span></td></tr>
+  <tr><td>Медальоны ⌀100 мм</td><td>7 SKU</td><td><span class="num-hi">260 шт</span></td></tr>
+  <tr><td>Медальоны ⌀120 мм</td><td>4 SKU</td><td><span class="num-hi">120 шт</span></td></tr>
+  <tr><td>Мини-стикеры ⌀35 мм</td><td>3 универсала</td><td><span class="num-hi">1650 шт</span></td></tr>
+  <tr><td>Band 60×22 мм</td><td>1 универсал</td><td><span class="num-hi">550 шт</span></td></tr>
+  <tr><td>Журнал A5 bifold</td><td>7 SKU</td><td><span class="num-hi">570 шт</span></td></tr>
+  <tr class="total"><td>ВСЕГО единиц печати</td><td></td><td><span class="num-hi">~3920 шт</span></td></tr>
+</table>
+
+<!-- PALETTE ═══════════════════════════════════════════ -->
+<h2><span class="num">07</span> ПАЛИТРА SKU · RGB → CMYK</h2>
+
+<table>
+  <tr>
+    <th>SKU</th>
+    <th>Растение</th>
+    <th>RGB</th>
+    <th>CMYK approx</th>
+  </tr>
+  <tr><td><span class="sku-chip" style="background:#4A7C59"></span>01</td><td>Монстера</td><td>#4A7C59 · moss</td><td>C63 M20 Y63 K20</td></tr>
+  <tr><td><span class="sku-chip" style="background:#BE3A6B"></span>02</td><td>Фикус</td><td>#BE3A6B · cosmos</td><td>C15 M80 Y25 K15</td></tr>
+  <tr><td><span class="sku-chip" style="background:#C03A30"></span>03</td><td>Антуриум</td><td>#C03A30 · poppy</td><td>C15 M85 Y75 K15</td></tr>
+  <tr><td><span class="sku-chip" style="background:#7E6AAF"></span>04</td><td>Аглаонема</td><td>#7E6AAF · iris</td><td>C55 M55 Y0 K20</td></tr>
+  <tr><td><span class="sku-chip" style="background:#2878AE"></span>05</td><td>Спатифиллум</td><td>#2878AE · sky</td><td>C82 M48 Y0 K15</td></tr>
+  <tr><td><span class="sku-chip" style="background:#C47A10"></span>06</td><td>Замиокулькас</td><td>#C47A10 · butter</td><td>C10 M50 Y100 K10</td></tr>
+  <tr><td><span class="sku-chip" style="background:#4A7C59"></span>07</td><td>Эпипремнум</td><td>#4A7C59 · moss (=01)</td><td>C63 M20 Y63 K20</td></tr>
+</table>
+
+<h3>Базовые цвета</h3>
+<table>
+  <tr><th>Роль</th><th>HEX</th><th>CMYK</th></tr>
+  <tr><td>Бумага (cream)</td><td>#F6F4F0</td><td>цвет бумаги — не печатать</td></tr>
+  <tr><td>Charcoal ink</td><td>#1C1C1C</td><td>C60 M60 Y60 K100 (rich black)</td></tr>
+  <tr><td>Moss signature (universal)</td><td>#4A7C59</td><td>C63 M20 Y63 K20</td></tr>
+</table>
+
+<!-- FONTS ══════════════════════════════════════════════ -->
+<h2><span class="num">08</span> ШРИФТЫ</h2>
+
+<table>
+  <tr><th>Семейство</th><th>Weights</th><th>Роль</th></tr>
+  <tr><td><strong>Unbounded</strong></td><td>300 / 500 / 700 / 900</td><td>System text, caps labels, COLLECTIO header, slogan</td></tr>
+  <tr><td><strong>Spectral</strong></td><td>400 italic / 700</td><td>Latin names, poetic signatures, apothecary stamp</td></tr>
+  <tr><td><strong>Caveat</strong></td><td>400</td><td>Handwritten tagline «заземли себя» (только фронт листовки)</td></tr>
+</table>
+
+<div class="warning">
+  <strong>⚠ КРИТИЧНО:</strong> Проверить что Unbounded subset содержит <strong>Ё</strong> (U+0401). Иначе текст «ЗАЗЕМЛЁН» на 6 SKU сломается.
+</div>
+
+<!-- TIMELINE ══════════════════════════════════════════ -->
+<h2><span class="num">09</span> ВРЕМЕННОЙ ПЛАН</h2>
+
+<table>
+  <tr><th>Этап</th><th>Действие</th></tr>
+  <tr><td>День 0</td><td>Выбор бумаги, заказ пробных образцов (журнал A5 + листовка + медальон)</td></tr>
+  <tr><td>День +3</td><td>Получить образцы, проверить линии/шрифты/цвета</td></tr>
+  <tr><td>День +4</td><td>Подтвердить или скорректировать → полный заказ</td></tr>
+  <tr><td>День +9</td><td>Получить тираж партии 0 (500 боксов)</td></tr>
+</table>
+
+<!-- CHECKLIST ═════════════════════════════════════════ -->
+<h2><span class="num">10</span> ЧЕКЛИСТ ПЕРЕД ОТПРАВКОЙ</h2>
+
+<ul class="checklist">
+  <li>Все SVG сконвертированы в CMYK</li>
+  <li>Unbounded webfont subset содержит Ё</li>
+  <li>Все линии ≥0.25 мм</li>
+  <li>Все шрифты ≥2.3 pt</li>
+  <li>Вылеты 3 мм на всех макетах</li>
+  <li>Файлы в формате PDF/X-4 или PDF/X-1a</li>
+  <li>Crop marks включены на всех макетах</li>
+  <li>Пробный образец заказан для ключевых артефактов</li>
+</ul>
+
+<div class="divider">❦ · — выращено в доме — · ❦</div>
+
+</body>
+</html>

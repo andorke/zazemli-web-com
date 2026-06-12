@@ -1,0 +1,6 @@
+# Reference docs (copied from ~/.claude/templates/project-docs/)
+# Same for every project — not worth committing. Remove this entry if your team wants to version it.
+example_docs/
+
+# macOS
+.DS_Store

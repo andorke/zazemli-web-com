@@ -1,0 +1,138 @@
+═══════════════════════════════════════════════════════════════
+  ЗАЗЕМЛИ · ПАРТИЯ 0 · MANIFEST
+  v5.4 · 26 апреля 2026 (regenerated)
+═══════════════════════════════════════════════════════════════
+
+33 PDF, готовых к отправке в типографию (Enjoyprint-стандарт).
+Pre-press: vector CMYK FOGRA39L · embedded fonts · TrimBox+BleedBox
+        · DIECUT spot Magenta 100% · Crop+Registration marks
+        · Pure K=100 для текста · Bleed 3 мм со всех сторон
+
+V5.4 ПРАВКИ (vs v5.3):
+  • Mini ring r=54u (90% trim, safe 2мм — компромисс для малого формата)
+  • Mini arc-bot Unbounded 500 в accent-color (унификация с медальоном)
+  • Лейблы мини: 01 ЗАБОТА · 02 ДРЕНАЖ · 03 ГРУНТ
+  • Листовка БЕЗ фона (печать на льне ivory, бумага сама даёт цвет)
+  • Все 2-FRAME inset 18u (=3мм safe от trim)
+  • Composition list line-height 1.48 (по брендбуку §05)
+  • Footer на оборотной листовке у нижнего края
+  • Apothecary-bar §03.5 (hairline·dot·❦·dot·hairline)
+
+
+───────────────────────────────────────────────────────────────
+  МЕДАЛЬОНЫ ⌀80 / ⌀100 / ⌀120 мм · 7 SKU × 3 размера = 21 PDF
+───────────────────────────────────────────────────────────────
+
+  ⌀80 мм (trim 80×80, bleed 86×86, media 100×100):
+    medallion-80mm-001-monstera.pdf       moss
+    medallion-80mm-002-ficus.pdf          cosmos
+    medallion-80mm-003-anturium.pdf       poppy
+    medallion-80mm-004-aglaonema.pdf      iris
+    medallion-80mm-005-spatifillum.pdf    sky
+    medallion-80mm-006-zamiokulkas.pdf    buttercup
+    medallion-80mm-007-epipremnum.pdf     moss
+
+  ⌀100 мм (trim 100×100, bleed 106×106, media 120×120):
+    medallion-100mm-001-monstera.pdf
+    medallion-100mm-002-ficus.pdf
+    medallion-100mm-003-anturium.pdf
+    medallion-100mm-004-aglaonema.pdf
+    medallion-100mm-005-spatifillum.pdf
+    medallion-100mm-006-zamiokulkas.pdf
+    medallion-100mm-007-epipremnum.pdf
+
+  ⌀120 мм (trim 120×120, bleed 126×126, media 140×140):
+    medallion-120mm-001-monstera.pdf
+    medallion-120mm-002-ficus.pdf
+    medallion-120mm-003-anturium.pdf
+    medallion-120mm-004-aglaonema.pdf
+    medallion-120mm-005-spatifillum.pdf
+    medallion-120mm-006-zamiokulkas.pdf
+    medallion-120mm-007-epipremnum.pdf
+
+  Материал:    бумажная самоклейка + soft-touch плёнка 30 мкм
+  Тираж 0:     30–50 × 7 SKU × 3 размера = 630–1050 шт
+
+
+───────────────────────────────────────────────────────────────
+  МИНИ-СТИКЕРЫ ⌀40 мм · 3 роли = 3 PDF
+───────────────────────────────────────────────────────────────
+
+  trim 40×40, bleed 46×46, media 60×60:
+    mini-01-bone.pdf       01 ЗАБОТА     bone ground
+    mini-02-charcoal.pdf   02 ДРЕНАЖ     charcoal ground (§16 инверсия)
+    mini-03-charcoal.pdf   03 ГРУНТ      charcoal ground (§16 инверсия)
+
+  Safe zone:   2 мм (компромисс для малого формата)
+  Материал:    бумажная самоклейка + soft-touch плёнка 30 мкм
+  Тираж 0:     30–50 × 3 = 90–150 шт
+
+
+───────────────────────────────────────────────────────────────
+  BAND 70×50 мм · «Заземли рекомендует» = 1 PDF
+───────────────────────────────────────────────────────────────
+
+  trim 70×50, bleed 76×56, media 90×70:
+    band-charcoal.pdf      §16 инверсия · charcoal-ground · 3мм safe zone
+
+  Материал:    бумажная самоклейка
+  Тираж 0:     50–100 шт
+
+
+───────────────────────────────────────────────────────────────
+  ЛИСТОВКА 140×140 мм · 1 фронт + 7 оборотов = 8 PDF
+───────────────────────────────────────────────────────────────
+
+  trim 140×140, bleed 146×146, media 160×160:
+    leaflet-00-front.pdf                  hero «РУКИ В ЗЕМЛЮ»
+    leaflet-001-monstera-back.pdf         poetry + состав + 2 QR + handscript
+    leaflet-002-ficus-back.pdf
+    leaflet-003-anturium-back.pdf
+    leaflet-004-aglaonema-back.pdf
+    leaflet-005-spatifillum-back.pdf
+    leaflet-006-zamiokulkas-back.pdf
+    leaflet-007-epipremnum-back.pdf
+
+  Бумага:      «Лен» сл. кость, 300 гр (uncoated)
+  БЕЗ ФОНА:    бумага сама даёт цвет ivory
+  Safe zone:   3 мм (рамки в 18u inset = 9u bleed + 9u safe)
+  Тираж 0:     30–50 × 7 SKU = 210–350 шт
+
+
+═══════════════════════════════════════════════════════════════
+  TECH SPECS · pre-press проверки (выполнены)
+═══════════════════════════════════════════════════════════════
+
+  [✓] Вектор · cairosvg → PDF без растеризации
+  [✓] CMYK FOGRA39L · ghostscript ICC + post-process k/K операторы
+  [✓] Pure K=100 для текста (#000000 после автозамены charcoal)
+  [✓] Rich black для плашек (#1C1C1C → C70 M67 Y66 K77)
+  [✓] DIECUT magenta 100% (M=100) на bleed-edge, layer "CutContour"
+  [✓] Bleed 3 мм со всех сторон
+  [✓] Crop marks 5 мм / stroke 0.25 мм / gap 2 мм от trim
+  [✓] Registration marks ⌀4 мм с крестом, 4 угла media-box
+  [✓] TrimBox + BleedBox прописаны в PDF metadata
+  [✓] Embedded fonts subset · Unbounded (Regular/Bold/Black) ·
+      Spectral (Regular/Italic) · Caveat (Regular)
+      Cyrillic + Ё проверены на всех 33 файлах
+
+
+═══════════════════════════════════════════════════════════════
+  WORKFLOW · автогенерация
+═══════════════════════════════════════════════════════════════
+
+  Source script:
+    C:\Users\Настя\Documents\zazemli-brand\maketi\_sketches-v5\
+      build_sketches.py     — артефакт-функции + sketches.html
+      build_prepress.py     — pre-press wrapper + 33 PDF
+
+  Чтобы пересобрать:
+    cd _sketches-v5/
+    python3 build_prepress.py
+
+  Output:  print-v6-prepress/{*.pdf} → копировать в maketi/partia-0/
+
+
+═══════════════════════════════════════════════════════════════
+  Версия: v5.4 · 26 апреля 2026 · 33 PDF
+═══════════════════════════════════════════════════════════════
