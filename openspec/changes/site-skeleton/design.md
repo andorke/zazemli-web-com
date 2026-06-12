@@ -1,0 +1,70 @@
+# Design: site-skeleton
+
+## Context
+
+Репозиторий содержит только документы и ассеты — кода нет. Дизайн-система полностью специфицирована фаундером: `tokens.json` v1.0.1 (цвета, типографика, спейсинг, opacity, рамки, motion, брейкпоинты, a11y), color-system.md (правило 60/30/10), typography.md (3 семейства, роли, letter-spacing). Эталон главной — Figma `bCmvvuyo5ssXaGEuUjwbHc` node 185:2 «Screen / Landing · PHASE 8 · v2» (десктоп 1440, тексты финальные). Стек канонизирован брифом: Next.js + React + TS strict + Tailwind + shadcn/ui. Решения брейнсторминга 2026-06-12 (см. CONTEXT.md): static export, контент статикой, структура по ролям, объём «DS + каркас + главная» целиком.
+
+Ограничения: анимация только CSS (на MVP отсутствует), аналитика только Я.Метрика, шрифтов ровно 3, без box-shadow, радиусы 0/2px, мобильных макетов в Figma нет.
+
+## Goals / Non-Goals
+
+**Goals:**
+- Рабочий статический сайт: `npm run build` → `out/` с 5 страницами.
+- Дизайн-токены и шрифты как переиспользуемый фундамент для всех будущих страниц.
+- Главная, соответствующая Figma 185:2 на 1440px и адаптивная до 360px.
+- Юр/аналитика-минимум: cookie-баннер с consent-gate, каркас Метрики, noindex на `/diary-signup`.
+- Тестовый каркас: Vitest unit + Playwright smoke.
+
+**Non-Goals:**
+- Контент `/collectio`, `/lab`, `/guide`, `/diary-signup` (придёт от Насти — сейчас заглушки).
+- Форма подписки и выбор email-провайдера.
+- Sanity, каталог `/collectio/[plant]`, магазин.
+- Хостинг/деплой/CI, домен, реальный Ozon-URL.
+- Анимация (motion-токены заложены, не используются).
+- Полный SEO (только title/description/canonical/sitemap/robots + OG-заглушка).
+
+## Decisions
+
+### D1. Static export, без API routes
+`output: 'export'`, `images.unoptimized: true`, `trailingSlash` по умолчанию. Альтернатива — Node SSG на VPS — отвергнута: сайт полностью статичен, статика дешевле и стабильнее в РФ-контексте (Vercel не рекомендован брифом). Будущая форма `/diary-signup` постит напрямую во внешний email-сервис.
+
+### D2. Токены: одна ручная трансляция в CSS-переменные
+`tokens.json` → `src/styles/globals.css` (`:root` + `@theme` Tailwind v4), вручную, с комментарием-ссылкой на источник и версию. Альтернатива — кодогенерация из tokens.json — отвергнута: токены меняются редко, скрипт = лишняя движущаяся часть (Karpathy: simplicity first). Контракт: компоненты используют только CSS-переменные/Tailwind-классы темы, hex в коде запрещён.
+
+### D3. Шрифты self-hosted через next/font/local
+woff2 копируются из `docs/zazemli_design_arts/fonts/` в `src/fonts/`. Веса: Unbounded 300/400/500/700/900, Spectral 400 (+italic) /700, Caveat 400. Альтернатива — Google Fonts (упомянута в HANDOFF §5) — отвергнута: site-brief §4.3 требует self-hosted, это надёжнее из РФ и без FOUT-сюрпризов. Spectral Light 300 отсутствует в файлах — «гигантская 7» рендерится Spectral 400 (открытый вопрос Насте).
+
+### D4. Структура по ролям, имена из БЗ
+`components/ui` (shadcn-примитивы + бренд-атомы), `components/site` (SiteHeader, SiteFooter, CookieBanner, Metrika), `components/sections/home/` (9 секций). Альтернатива — atomic-папки как в БЗ — отвергнута пользователем: меньше церемоний, маппинг уровней фиксируется таблицей в DEVELOPMENT.md.
+
+### D5. Контент — типизированные TS-константы
+`src/content/{sku,home,site}.ts` с явными типами (`Sku`, `NavItem`, `FooterInfo`, `HomeContent`). Тексты главной — дословно из Figma-нод 185:2 (истина по брифу §6). В JSX текстов нет — готовит миграцию на Sanity. `ozonStoreUrl: string | null` — при `null` кнопки Ozon рендерятся как «Скоро на Ozon» (не-ссылка).
+
+### D6. Consent-gate аналитики
+CookieBanner — своя лёгкая реализация (`localStorage`-флаг, два действия: «Принять» / «Только необходимые»; по умолчанию — отклонено). Скрипт Метрики вставляется только после согласия и только при заданном `NEXT_PUBLIC_METRIKA_ID`. Альтернатива — грузить Метрику сразу — отвергнута: бриф §8 требует отклонение необязательных cookie по умолчанию (152-ФЗ). Цели 7 точек — тонкие обёртки `lib/metrika.ts` (`reachGoal`), вызовы расставляются по мере появления страниц.
+
+### D7. SEO-минимум через Metadata API
+`metadata` в layout/страницах: title-шаблон, description, canonical (`metadataBase` = `https://zazemli.com`). `sitemap.ts` и `robots.ts` (static-export-совместимы); `/diary-signup`: `robots: { index: false }` и исключение из sitemap. Schema.org HowTo — в Фазе 2 вместе с контентом `/guide`.
+
+### D8. Тесты: инварианты + smoke, без пиксель-перфекта
+Unit (Vitest + RTL): `utm.ts`, инварианты контента (SKU=7, diary-signup вне навигации, дисклеймер в футере). E2E (Playwright против `next dev`): 5 роутов с правильными h1/title, навигация, burger, заглушка Ozon-кнопки. Визуальное соответствие Figma проверяется глазами на ревью; скриншот-тесты — отвергнуты (хрупко на старте, иллюстрации ещё будут меняться).
+
+## Risks / Trade-offs
+
+- [Тексты из Figma могут разойтись с будущими копи-файлами Насти] → контент изолирован в `content/home.ts`, замена — точечный PR без правки компонентов.
+- [Spectral Light 300 нет в файлах] → временно 400; зафиксировано как открытый вопрос Насте (CONTEXT.md).
+- [Мобильных макетов нет] → адаптив по DS-правилам (стек колонок, fluid clamp для hero); риск переделки после мобильной Figma — принят, секции изолированы.
+- [`images.unoptimized` — нет автоматического resize] → на MVP изображений почти нет (слоты); при появлении иллюстраций — пережать вручную/скриптом до целевых размеров.
+- [Burger в shadcn Sheet тянет Radix-зависимости] → допустимо: компоненты копируются в репо, дерево зависимостей фиксируется lock-файлом.
+- [QR-SVG и дудлы содержат кириллические имена файлов] → при копировании в `public/` переименовать в латиницу (URL-безопасность).
+
+## Migration Plan
+
+Новый код, миграции нет. Деплой вне зоны change. Откат = revert коммитов.
+
+## Open Questions
+
+- Ozon-store URL (вопрос Насте из брифа §9.4) — до ответа `ozonStoreUrl: null`.
+- Подтверждение noindex на `/diary-signup` (наше допущение).
+- Вес Spectral Light для «7» в галерее SKU.
+- Точный Lighthouse-бюджет (файл brief-CDO v1.2 вне репо) — пока ориентир perf ≥ 90.
