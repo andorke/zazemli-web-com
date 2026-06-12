@@ -41,4 +41,4 @@
 ## Следующие шаги
 - [x] git init + первый коммит документов
 - [ ] Создать OpenSpec change на каркас (`/opsx:propose`)
-- [ ] Передать Насте открытые вопросы: Ozon-store URL, вес Spectral Light 300 (для «7» в галерее), noindex на `/diary-signup`
+- [ ] Передать Насте открытые вопросы: Ozon-store URL, вес Spectral Light 300 (для «7» в галерее), noindex на `/diary-signup`, файлы шрифтов (woff2 в ассетах битые по 39 байт; нет Unbounded 500 и Spectral 700)

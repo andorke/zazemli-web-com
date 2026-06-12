@@ -9,10 +9,10 @@
 
 ## 2. Дизайн-система
 
-- [ ] 2.1 Транслировать `tokens.json` v1.0.1 в `src/styles/globals.css` (`:root`-переменные + `@theme` Tailwind v4): цвета brand/earth/sku, шкала шрифтов, спейсинг, opacity, радиусы 0/2/pill, брейкпоинты; коммент-ссылка на источник
-- [ ] 2.2 Скопировать woff2 в `src/fonts/`, подключить через `next/font/local`: Unbounded 300/400/500/700/900, Spectral 400(+italic)/700, Caveat 400; назначить CSS-переменные семейств
-- [ ] 2.3 TDD: бренд-атомы `Fleuron`, `MaterialDot`, `KickerHeader`, `CaveatNote` + DS-вариант Button (radius ≤2px, без тени) — RED-тесты на рендер/стили, затем реализация
-- [ ] 2.4 Тест-инвариант DS: поиск hex-литералов и `shadow`/`rounded-*` вне разрешённого набора по `src/components` + `src/app` — зелёный
+- [x] 2.1 Транслировать `tokens.json` v1.0.1 в `src/app/globals.css` (`:root`-переменные + `@theme` Tailwind v4): цвета brand/earth/sku, шкала шрифтов, спейсинг, opacity, радиусы 0/2/pill, брейкпоинты; коммент-ссылка на источник
+- [x] 2.2 Скопировать шрифты в `src/fonts/`, подключить через `next/font/local` (факт: woff2 в ассетах битые → ttf; доступны Unbounded 300/400/700/900, Spectral 400(+italic)/600, Caveat 400; Unbounded 500 и Spectral 700 — вопрос Насте); CSS-переменные семейств назначены
+- [x] 2.3 TDD: бренд-атомы `Fleuron`, `MaterialDot`, `KickerHeader`, `CaveatNote` + DS-вариант Button (radius ≤2px, без тени) — RED-тесты на рендер/стили, затем реализация
+- [x] 2.4 Тест-инвариант DS: поиск hex-литералов и `shadow`/`rounded-*` вне разрешённого набора по `src/components` + `src/app` — зелёный (поймал и убрал shadow-lg в shadcn sheet)
 
 ## 3. Контент-слой
 
