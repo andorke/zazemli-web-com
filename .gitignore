@@ -5,6 +5,9 @@ example_docs/
 # macOS
 .DS_Store
 
+# временные артефакты (figma-рендеры для сверки и пр.)
+/tmp/
+
 # dependencies
 /node_modules
 /.pnp

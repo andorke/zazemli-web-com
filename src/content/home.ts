@@ -31,6 +31,7 @@ export type HomeContent = {
   };
   skuGallery: {
     kicker: string;
+    title: string;
     decorative: string;
     link: { label: string; href: string };
   };
@@ -102,9 +103,10 @@ export const home: HomeContent = {
     photoSlot: "фото · компоненты земли",
   },
   skuGallery: {
-    kicker: "IV · КОЛЛЕКЦИЯ · СЕМЬ НОМЕРОВ",
+    kicker: "IV · КОЛЛЕКЦИЯ",
+    title: "Семь растений — семь рецептов земли",
     decorative: "7",
-    link: { label: "Открыть коллекцию →", href: "/collectio" },
+    link: { label: "Посмотреть коллекцию →", href: "/collectio" },
   },
   statement: {
     kicker: "ИЗ ЗАПИСЕЙ",

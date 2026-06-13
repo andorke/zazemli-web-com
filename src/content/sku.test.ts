@@ -31,4 +31,12 @@ describe("Коллекция SKU", () => {
       expect(sku.nameRu).toBe(sku.nameRu.toLowerCase());
     }
   });
+
+  it("у каждого SKU есть фраза, размер горшка и дудл (для галереи)", () => {
+    for (const sku of skus) {
+      expect(sku.tagline.length).toBeGreaterThan(0);
+      expect(sku.potSize).toMatch(/для горшка/);
+      expect(sku.doodle).toMatch(/^\/doodles\/.+\.svg$/);
+    }
+  });
 });

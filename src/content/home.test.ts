@@ -8,7 +8,11 @@ describe("Контент главной (Figma 185:2)", () => {
     expect(home.differentSoil.kicker).toBe(
       "II · РАЗНЫМ РАСТЕНИЯМ — РАЗНАЯ ЗЕМЛЯ",
     );
-    expect(home.skuGallery.kicker).toBe("IV · КОЛЛЕКЦИЯ · СЕМЬ НОМЕРОВ");
+    expect(home.skuGallery.kicker).toBe("IV · КОЛЛЕКЦИЯ");
+  });
+
+  it("заголовок галереи SKU дословно", () => {
+    expect(home.skuGallery.title).toBe("Семь растений — семь рецептов земли");
   });
 
   it("statement-цитата дословно", () => {

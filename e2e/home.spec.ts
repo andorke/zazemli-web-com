@@ -17,10 +17,14 @@ test("ключевые строки эталона видимы", async ({ page 
   ).toBeVisible();
 });
 
-test("галерея показывает 7 SKU с латынью", async ({ page }) => {
+test("галерея: заголовок и 7 SKU с фразами", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("Monstera")).toBeVisible();
-  await expect(page.getByText("Epipremnum")).toBeVisible();
+  await expect(
+    page.getByText("Семь растений — семь рецептов земли"),
+  ).toBeVisible();
+  await expect(page.getByText("монстера")).toBeVisible();
+  await expect(page.getByText("эпипремнум")).toBeVisible();
+  await expect(page.getByText("почти песок")).toBeVisible();
 });
 
 test("нет горизонтального скролла", async ({ page }) => {
