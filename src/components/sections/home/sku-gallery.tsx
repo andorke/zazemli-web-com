@@ -45,7 +45,7 @@ export function SkuGallery() {
             key={sku.number}
             className="flex w-40 flex-col items-center gap-3 text-center"
           >
-            <Doodle src={sku.doodle} className="h-16 w-12" />
+            <Doodle src={sku.doodle} className="h-32 w-24" />
             <span className="flex items-center gap-2">
               <span
                 aria-hidden="true"

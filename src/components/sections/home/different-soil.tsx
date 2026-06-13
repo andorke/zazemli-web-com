@@ -1,5 +1,5 @@
-import { SoilVial } from "@/components/ui/soil-vial";
 import { KickerHeader } from "@/components/ui/kicker-header";
+import { SoilVial } from "@/components/ui/soil-vial";
 import { home } from "@/content/home";
 
 /* «Разным растениям — разная земля» 185:143 — bone, кикер + лид + тройка колб-контраст (soil-vials-spec) */
@@ -11,18 +11,16 @@ export function DifferentSoil() {
       <p className="leading-narrative text-charcoal/70 max-w-3xl font-serif text-xl">
         {differentSoil.body}
       </p>
-      <div className="mt-6 flex flex-col items-center justify-center gap-12 sm:flex-row sm:items-start sm:gap-16">
+      <div className="mt-8 grid grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
         {differentSoil.vials.map((vial) => (
-          <figure
-            key={vial.caption}
-            className="flex max-w-56 flex-col items-center gap-4 text-center"
-          >
-            <SoilVial segments={vial.segments} />
-            <figcaption className="flex flex-col gap-2">
-              <span className="text-charcoal font-serif text-lg">
+          <figure key={vial.caption} className="flex flex-col gap-5">
+            <SoilVial segments={vial.segments} className="h-72 w-auto" />
+            <figcaption className="flex flex-col gap-3">
+              <span className="font-sans text-lg lowercase">
                 {vial.caption}
               </span>
-              <span className="text-charcoal/60 font-serif text-sm leading-snug italic">
+              <span className="bg-charcoal/40 h-px w-8" />
+              <span className="text-charcoal/65 max-w-xs font-serif text-base leading-snug italic">
                 {vial.note}
               </span>
             </figcaption>
