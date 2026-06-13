@@ -14,9 +14,9 @@ export function DifferentSoil() {
       <div className="mt-8 grid grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
         {differentSoil.vials.map((vial) => (
           <figure key={vial.caption} className="flex flex-col gap-5">
-            <SoilVial segments={vial.segments} className="h-72 w-auto" />
+            <SoilVial segments={vial.segments} className="w-40 sm:w-36 lg:w-48" />
             <figcaption className="flex flex-col gap-3">
-              <span className="font-sans text-lg lowercase">
+              <span className="font-sans text-base lowercase">
                 {vial.caption}
               </span>
               <span className="bg-charcoal/40 h-px w-8" />
