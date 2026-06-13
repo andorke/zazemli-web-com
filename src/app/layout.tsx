@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { CookieBanner } from "@/components/site/cookie-banner";
+import { Metrika } from "@/components/site/metrika";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { caveat, spectral, unbounded } from "./fonts";
@@ -31,6 +33,8 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <SiteFooter />
+        <CookieBanner />
+        <Metrika />
       </body>
     </html>
   );

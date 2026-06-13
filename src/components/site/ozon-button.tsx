@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { reachGoal } from "@/lib/metrika";
 import { buildOzonUrl } from "@/lib/utm";
 import type { ComponentProps } from "react";
 
@@ -30,6 +33,7 @@ export function OzonButton({
         href={buildOzonUrl(href, { skuNumber })}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => reachGoal("ozon-click")}
       >
         Купить на Ozon
       </a>
