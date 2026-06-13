@@ -50,6 +50,10 @@
 - **FR-6.1** title / description / canonical на каждой странице, sitemap, robots.
 - **FR-6.2** OG-картинка универсальная. На `/guide` — Schema.org `HowTo`.
 
+### Статус реализации (change site-skeleton, 2026-06-13)
+- **Реализовано**: FR-1 (5 роутов + заглушки), FR-2 (header/footer/burger), FR-3.1 + заглушка Ozon (`ozonStoreUrl: null`), FR-4.2 (cookie-баннер), FR-5 каркас (`reachGoal`, цель `ozon-click`), FR-6.1 (title/description/canonical/sitemap/robots, кроме OG).
+- **Частично/ожидает контента**: FR-3.2 (per-SKU Ozon — после URL и карточек), FR-4.1 (форма 152-ФЗ — с формой `/diary-signup` в Фазе 2), FR-5 остальные 6 целей (по мере страниц), FR-6.2 (OG-картинка, HowTo — Фаза 2/3).
+
 ## Нефункциональные требования
 
 ### NFR-1: Производительность

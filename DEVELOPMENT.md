@@ -7,17 +7,22 @@
 ## Технологический стек
 | Слой | Выбор | Примечание |
 |------|-------|------------|
-| Фреймворк | Next.js (App Router, `src/`-layout), актуальный стабильный | `output: 'export'` — чистая статика; `images.unoptimized: true` |
-| Язык | TypeScript, `strict: true` | |
-| UI | React + Tailwind CSS v4 + shadcn/ui | shadcn-компоненты копируются в репо (`components/ui`), не плагином |
-| Шрифты | `next/font/local`: Unbounded, Spectral, Caveat | woff2 в репо; DS-контракт «3 семейства max», 4-й шрифт не вводить |
-| Формы | react-hook-form + zod | только на `/diary-signup` |
-| Аналитика | Яндекс.Метрика | грузится после согласия в cookie-баннере (consent-gate); ID в `NEXT_PUBLIC_METRIKA_ID` |
-| Тесты | Vitest + React Testing Library (unit), Playwright (e2e smoke) | |
+| Фреймворк | Next.js 16 (App Router, `src/`-layout, Turbopack) | `output: 'export'` — чистая статика; `images.unoptimized: true`; `turbopack.root` задан (в `~/` есть посторонний package-lock) |
+| Язык | TypeScript 5, `strict: true` | |
+| UI | React 19 + Tailwind CSS v4 + shadcn/ui (preset nova, base radix) | shadcn-компоненты копируются в репо (`components/ui`), не плагином |
+| Шрифты | `next/font/local`: Unbounded, Spectral, Caveat — woff2 | DS-контракт «3 семейства max»; woff2 пересобраны из ttf субсеттингом (Cyrillic+Latin); Caveat `preload: false` (ниже фолда) |
+| Формы | react-hook-form + zod | только на `/diary-signup` (Фаза 2) |
+| Аналитика | Яндекс.Метрика | грузится после согласия (consent-gate, `useConsent`); ID в `NEXT_PUBLIC_METRIKA_ID`; без ID не подключается |
+| Тесты | Vitest + RTL (unit, `globals: true`), Playwright (e2e: desktop 1440 + mobile 360) | |
 | CMS | нет на MVP — контент в `src/content/*.ts` | миграция на Sanity — post-MVP, типы контента проектировать совместимо |
 | Анимация | только CSS + IntersectionObserver | без Framer Motion/GSAP/Lenis; `prefers-reduced-motion` обязателен; на MVP анимации нет |
 
-Точные версии фиксируются в `package.json` при установке; правило — последние стабильные мажоры, без canary/beta.
+Точные версии — в `package.json`. Правило — последние стабильные мажоры, без canary/beta.
+
+### Готчи окружения
+- **Tailwind-скан**: `@import "tailwindcss" source("../")` в `globals.css` ограничивает скан классов каталогом `src/` — иначе Turbopack падает на tailwind-подобных строках в `docs/` (архивы БЗ).
+- **Прокси**: в окружении выставлен `HTTP_PROXY=127.0.0.1:8888`, через который `npm install` падает с ECONNRESET. Ставить зависимости с временным сбросом прокси: `HTTP_PROXY= HTTPS_PROXY= npm install`.
+- **Шрифты**: woff2 в `docs/zazemli_design_arts/fonts/` битые (по 39 байт) — рабочие ttf пересобраны в woff2 через `python3 -m fontTools.subset`.
 
 ## Структура репозитория
 ```

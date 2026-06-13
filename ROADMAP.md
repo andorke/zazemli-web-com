@@ -7,8 +7,8 @@
 ## Обзор фаз
 | Фаза | Название | Статус |
 |------|----------|--------|
-| 0    | Настройка проекта | ⏳ В процессе |
-| 1    | Дизайн-система + каркас + главная | ⏸️ Ожидает |
+| 0    | Настройка проекта | ✅ Готово |
+| 1    | Дизайн-система + каркас + главная | ✅ Реализовано (ожидает verify/archive) |
 | 2    | Контентные страницы (по готовности от Насти) | ⏸️ Ожидает |
 | 3    | Релиз: QA, хостинг, аналитика | ⏸️ Ожидает |
 | 4    | Post-MVP: каталог, Sanity, магазин | ⏸️ Ожидает |
@@ -17,14 +17,14 @@
 - [x] Репозиторий инициализирован (scaffold)
 - [x] Документы заполнены (AGENTS, CONTEXT, REQUIREMENTS, DEVELOPMENT, ARCHITECTURE, ROADMAP)
 - [x] git init + первый коммит
-- [ ] Стек развёрнут (`create-next-app` + Tailwind + shadcn), `npm run build` зелёный
-- [ ] Первая фича описана через `/opsx:propose`
+- [x] Стек развёрнут (`create-next-app` + Tailwind + shadcn), `npm run build` зелёный
+- [x] Первая фича описана через `/opsx:propose`
 
 ## Фаза 1: Дизайн-система + каркас + главная
-- [ ] DS-фундамент: токены → CSS-переменные/Tailwind-тема, 3 шрифта через `next/font/local`, бренд-атомы
-- [ ] Каркас: 5 роутов, SiteHeader + SiteFooter, заглушки 4 страниц, 404, cookie-баннер + consent-gate Метрики, SEO-минимум (title/description/canonical/sitemap/robots)
-- [ ] Главная по Figma 185:2: 9 секций, тексты из Figma, слоты под иллюстрации без CLS
-- [ ] Тесты зелёные (unit + e2e smoke), static export собирается
+- [x] DS-фундамент: токены → CSS-переменные/Tailwind-тема, 3 шрифта через `next/font/local`, бренд-атомы
+- [x] Каркас: 5 роутов, SiteHeader + SiteFooter, заглушки 4 страниц, 404, cookie-баннер + consent-gate Метрики, SEO-минимум (title/description/canonical/sitemap/robots)
+- [x] Главная по Figma 185:2: 9 секций, тексты из Figma, слоты под иллюстрации без CLS
+- [x] Тесты зелёные (unit + e2e smoke), static export собирается
 
 ## Фаза 2: Контентные страницы
 - [ ] `/collectio` — витрина 7 SKU (по Figma от Насти)
