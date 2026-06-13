@@ -24,7 +24,8 @@ test("галерея: заголовок и 7 SKU с фразами", async ({ p
   ).toBeVisible();
   await expect(page.getByText("монстера")).toBeVisible();
   await expect(page.getByText("эпипремнум")).toBeVisible();
-  await expect(page.getByText("почти песок")).toBeVisible();
+  // exact: тэглайн «почти песок» в галерее, не путать с подписью колбы выше
+  await expect(page.getByText("почти песок", { exact: true })).toBeVisible();
 });
 
 test("нет горизонтального скролла", async ({ page }) => {

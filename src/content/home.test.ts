@@ -34,4 +34,20 @@ describe("Контент главной (Figma 185:2)", () => {
   it("тизеры ведут на /guide и /lab", () => {
     expect(home.teasers.map((t) => t.link.href)).toEqual(["/guide", "/lab"]);
   });
+
+  it("колбы: тройка-контраст, доли сегментов в сумме 100% (soil-vials-spec)", () => {
+    expect(home.differentSoil.vials.map((v) => v.caption)).toEqual([
+      "антуриум",
+      "фикус",
+      "замиокулькас",
+    ]);
+    for (const v of home.differentSoil.vials) {
+      const sum =
+        v.segments.base +
+        v.segments.moisture +
+        v.segments.air +
+        v.segments.drainage;
+      expect(sum).toBe(100);
+    }
+  });
 });

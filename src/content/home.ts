@@ -21,7 +21,16 @@ export type HomeContent = {
   differentSoil: {
     kicker: string;
     body: string;
-    vials: { caption: string }[];
+    vials: {
+      caption: string;
+      note: string;
+      segments: {
+        base: number;
+        moisture: number;
+        air: number;
+        drainage: number;
+      };
+    }[];
   };
   whatSoilGives: {
     kicker: string;
@@ -80,11 +89,23 @@ export const home: HomeContent = {
   differentSoil: {
     kicker: "II · РАЗНЫМ РАСТЕНИЯМ — РАЗНАЯ ЗЕМЛЯ",
     body: "Один грунт «для всех» не подходит никому. Мы собираем землю под то, как растение живёт в природе, и сверяем каждый состав с исследованиями.",
-    // тройка-контраст из soil-vials-spec.md: антуриум / фикус / замиокулькас
+    // тройка-контраст из soil-vials-spec.md: максимальный разброс профилей (доли % объёма по 4 группам)
     vials: [
-      { caption: "антуриум" },
-      { caption: "фикус" },
-      { caption: "замиокулькас" },
+      {
+        caption: "антуриум",
+        note: "в природе живёт на дереве — воздух корням дают кора и кокос",
+        segments: { base: 35, air: 20, moisture: 35, drainage: 10 },
+      },
+      {
+        caption: "фикус",
+        note: "укоренился — не сдвинешь: торф и уголь держат стабильность",
+        segments: { base: 60, air: 10, moisture: 20, drainage: 10 },
+      },
+      {
+        caption: "замиокулькас",
+        note: "переживает засуху — почти песок, вода уходит мгновенно",
+        segments: { base: 55, air: 0, moisture: 20, drainage: 25 },
+      },
     ],
   },
   whatSoilGives: {
