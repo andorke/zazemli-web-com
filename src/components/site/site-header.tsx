@@ -9,10 +9,7 @@ import { mainNav, ozonStoreUrl } from "@/content/site";
 export function SiteHeader() {
   return (
     <header className="flex items-center justify-between gap-6 px-6 py-7 lg:px-16">
-      <Link
-        href="/"
-        className="font-sans text-base text-charcoal opacity-85"
-      >
+      <Link href="/" className="text-charcoal font-sans text-base opacity-85">
         ЗАЗЕМЛИ
       </Link>
 
@@ -21,7 +18,7 @@ export function SiteHeader() {
           <Link
             key={item.href}
             href={item.href}
-            className="font-sans text-sm text-charcoal/70 transition-colors hover:text-charcoal"
+            className="text-charcoal/70 hover:text-charcoal font-sans text-sm transition-colors"
           >
             {item.label}
           </Link>

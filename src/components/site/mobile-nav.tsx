@@ -42,7 +42,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="font-sans text-base text-charcoal"
+              className="text-charcoal font-sans text-base"
             >
               {item.label}
             </Link>

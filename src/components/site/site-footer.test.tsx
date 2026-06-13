@@ -6,9 +6,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 describe("SiteFooter", () => {
   it("дисклеймер присутствует дословно", () => {
     render(<SiteFooter />);
-    expect(
-      screen.getByText(/Растения — не лекарство\./),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Растения — не лекарство\./)).toBeInTheDocument();
   });
 
   it("контакты: email и соцсети текстом", () => {

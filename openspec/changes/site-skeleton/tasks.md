@@ -22,12 +22,12 @@
 
 ## 4. Каркас сайта
 
-- [ ] 4.1 TDD: `SiteHeader` (wordmark, меню из `content/site.ts`, кнопка Ozon: при `ozonStoreUrl=null` — «Скоро на Ozon» не-ссылка; burger на <lg через Sheet)
-- [ ] 4.2 TDD: `SiteFooter` (юр-инфо, дисклеймер, контакты текстом, QR-SVG (переименовать в латиницу при копировании в `public/`), гигантский wordmark)
-- [ ] 4.3 Root layout: шрифты, фон bone, SiteHeader/SiteFooter, `metadataBase=https://zazemli.com`, title-шаблон «%s — ЗАЗЕМЛИ»
-- [ ] 4.4 Страницы-заглушки `/collectio` «Коллекция», `/lab` «Лаборатория», `/guide` «Гайд», `/diary-signup` (без выдуманной копи; kicker + h1 в DS-стиле); `not-found.tsx`
-- [ ] 4.5 SEO: per-page metadata (description, canonical), `sitemap.ts` (4 страницы, без diary), `robots.ts`; `/diary-signup`: `robots noindex`
-- [ ] 4.6 E2E smoke: 5 роутов → title/h1, навигация по меню, burger на 360px, 404 для `/nope`, в header/footer нет ссылок на diary-signup
+- [x] 4.1 TDD: `SiteHeader` (wordmark, меню из `content/site.ts`, кнопка Ozon: при `ozonStoreUrl=null` — «Скоро на Ozon» не-ссылка; burger на <lg через Sheet)
+- [x] 4.2 TDD: `SiteFooter` (юр-инфо, дисклеймер, контакты текстом, QR-SVG (переименовать в латиницу при копировании в `public/`), гигантский wordmark)
+- [x] 4.3 Root layout: шрифты, фон bone, SiteHeader/SiteFooter, `metadataBase=https://zazemli.com`, title-шаблон «%s — ЗАЗЕМЛИ»
+- [x] 4.4 Страницы-заглушки `/collectio` «Коллекция», `/lab` «Лаборатория», `/guide` «Гайд», `/diary-signup` (без выдуманной копи; kicker + h1 в DS-стиле); `not-found.tsx`
+- [x] 4.5 SEO: per-page metadata (description, canonical), `sitemap.ts` (4 страницы, без diary), `robots.ts`; `/diary-signup`: `robots noindex`
+- [x] 4.6 E2E smoke: 5 роутов → title/h1, навигация по меню, burger на 360px, 404 для `/nope`, в header/footer нет ссылок на diary-signup
 
 ## 5. Cookie-consent и Метрика
 

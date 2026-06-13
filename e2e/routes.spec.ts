@@ -1,7 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 const pages = [
-  { path: "/collectio", h1: "Коллекция", title: /Коллекция · 7 родов растений/ },
+  {
+    path: "/collectio",
+    h1: "Коллекция",
+    title: /Коллекция · 7 родов растений/,
+  },
   { path: "/lab", h1: "Лаборатория", title: /Лаборатория грунта/ },
   { path: "/guide", h1: "Гайд", title: /Гайд по пересадке/ },
   { path: "/diary-signup", h1: "Дневник растения", title: /Дневник растения/ },
@@ -33,7 +37,10 @@ test("в header и footer нет ссылок на diary-signup", async ({ page 
   expect(hrefs.some((h) => h?.includes("diary"))).toBe(false);
 });
 
-test("diary-signup: noindex и отсутствие в sitemap", async ({ page, request }) => {
+test("diary-signup: noindex и отсутствие в sitemap", async ({
+  page,
+  request,
+}) => {
   await page.goto("/diary-signup");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     "content",
