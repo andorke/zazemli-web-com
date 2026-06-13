@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { checkDsViolations } from "@/lib/ds-lint";
+import { checkCssViolations, checkDsViolations } from "@/lib/ds-lint";
 
 describe("checkDsViolations", () => {
   it("находит hex-литерал цвета", () => {
@@ -33,6 +33,18 @@ describe("checkDsViolations", () => {
   });
 });
 
+describe("checkCssViolations", () => {
+  it("находит box-shadow в CSS", () => {
+    expect(
+      checkCssViolations(".x{box-shadow:0 1px 2px #000}"),
+    ).not.toHaveLength(0);
+  });
+
+  it("пропускает hex (токены) и обычный CSS", () => {
+    expect(checkCssViolations("--moss: #4a7c59;")).toHaveLength(0);
+  });
+});
+
 /* Инвариант DS: компоненты и роуты не содержат hex, теней и чужих радиусов.
    Цвета — только через токены globals.css (источник tokens.json v1.0.1). */
 describe("DS-инвариант по src/", () => {
@@ -55,5 +67,11 @@ describe("DS-инвариант по src/", () => {
       }
     }
     expect(offenders).toEqual({});
+  });
+
+  it("в globals.css нет box-shadow (shadow: null)", () => {
+    expect(
+      checkCssViolations(readFileSync("src/app/globals.css", "utf8")),
+    ).toHaveLength(0);
   });
 });

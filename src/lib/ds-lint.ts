@@ -17,3 +17,12 @@ export function checkDsViolations(source: string): string[] {
     (rule) => rule.name,
   );
 }
+
+/*
+ * Проверка CSS-файлов. Hex здесь НЕ ищем — globals.css это источник токенов
+ * (единственное легитимное место hex). Ищем box-shadow: тени запрещены (shadow: null),
+ * а CSS-property мимо tsx-сканера прошла бы незамеченной.
+ */
+export function checkCssViolations(source: string): string[] {
+  return /box-shadow\s*:/.test(source) ? ["box-shadow в CSS"] : [];
+}

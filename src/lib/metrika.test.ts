@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { reachGoal } from "@/lib/metrika";
 
 afterEach(() => {
-  delete globalThis.ym;
+  vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
 
@@ -15,7 +15,7 @@ describe("reachGoal", () => {
   it("при наличии счётчика и ID вызывает ym(id, 'reachGoal', goal)", () => {
     vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
     const ym = vi.fn();
-    globalThis.ym = ym;
+    vi.stubGlobal("ym", ym);
 
     reachGoal("ozon-click");
 
@@ -24,7 +24,7 @@ describe("reachGoal", () => {
 
   it("без ID — не вызывает ym даже если он есть", () => {
     const ym = vi.fn();
-    globalThis.ym = ym;
+    vi.stubGlobal("ym", ym);
 
     reachGoal("ozon-click");
 
