@@ -58,10 +58,10 @@ export function SkuGallery() {
             <span className="text-charcoal font-serif text-xl">
               {sku.nameRu}
             </span>
-            <span className="text-charcoal/65 font-serif text-sm italic">
+            <span className="text-charcoal/40 font-serif text-sm italic">
               {sku.tagline}
             </span>
-            <span className="text-charcoal/35 font-sans text-[10px] tracking-wide">
+            <span className="text-charcoal/20 font-sans text-[10px] tracking-wide">
               {sku.potSize}
             </span>
           </li>
