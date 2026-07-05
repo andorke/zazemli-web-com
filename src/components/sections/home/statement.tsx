@@ -8,7 +8,7 @@ export function Statement() {
   return (
     <section className="bg-charcoal text-bone flex flex-col items-center gap-7 px-6 py-28 text-center">
       <KickerHeader className="text-bone/60">{statement.kicker}</KickerHeader>
-      <p className="max-w-3xl font-serif text-[clamp(2rem,5vw,3.5rem)] leading-tight italic">
+      <p className="max-w-3xl font-voice text-[clamp(2rem,5vw,3.5rem)] leading-tight italic">
         {statement.quote}
       </p>
       <Fleuron className="text-[26px] opacity-100" />

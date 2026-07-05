@@ -14,19 +14,19 @@ export function Teasers() {
         >
           <div className="flex items-center justify-between">
             <KickerHeader>{teaser.kicker}</KickerHeader>
-            <span className="tracking-kicker text-charcoal/45 font-sans text-[10px]">
+            <span className="tracking-kicker text-charcoal/45 font-ui text-[10px]">
               {teaser.meta}
             </span>
           </div>
-          <h2 className="text-charcoal/85 font-serif text-[26px] italic">
+          <h2 className="text-charcoal/85 font-voice text-[26px] italic">
             {teaser.title}
           </h2>
-          <p className="text-charcoal/70 max-w-lg font-serif text-base leading-relaxed">
+          <p className="text-charcoal/70 max-w-lg font-voice text-base leading-relaxed">
             {teaser.body}
           </p>
           <Link
             href={teaser.link.href}
-            className="text-charcoal/75 w-fit font-serif text-base underline underline-offset-4"
+            className="text-charcoal/75 w-fit font-voice text-base underline underline-offset-4"
           >
             {teaser.link.label}
           </Link>

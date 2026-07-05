@@ -11,7 +11,7 @@ export default function NotFound() {
       <h1 className="leading-heading tracking-heading-tight text-charcoal/80 text-4xl font-bold">
         Страница не нашлась.
       </h1>
-      <p className="leading-narrative text-charcoal/70 max-w-xl font-serif text-lg">
+      <p className="leading-narrative text-charcoal/70 max-w-xl font-voice text-lg">
         Возможно, переехала или мы ошиблись со ссылкой.
       </p>
       <div className="flex items-center gap-4">

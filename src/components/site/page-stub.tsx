@@ -8,7 +8,7 @@ export function PageStub({ h1, lead }: { h1: string; lead: string }) {
       <h1 className="leading-heading tracking-heading-tight text-charcoal/80 text-4xl font-bold">
         {h1}
       </h1>
-      <p className="leading-narrative text-charcoal/70 max-w-xl font-serif text-lg">
+      <p className="leading-narrative text-charcoal/70 max-w-xl font-voice text-lg">
         {lead}
       </p>
     </main>

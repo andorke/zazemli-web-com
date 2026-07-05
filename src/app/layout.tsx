@@ -4,7 +4,7 @@ import { CookieBanner } from "@/components/site/cookie-banner";
 import { Metrika } from "@/components/site/metrika";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { caveat, spectral, unbounded } from "./fonts";
+import { ui, voice } from "./fonts";
 import "./globals.css";
 
 /* Meta-content — утверждённая копи: Маркетинг/Каналы/Сайт/home.md v1.1 §Meta-content */
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${unbounded.variable} ${spectral.variable} ${caveat.variable} h-full font-sans antialiased`}
+      className={`${voice.variable} ${ui.variable} h-full font-ui antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <SiteHeader />

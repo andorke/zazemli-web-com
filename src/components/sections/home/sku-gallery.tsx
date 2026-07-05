@@ -27,14 +27,14 @@ export function SkuGallery() {
     <section className="bg-bone text-charcoal relative flex flex-col gap-12 overflow-hidden px-6 py-20 lg:px-30 lg:py-35">
       <span
         aria-hidden="true"
-        className="text-charcoal/7 pointer-events-none absolute top-16 right-6 font-serif text-[200px] leading-none font-light select-none lg:right-30"
+        className="text-charcoal/7 pointer-events-none absolute top-16 right-6 font-voice text-[200px] leading-none font-light select-none lg:right-30"
       >
         {skuGallery.decorative}
       </span>
 
       <div className="flex flex-col gap-6">
         <KickerHeader>{skuGallery.kicker}</KickerHeader>
-        <h2 className="leading-heading max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)]">
+        <h2 className="leading-heading max-w-2xl font-voice text-[clamp(2rem,4vw,3rem)]">
           {skuGallery.title}
         </h2>
       </div>
@@ -51,17 +51,17 @@ export function SkuGallery() {
                 aria-hidden="true"
                 className={`inline-block size-[7px] rounded-full ${dotBg[sku.color]}`}
               />
-              <span className="tracking-kicker text-charcoal/45 font-sans text-[10px]">
+              <span className="tracking-kicker text-charcoal/45 font-ui text-[10px]">
                 {sku.number}
               </span>
             </span>
-            <span className="text-charcoal font-sans text-xl capitalize">
+            <span className="text-charcoal font-voice text-xl capitalize">
               {sku.nameRu}
             </span>
-            <span className="text-charcoal/40 font-serif text-sm italic">
+            <span className="text-charcoal/40 font-voice text-sm italic">
               {sku.tagline}
             </span>
-            <span className="text-charcoal/20 mt-1.5 font-sans text-[10px] tracking-wide">
+            <span className="text-charcoal/20 mt-1.5 font-ui text-[10px] tracking-wide">
               {sku.potSize}
             </span>
           </li>
@@ -70,7 +70,7 @@ export function SkuGallery() {
 
       <Link
         href={skuGallery.link.href}
-        className="text-charcoal/70 w-fit font-serif text-lg underline underline-offset-4"
+        className="text-charcoal/70 w-fit font-voice text-lg underline underline-offset-4"
       >
         {skuGallery.link.label}
       </Link>

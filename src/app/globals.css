@@ -94,10 +94,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Шрифтовые семейства (переменные задаёт next/font/local в layout) */
-  --font-sans: var(--font-unbounded);
-  --font-serif: var(--font-spectral);
-  --font-hand: var(--font-caveat);
+  /* Шрифтовые роли (переменные задаёт next/font/local в layout):
+     voice — заголовки, нарратив, латынь, italic-акценты; ui — кикеры,
+     кнопки, навигация, мелкий UI. Значения @theme inline не эмитятся —
+     utility ссылается на html-переменную next/font с тем же именем. */
+  --font-voice: var(--font-voice);
+  --font-ui: var(--font-ui);
 
   /* Type-scale Major Third ×1.25 (tokens.typography.scale) */
   --text-xs: 0.75rem;
@@ -120,7 +122,7 @@
   --leading-heading: 1.15;
   --leading-body: 1.5;
   --leading-narrative: 1.65;
-  --leading-caveat: 1.3;
+  --leading-ritual: 1.3; /* tokens.lineHeight — роль рукописной приписки (имя в tokens.json — от выведенного семейства) */
 
   /* Letter-spacing (tokens.typography.letterSpacing) */
   --tracking-kicker: 0.18em;
@@ -145,7 +147,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-ui;
   }
 }
 

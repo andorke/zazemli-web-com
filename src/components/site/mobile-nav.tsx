@@ -32,7 +32,7 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="right" className="bg-bone">
         <SheetHeader>
-          <SheetTitle className="font-sans text-base font-normal">
+          <SheetTitle className="font-voice text-base font-normal">
             ЗАЗЕМЛИ
           </SheetTitle>
         </SheetHeader>
@@ -42,7 +42,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="text-charcoal font-sans text-base"
+              className="text-charcoal font-ui text-base"
             >
               {item.label}
             </Link>

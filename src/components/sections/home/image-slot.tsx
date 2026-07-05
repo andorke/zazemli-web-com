@@ -24,7 +24,7 @@ export function ImageSlot({
         className,
       )}
     >
-      <span className="px-4 text-center font-serif text-sm italic">
+      <span className="px-4 text-center font-voice text-sm italic">
         {caption}
       </span>
     </div>

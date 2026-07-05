@@ -27,10 +27,10 @@ export function WhatSoilGives() {
               key={col.label}
               className="border-bone/14 flex flex-col gap-3 border-b pb-7 last:border-b-0"
             >
-              <span className="text-bone/65 font-serif text-[17px] italic">
+              <span className="text-bone/65 font-voice text-[17px] italic">
                 {col.label}
               </span>
-              <p className="text-bone/70 font-serif text-[27px] leading-snug">
+              <p className="text-bone/70 font-voice text-[27px] leading-snug">
                 {col.text.map((line) => (
                   <span key={line} className="block">
                     {line}
@@ -39,7 +39,7 @@ export function WhatSoilGives() {
               </p>
             </div>
           ))}
-          <p className="text-bone/85 font-serif text-[17px] italic">
+          <p className="text-bone/85 font-voice text-[17px] italic">
             {whatSoilGives.closing}
           </p>
         </div>

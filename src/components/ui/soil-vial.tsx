@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  *   стенками, при любых segments и любой ширине. Маску генерит scripts из самого PNG (по строкам
  *   тела с эрозией на толщину стенки) — заменишь колбу, перегенеришь маску.
  * Поверх слоёв лежит PNG через mix-blend-multiply: белый фон стекла уходит в bone, штриховка и
- * мерные засечки ложатся на землю как настоящее стекло. Подписи групп — справа, Spectral italic.
+ * мерные засечки ложатся на землю как настоящее стекло. Подписи групп — справа, voice italic.
  * Порядок снизу вверх: основа → дренаж → влага → воздух. Сегмент 0% не рисуется.
  * Цвет сегмента = по группе (земляные токены — санкционировано спекой для иллюстрации).
  */
@@ -103,7 +103,7 @@ export function SoilVial({
       {bands.map((b) => (
         <span
           key={b.key}
-          className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-serif text-sm leading-none italic whitespace-nowrap"
+          className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-voice text-sm leading-none italic whitespace-nowrap"
           style={{ left: `${GLASS_RIGHT}%`, top: `${b.mid}%` }}
         >
           {b.label}

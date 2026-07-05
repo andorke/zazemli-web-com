@@ -2,10 +2,10 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Button } from "@/components/ui/button";
-import { CaveatNote } from "@/components/ui/caveat-note";
 import { Fleuron } from "@/components/ui/fleuron";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { MaterialDot } from "@/components/ui/material-dot";
+import { RitualNote } from "@/components/ui/ritual-note";
 
 describe("Fleuron", () => {
   it("рендерит символ ❦ цветом moss как декорацию", () => {
@@ -28,21 +28,21 @@ describe("MaterialDot", () => {
 });
 
 describe("KickerHeader", () => {
-  it("рендерит кикер: КАПС, letter-spacing 0.18em, цвет moss", () => {
+  it("рендерит кикер ui-ролью: КАПС с letter-spacing", () => {
     render(<KickerHeader>II · Разным растениям</KickerHeader>);
     const el = screen.getByText("II · Разным растениям");
     expect(el).toHaveClass("uppercase");
-    expect(el).toHaveClass("tracking-kicker");
-    expect(el).toHaveClass("text-moss");
-    expect(el).toHaveClass("font-sans");
+    expect(el).toHaveClass("font-ui");
   });
 });
 
-describe("CaveatNote", () => {
-  it("рендерит рукописную приписку шрифтом Caveat", () => {
-    render(<CaveatNote>совет от насти</CaveatNote>);
+describe("RitualNote", () => {
+  it("рендерит ритуальную приписку: voice italic + акцентный цвет", () => {
+    render(<RitualNote>совет от насти</RitualNote>);
     const el = screen.getByText("совет от насти");
-    expect(el).toHaveClass("font-hand");
+    expect(el).toHaveClass("font-voice");
+    expect(el).toHaveClass("italic");
+    expect(el).toHaveClass("text-moss-ink");
   });
 });
 
