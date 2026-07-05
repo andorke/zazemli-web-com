@@ -11,7 +11,7 @@
 |------|-------------|
 | 2026-06-13 | Реализован change `site-skeleton` (29 задач, TDD): Next 16 static export, токены→Tailwind, 3 шрифта woff2, 5 роутов, header/footer, cookie-consent + Метрика, главная по Figma 185:2 (9 секций). Unit 52 + e2e 30 зелёные. Lighthouse desktop 99/96/100/100 |
 | 2026-06-12 | Создан OpenSpec change `site-skeleton` (proposal/design/4 specs/tasks) через /opsx:propose |
-| 2026-06-12 | Брейнсторминг каркаса завершён: дизайн одобрен по секциям; решения зафиксированы в DEVELOPMENT/ARCHITECTURE/ROADMAP |
+| 2026-06-12 | Брейнсторминг каркаса завершён: дизайн одобрен по секциям; решения зафиксированы в DEVELOPMENT/ARCHITECTURE |
 | 2026-06-12 | Собран контекст из БЗ и брифов (HANDOFF Ивану, site-brief, tokens.json, Figma 185:2). Начат брейнсторминг каркаса |
 | 2026-06-12 | Проект scaffolded через /setup-project |
 

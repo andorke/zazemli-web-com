@@ -9,9 +9,8 @@
 1. `AGENTS.md` (этот файл)
 2. `DEVELOPMENT.md`
 3. `CONTEXT.md`
-4. `ROADMAP.md`
-5. `REQUIREMENTS.md`
-6. `ARCHITECTURE.md`
+4. `REQUIREMENTS.md`
+5. `ARCHITECTURE.md`
 
 ## Глоссарий
 | Термин | Значение |
