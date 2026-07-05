@@ -43,7 +43,7 @@ export function SkuGallery() {
         {skus.map((sku) => (
           <li
             key={sku.number}
-            className="flex w-40 flex-col items-center gap-3 text-center"
+            className="flex w-40 flex-col items-center gap-1.5 text-center"
           >
             <Doodle src={sku.doodle} className="h-32 w-24" />
             <span className="flex items-center gap-2">
@@ -55,13 +55,13 @@ export function SkuGallery() {
                 {sku.number}
               </span>
             </span>
-            <span className="text-charcoal font-serif text-xl">
+            <span className="text-charcoal font-sans text-xl capitalize">
               {sku.nameRu}
             </span>
             <span className="text-charcoal/40 font-serif text-sm italic">
               {sku.tagline}
             </span>
-            <span className="text-charcoal/20 font-sans text-[10px] tracking-wide">
+            <span className="text-charcoal/20 mt-1.5 font-sans text-[10px] tracking-wide">
               {sku.potSize}
             </span>
           </li>
