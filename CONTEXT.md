@@ -3,12 +3,13 @@
 > **Пример заполнения:** `example_docs/CONTEXT.md`
 
 ## Текущий статус
-- **Этап:** Фаза 1 реализована — каркас site-skeleton собран (DS + 5 роутов + главная). Ожидает `/opsx:verify` → code review → `/opsx:sync` → `/opsx:archive`.
-- **Последнее обновление:** 2026-06-13
+- **Этап:** Фаза 2 спланирована — редизайн под обновлённый vault (прототипы = новый source of truth). 4 OpenSpec change готовы к реализации.
+- **Последнее обновление:** 2026-07-05
 
 ## Что сделано
 | Дата | Что сделано |
 |------|-------------|
+| 2026-07-05 | Аудит обновлённого vault: source of truth вёрстки теперь HTML-прототипы `Айти/Сайт/prototypes/` + tokens v1.1.0 (Newsreader/Commissioner, moss-ink), не Figma 185:2. Брейнсторминг → дизайн-спека `docs/superpowers/specs/2026-07-05-site-redesign-design.md`. Созданы 4 OpenSpec change: `ds-migration` → `landing-redesign` → `product-pages` ∥ `guide-lab` (архив: product-pages до guide-lab) |
 | 2026-06-13 | Реализован change `site-skeleton` (29 задач, TDD): Next 16 static export, токены→Tailwind, 3 шрифта woff2, 5 роутов, header/footer, cookie-consent + Метрика, главная по Figma 185:2 (9 секций). Unit 52 + e2e 30 зелёные. Lighthouse desktop 99/96/100/100 |
 | 2026-06-12 | Создан OpenSpec change `site-skeleton` (proposal/design/4 specs/tasks) через /opsx:propose |
 | 2026-06-12 | Брейнсторминг каркаса завершён: дизайн одобрен по секциям; решения зафиксированы в DEVELOPMENT/ARCHITECTURE |
@@ -18,7 +19,7 @@
 > Новые записи добавляются **сверху**. Не переписывай историю — это журнал, а не спека.
 
 ## Текущая задача
-Каркас `site-skeleton` реализован. Следующее по потоку: `/opsx:verify site-skeleton` → code review → `/opsx:sync` → `/opsx:archive`.
+Реализация редизайна: `/opsx:apply ds-migration` (блокирует остальные) → `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell). Каждый change: apply → verify → sync → archive.
 
 ## Ключевые архитектурные решения
 | Решение | Выбор | Обоснование |
