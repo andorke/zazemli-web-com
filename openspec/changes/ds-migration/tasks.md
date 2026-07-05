@@ -19,8 +19,9 @@
 
 ## 3. Атомы
 
-- [ ] 3.1 Тесты атомов: RitualNote (Newsreader italic + акцент), KickerHeader на Commissioner, `<details>`-аккордеон с caret, кнопки btn/btn--solid без тени/радиус ≤2px — красные
-- [ ] 3.2 Реализовать/перевести атомы: CaveatNote → RitualNote (удалить старое имя), KickerHeader → ui-роль, добавить details-аккордеон и кнопки по прототипам — тесты зелёные
+- [x] 3.1 Тесты атомов: RitualNote (Newsreader italic + акцент), KickerHeader на Commissioner, `<details>`-аккордеон с caret, кнопки btn/btn--solid без тени/радиус ≤2px — красные
+- [x] 3.2 Реализовать/перевести атомы: CaveatNote → RitualNote (удалить старое имя), KickerHeader → ui-роль, добавить details-аккордеон и кнопки по прототипам — тесты зелёные
+  > RitualNote/rename сделаны в 1.4 (grep-инвариант требовал); здесь добавлены DetailsAccordion и BrandButton (btn/btn--solid), KickerHeader переведён на .eyebrow прототипа. Попутный фикс: cn()/twMerge научен ролевым font-size (иначе text-<цвет> вытеснял text-eyebrow).
 
 ## 4. Site-компоненты
 

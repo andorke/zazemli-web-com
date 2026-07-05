@@ -4,7 +4,6 @@ import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { OzonButton } from "@/components/site/ozon-button";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,8 +12,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { mainNav, ozonStoreUrl } from "@/content/site";
+import { mainNav } from "@/content/site";
 
+/*
+ * Бургер-меню ниже layout-брейкпоинта (860px, прототип). Механика — Sheet
+ * (radix Dialog: aria-expanded/aria-controls на триггере из коробки),
+ * вид — новые токены. Те же 3 пункта, без Ozon-кнопки.
+ */
 export function MobileNav() {
   const [open, setOpen] = useState(false);
 
@@ -25,14 +29,14 @@ export function MobileNav() {
           variant="ghost"
           size="icon"
           aria-label="Открыть меню"
-          className="lg:hidden"
+          className="layout:hidden"
         >
           <MenuIcon />
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="bg-bone">
         <SheetHeader>
-          <SheetTitle className="font-voice text-base font-normal">
+          <SheetTitle className="font-voice text-base font-normal tracking-[0.06em]">
             ЗАЗЕМЛИ
           </SheetTitle>
         </SheetHeader>
@@ -47,7 +51,6 @@ export function MobileNav() {
               {item.label}
             </Link>
           ))}
-          <OzonButton href={ozonStoreUrl} className="mt-2 w-fit" />
         </nav>
       </SheetContent>
     </Sheet>

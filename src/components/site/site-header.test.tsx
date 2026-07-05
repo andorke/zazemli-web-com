@@ -3,18 +3,19 @@ import { describe, expect, it } from "vitest";
 
 import { SiteHeader } from "@/components/site/site-header";
 
-describe("SiteHeader", () => {
-  it("wordmark ЗАЗЕМЛИ ведёт на главную", () => {
+describe("SiteHeader (topbar по прототипу)", () => {
+  it("wordmark ЗАЗЕМЛИ ведёт на главную, voice-ролью", () => {
     render(<SiteHeader />);
     const wordmark = screen.getByRole("link", { name: "ЗАЗЕМЛИ" });
     expect(wordmark).toHaveAttribute("href", "/");
+    expect(wordmark).toHaveClass("font-voice");
   });
 
-  it("меню: Коллекция, Лаборатория, Гайд", () => {
+  it("меню: Коллекция → /#collectio, Лаборатория, Гайд", () => {
     render(<SiteHeader />);
     expect(screen.getByRole("link", { name: "Коллекция" })).toHaveAttribute(
       "href",
-      "/collectio",
+      "/#collectio",
     );
     expect(screen.getByRole("link", { name: "Лаборатория" })).toHaveAttribute(
       "href",
@@ -34,9 +35,9 @@ describe("SiteHeader", () => {
     );
   });
 
-  it("кнопка Ozon в состоянии-заглушке (магазин ещё не открыт)", () => {
+  it("кнопки Ozon в шапке нет", () => {
     render(<SiteHeader />);
-    expect(screen.getByText("Скоро на Ozon")).toBeInTheDocument();
+    expect(screen.queryByText(/Ozon/i)).not.toBeInTheDocument();
   });
 
   it("есть кнопка мобильного меню", () => {
