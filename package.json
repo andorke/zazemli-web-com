@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "ds-lint": "vitest run src/lib/ds-lint.test.ts src/lib/fonts-invariant.test.ts src/app/globals-tokens.test.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

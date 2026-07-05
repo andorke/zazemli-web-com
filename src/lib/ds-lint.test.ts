@@ -31,6 +31,50 @@ describe("checkDsViolations", () => {
       ),
     ).toHaveLength(0);
   });
+
+  it("находит выведенные семейства (unbounded|spectral|caveat)", () => {
+    expect(checkDsViolations('variable: "--font-unbounded"')).not.toHaveLength(
+      0,
+    );
+    expect(checkDsViolations("/* Spectral italic */")).not.toHaveLength(0);
+    expect(
+      checkDsViolations('className="font-hand" /* Caveat */'),
+    ).not.toHaveLength(0);
+  });
+
+  it("находит text-moss без метки ds-allow: moss-large", () => {
+    expect(checkDsViolations('className="text-moss"')).not.toHaveLength(0);
+    expect(checkDsViolations('className="hover:text-moss"')).not.toHaveLength(
+      0,
+    );
+  });
+
+  it("пропускает text-moss-ink и text-moss с меткой ds-allow: moss-large", () => {
+    expect(checkDsViolations('className="text-moss-ink"')).toHaveLength(0);
+    expect(
+      checkDsViolations(
+        '"text-moss opacity-80", // ds-allow: moss-large — фльерон',
+      ),
+    ).toHaveLength(0);
+  });
+
+  it("находит SKU-цвет как цвет текста", () => {
+    expect(checkDsViolations('className="text-sku-ficus"')).not.toHaveLength(
+      0,
+    );
+    expect(checkDsViolations('className="text-poppy"')).not.toHaveLength(0);
+  });
+
+  it("пропускает SKU-цвет в декоре (bg/border) и с меткой ds-allow: sku-accent", () => {
+    expect(
+      checkDsViolations('className="bg-sku-ficus border-sku-monstera"'),
+    ).toHaveLength(0);
+    expect(
+      checkDsViolations(
+        '"text-sku-ficus", // ds-allow: sku-accent — рукописный акцент SKU',
+      ),
+    ).toHaveLength(0);
+  });
 });
 
 describe("checkCssViolations", () => {

@@ -5,8 +5,8 @@ import { describe, expect, it } from "vitest";
 /*
  * Инвариант ds-migration: семейства Unbounded/Spectral/Caveat выведены из src/
  * полностью — ни файлов шрифтов, ни CSS-переменных, ни классов, ни имён компонентов
- * (spec design-system «Старые семейства выведены»). Тестовые файлы исключены:
- * они и есть проверяющий код.
+ * (spec design-system «Старые семейства выведены»). Тестовые файлы и ds-lint.ts
+ * исключены: они и есть проверяющий код (содержат запрещающий паттерн).
  */
 
 const LEGACY = /unbounded|spectral|caveat/i;
@@ -15,7 +15,7 @@ const collect = (dir: string): string[] =>
   readdirSync(dir).flatMap((name) => {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) return collect(full);
-    if (/\.test\./.test(name)) return [];
+    if (/\.test\./.test(name) || name === "ds-lint.ts") return [];
     return [full];
   });
 
