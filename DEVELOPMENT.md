@@ -10,7 +10,7 @@
 | Фреймворк | Next.js 16 (App Router, `src/`-layout, Turbopack) | `output: 'export'` — чистая статика; `images.unoptimized: true`; `turbopack.root` задан (в `~/` есть посторонний package-lock) |
 | Язык | TypeScript 5, `strict: true` | |
 | UI | React 19 + Tailwind CSS v4 + shadcn/ui (preset nova, base radix) | shadcn-компоненты копируются в репо (`components/ui`), не плагином |
-| Шрифты | `next/font/local`: Unbounded, Spectral, Caveat — woff2 | DS-контракт «3 семейства max»; woff2 пересобраны из ttf субсеттингом (Cyrillic+Latin); Caveat `preload: false` (ниже фолда) |
+| Шрифты | `next/font/local`, роли: `--font-voice` (сейчас Literata — временный дублёр Newsreader, у которого нет кириллицы; финал утверждает Настя) + `--font-ui` (Commissioner) | variable woff2 (оси opsz/wght живы), субсет Cyrillic+Latin+пунктуация через fonttools (instancer + pyftsubset); ровно 2 семейства (typography.md v2.0) |
 | Формы | react-hook-form + zod | только на `/diary-signup` (Фаза 2) |
 | Аналитика | Яндекс.Метрика | грузится после согласия (consent-gate, `useConsent`); ID в `NEXT_PUBLIC_METRIKA_ID`; без ID не подключается |
 | Тесты | Vitest + RTL (unit, `globals: true`), Playwright (e2e: desktop 1440 + mobile 360) | |
@@ -22,7 +22,7 @@
 ### Готчи окружения
 - **Tailwind-скан**: `@import "tailwindcss" source("../")` в `globals.css` ограничивает скан классов каталогом `src/` — иначе Turbopack падает на tailwind-подобных строках в `docs/` (архивы БЗ).
 - **Прокси**: в окружении выставлен `HTTP_PROXY=127.0.0.1:8888`, через который `npm install` падает с ECONNRESET. Ставить зависимости с временным сбросом прокси: `HTTP_PROXY= HTTPS_PROXY= npm install`.
-- **Шрифты**: woff2 в `docs/zazemli_design_arts/fonts/` битые (по 39 байт) — рабочие ttf пересобраны в woff2 через `python3 -m fontTools.subset`.
+- **Шрифты**: собираются из variable TTF репозитория `google/fonts` (raw.githubusercontent.com): `fonttools varLib.instancer` (ограничение wght-диапазона) → `pyftsubset --flavor=woff2 --layout-features='*'` (субсет Cyrillic+Latin+пунктуация, оси сохраняются). Внимание: у Newsreader кириллицы нет вовсе — поэтому voice временно Literata (см. стек).
 
 ## Структура репозитория
 ```
@@ -36,7 +36,7 @@
 └─ src/                           # код сайта (появляется в Фазе 1)
    ├─ app/                        # роуты: / collectio lab guide diary-signup + not-found
    ├─ components/
-   │  ├─ ui/                      # shadcn-примитивы + бренд-атомы (Fleuron, CaveatNote, MaterialDot…)
+   │  ├─ ui/                      # shadcn-примитивы + бренд-атомы (Fleuron, RitualNote, MaterialDot, DetailsAccordion, BrandButton…)
    │  ├─ site/                    # обвязка: SiteHeader, SiteFooter, CookieBanner, Metrika
    │  └─ sections/<page>/         # секции страниц, по папке на страницу (home/Hero…)
    ├─ content/                    # контент TS-константами: sku.ts, home.ts, site.ts
@@ -54,6 +54,7 @@ npm run dev        # дев-сервер на :3000
 npm run build      # static export → out/
 npm run test       # vitest unit
 npm run test:e2e   # playwright smoke (требует build или dev)
+npm run ds-lint    # DS-инварианты: запреты, шрифты, токены
 npm run lint       # eslint
 ```
 Переменные окружения: `NEXT_PUBLIC_METRIKA_ID` (опциональна; без неё Метрика не подключается — так и должно быть в дев-режиме).
@@ -61,9 +62,10 @@ npm run lint       # eslint
 ## Паттерны кода
 - **RSC по умолчанию.** `'use client'` — только там, где есть интерактив: CookieBanner, мобильный burger, форма подписки.
 - **Контент отделён от презентации.** Тексты и данные — в `src/content/*.ts` с явными TS-типами; компоненты принимают контент пропсами или импортируют из `content/`. Хардкод текстов внутри JSX-секций не допускается — это готовит миграцию на Sanity.
-- **Токены — только через CSS-переменные** из `globals.css` (источник: `docs/.../Айдентика/tokens.json` v1.0.1). Хардкод hex в компонентах запрещён. Правило 60/30/10; SKU-цвета на MVP-страницах не используются.
+- **Токены — только через CSS-переменные** из `globals.css` (источник: `../zazemli-vault/Айти/Сайт/tokens.json` v1.1.0). Хардкод hex в компонентах запрещён. Правило 60/30/10; SKU-цвета — только декор (точки/бордеры/рукописные акценты), никогда 2+ SKU-цветов на странице.
+- **Контраст-политика moss-ink**: текст/ссылки/латынь на bone — `text-moss-ink` (#406C4F, AA 5.5) или charcoal; raw `text-moss` (4.43) — только ≥18pt с инлайн-меткой `ds-allow: moss-large` и причиной. Защищается `npm run ds-lint`.
 - **Имена компонентов — из БЗ** (SiteHeader, ProductCardMini, Fleuron, MaterialDot, KickerHeader…). Соответствие уровням БЗ: атомы → `components/ui`, молекулы/организмы → `components/site` или `sections/`.
-- **Запреты DS**: `box-shadow` нет (`shadow: null`), радиусы только 0/2px/pill, earth-палитра только в MaterialDot, Caveat ≤2 на страницу, italic — только Spectral.
+- **Запреты DS**: `box-shadow` нет (`shadow: null`), радиусы только 0/2px/pill, earth-палитра только в MaterialDot, ритуальные приписки (RitualNote) ≤2 на страницу, italic — только voice-роль.
 - **Внешние ссылки на Ozon** — только через `lib/utm.ts` (`utm_source=site`, per-SKU `utm_content=sku00X`). `ozonStoreUrl: null` → кнопка в состоянии «Скоро на Ozon».
 
 ## Стратегия тестирования

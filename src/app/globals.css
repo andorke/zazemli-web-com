@@ -217,6 +217,12 @@
   body {
     @apply bg-background text-foreground font-ui;
   }
+  /* Заголовки — всегда voice (базовое правило прототипов: h1,h2,h3 → var(--voice)) */
+  h1,
+  h2,
+  h3 {
+    @apply font-voice;
+  }
 }
 
 /* prefers-reduced-motion: reduce — глобально отключает анимацию (бриф §4, обязательное требование) */

@@ -9,6 +9,7 @@
 ## Что сделано
 | Дата | Что сделано |
 |------|-------------|
+| 2026-07-05 | Реализован change `ds-migration` (18 задач, TDD, worktree `ds-migration`): шрифты → роли voice/ui (**Literata** временно вместо Newsreader — у того не оказалось кириллицы ни на GF, ни в upstream; прототипы рендерили русский Georgia-фолбэком), токены v1.1.0 (moss-ink, SKU-палитра, шкалы ролей), атомы (RitualNote, DetailsAccordion, BrandButton, KickerHeader по прототипу), header/footer по `landing.html`, ds-lint с контраст-политикой (`npm run ds-lint`). Unit 81 + e2e 41 + build зелёные; скриншоты 5 роутов ×2 вьюпорта сняты (переходный вид старых секций). Ждёт: verify → review → sync → archive |
 | 2026-07-05 | Аудит обновлённого vault: source of truth вёрстки теперь HTML-прототипы `Айти/Сайт/prototypes/` + tokens v1.1.0 (Newsreader/Commissioner, moss-ink), не Figma 185:2. Брейнсторминг → дизайн-спека `docs/superpowers/specs/2026-07-05-site-redesign-design.md`. Созданы 4 OpenSpec change: `ds-migration` → `landing-redesign` → `product-pages` ∥ `guide-lab` (архив: product-pages до guide-lab) |
 | 2026-06-13 | Реализован change `site-skeleton` (29 задач, TDD): Next 16 static export, токены→Tailwind, 3 шрифта woff2, 5 роутов, header/footer, cookie-consent + Метрика, главная по Figma 185:2 (9 секций). Unit 52 + e2e 30 зелёные. Lighthouse desktop 99/96/100/100 |
 | 2026-06-12 | Создан OpenSpec change `site-skeleton` (proposal/design/4 specs/tasks) через /opsx:propose |
@@ -19,7 +20,7 @@
 > Новые записи добавляются **сверху**. Не переписывай историю — это журнал, а не спека.
 
 ## Текущая задача
-Реализация редизайна: `/opsx:apply ds-migration` (блокирует остальные) → `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell). Каждый change: apply → verify → sync → archive.
+`ds-migration` реализован (все 18 задач) — дальше по циклу: `/opsx:verify ds-migration` → code review → `/opsx:sync` → `/opsx:archive`. Затем `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell).
 
 ## Ключевые архитектурные решения
 | Решение | Выбор | Обоснование |
@@ -27,8 +28,8 @@
 | Фронтенд-стек | Next.js (App Router) + React + TypeScript strict + Tailwind CSS + shadcn/ui | Канон проекта, зафиксирован фаундером в HANDOFF-брифе §4 и site-brief §4.3 |
 | Анимация | Только CSS + ванильный JS (IntersectionObserver), без Framer Motion/GSAP/Lenis | Концепт A+ из брифа; `prefers-reduced-motion` обязателен |
 | Аналитика | Только Яндекс.Метрика (7 точек событий) | Бриф §8; GA и прочие — запрещены на MVP |
-| Шрифты | Self-hosted через `next/font/local`: Unbounded, Spectral, Caveat — максимум 3 | DS-контракт «3 шрифта max» (решение 27 мая); файлы в `docs/zazemli_design_arts/fonts/` |
-| Источник истины дизайна | Figma `bCmvvuyo5ssXaGEuUjwbHc`, главная — node 185:2 (PHASE 8 v2) + `tokens.json` v1.0.1 | Бриф §5; node 185:2 подтверждён фаундером как готовый к сборке |
+| Шрифты | Self-hosted `next/font/local`, роли: voice (Literata — временный дублёр Newsreader) + ui (Commissioner), ровно 2 семейства, variable woff2 | typography.md v2.0 (tokens v1.1.0); Literata — решение 2026-07-05: у Newsreader нет кириллицы (вопрос Насте) |
+| Источник истины дизайна | HTML-прототипы `../zazemli-vault/Айти/Сайт/prototypes/` + `tokens.json` v1.1.0; копи — канон-`.md` vault | BUILD-SPEC (2026-07-05); ранее Figma 185:2 + v1.0.1 — устарело |
 | Деплой-модель | Static export (`output: 'export'`), без API routes | Решение 2026-06-12: стабильность и свобода хостинга в РФ-контексте |
 | Контент на MVP | TS-константы в `src/content/`, без CMS | Решение 2026-06-12: Sanity — post-MVP, типы контента готовят миграцию |
 | Структура компонентов | По роли: `ui` / `site` / `sections` (не atomic-папки) | Решение 2026-06-12: имена компонентов из БЗ сохраняются |
@@ -43,15 +44,17 @@
 
 ## Следующие шаги
 - [x] git init + первый коммит документов
-- [x] Создать OpenSpec change на каркас (`/opsx:propose`)
-- [x] Реализовать каркас (`/opsx:apply site-skeleton`)
-- [ ] `/opsx:verify site-skeleton` → code review → `/opsx:sync` → `/opsx:archive`
+- [x] Реализовать каркас (`/opsx:apply site-skeleton`), заархивировать
+- [x] Реализовать `ds-migration` (`/opsx:apply`)
+- [ ] `/opsx:verify ds-migration` → code review → `/opsx:sync` → `/opsx:archive`
+- [ ] `landing-redesign`, затем `product-pages` ∥ `guide-lab`
 - [ ] Передать Насте открытые вопросы (см. ниже)
 
 ## Открытые вопросы Насте
+- **Voice-шрифт: у Newsreader нет кириллицы** (проверено 2026-07-05: ни на Google Fonts, ни в upstream Production Type v1.003; запись «кириллица полная» в typography.md v2.0 ошибочна — в прототипах русский текст фактически рендерит Georgia-фолбэк). Временный дублёр на сайте — **Literata** (ближайший editorial-serif: opsz 7–72, родная кириллица, variable italic). Утвердить Literata или выбрать другое семейство; замена дешёвая (woff2 + 1 строка конфигурации).
+- **Глиф ❦ (fleuron)** отсутствует и в Literata, и в Commissioner (и в Newsreader) — рендерится системным serif, как и в прототипах. Ок или заменить на SVG-глиф?
+- **Дисклеймер «Растения — не лекарство…»**: из футера убран (по прототипу), остаётся на `/lab` (change guide-lab). Показывать на всём сайте или только на `/lab`?
+- **Реквизиты ИП** для legal-строки футера (ОГРНИП) — плейсхолдер `ИП Минетто`.
 - **Ozon-store URL** — пока `ozonStoreUrl: null` → кнопки «Скоро на Ozon».
-- **Файлы шрифтов**: woff2 в ассетах битые (по 39 байт) — взяты ttf и пересобраны в woff2 субсеттингом. Нет весов Unbounded 500 (Medium) и Spectral 300 (Light, hero) / 700 (Bold) — временно заменены ближайшими. Нужны оригиналы.
 - **noindex на `/diary-signup`** — наше допущение (вход только по QR), подтвердить.
-- **Тэглайны и размеры горшков в галерее SKU** — транскрибированы с PNG-рендера Figma (data API в rate limit), сверить с текстовыми нодами после сброса. Заголовок галереи «Семь растений — семь рецептов земли» — добавлен.
-- **Контраст мелких меток** (номера 01–05, кикеры) — по Figma 0.45 непрозрачности, ниже WCAG AA. Бренд-DS vs a11y — решение CDO.
-- **Реквизиты ИП** для футера (ОГРНИП) — плейсхолдер `ИП Минетто`.
+- **Тэглайны и размеры горшков в галерее SKU** — транскрибированы с PNG-рендера Figma, сверить с канон-`.md` при `landing-redesign` (копи теперь живёт в vault).

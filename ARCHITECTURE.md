@@ -28,10 +28,10 @@ C4Context
 | `app/` (роуты + layout) | 5 страниц, метаданные/SEO, `not-found`, подключение шрифтов и обвязки |
 | `components/sections/<page>/` | Секции страниц (главная: Hero, WhatsInBox, DifferentSoil, WhatSoilGives, SkuGallery, Statement, About, Teasers, OzonCta) |
 | `components/site/` | SiteHeader, SiteFooter, CookieBanner (consent-gate), Metrika |
-| `components/ui/` | shadcn-примитивы + бренд-атомы DS (Fleuron, CaveatNote, MaterialDot, KickerHeader…) |
+| `components/ui/` | shadcn-примитивы + бренд-атомы DS (Fleuron, RitualNote, MaterialDot, KickerHeader, DetailsAccordion, BrandButton…) |
 | `content/` | Контент TS-константами: SKU, тексты секций, навигация, футер-реквизиты |
-| `lib/` | `utm.ts` (Ozon-ссылки), `metrika.ts` (цели 7 точек) |
-| `styles/globals.css` | Дизайн-токены (CSS-переменные из `tokens.json` v1.0.1) + Tailwind-тема |
+| `lib/` | `utm.ts` (Ozon-ссылки), `metrika.ts` (цели 7 точек), `ds-lint.ts` (DS-запреты + контраст-политика) |
+| `styles/globals.css` | Дизайн-токены (CSS-переменные из `tokens.json` v1.1.0, vault `Айти/Сайт/`) + Tailwind-тема |
 
 ## 4. Ключевые интерфейсы
 - **UTM-контракт.** Исходящие на Ozon: `utm_source=site`, per-SKU `utm_content=sku00X`. Входящие с печати: `utm_source=qr&utm_medium=print&utm_campaign=partia-0` (зашито в QR, сайт ничего не делает — считает Метрика).
