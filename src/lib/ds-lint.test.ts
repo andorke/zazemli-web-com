@@ -75,6 +75,17 @@ describe("checkDsViolations", () => {
       ),
     ).toHaveLength(0);
   });
+
+  it("находит устаревшие имена токенов var(--moss) → var(--color-moss)", () => {
+    expect(checkDsViolations('fill: "var(--soil)"')).not.toHaveLength(0);
+    expect(checkDsViolations("color: var(--moss)")).not.toHaveLength(0);
+  });
+
+  it("пропускает актуальные var(--color-*) и семантику shadcn", () => {
+    expect(checkDsViolations('fill: "var(--color-soil)"')).toHaveLength(0);
+    expect(checkDsViolations("var(--color-moss-ink)")).toHaveLength(0);
+    expect(checkDsViolations("var(--background)")).toHaveLength(0);
+  });
 });
 
 describe("checkCssViolations", () => {

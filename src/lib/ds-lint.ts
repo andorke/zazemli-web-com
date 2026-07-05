@@ -27,6 +27,11 @@ const RULES: Array<{ name: string; pattern: RegExp; allowMark?: string }> = [
       /(?:^|[\s"'`:])text-(?:sku-[a-z]+|cosmos|iris|buttercup|sky|poppy)\b/,
     allowMark: "ds-allow: sku-accent",
   },
+  {
+    name: "устаревшее имя токена: var(--moss|--soil|…) → var(--color-*)",
+    pattern:
+      /var\(--(?:bone|charcoal|moss|chalk|graphite|soil|ceramsite|pumice|sand|gravel|cosmos|iris|buttercup|sky|poppy)(?![-a-z])/,
+  },
 ];
 
 export function checkDsViolations(source: string): string[] {

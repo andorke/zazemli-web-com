@@ -23,10 +23,10 @@ export type VialSegments = {
 
 // снизу вверх
 const GROUPS = [
-  { key: "base", label: "основа и питание", fill: "var(--soil)" },
-  { key: "drainage", label: "дренаж и каркас", fill: "var(--ceramsite)" },
-  { key: "moisture", label: "влага", fill: "var(--moss)" },
-  { key: "air", label: "воздух", fill: "var(--pumice)" },
+  { key: "base", label: "основа и питание", fill: "var(--color-soil)" },
+  { key: "drainage", label: "дренаж и каркас", fill: "var(--color-ceramsite)" },
+  { key: "moisture", label: "влага", fill: "var(--color-moss)" },
+  { key: "air", label: "воздух", fill: "var(--color-pumice)" },
 ] as const;
 
 // Вертикальная зона тела (% от рамки PNG 600×900) — должна совпадать с y0/y1 в генераторе маски.
