@@ -5,75 +5,117 @@
 
 /*
  * Дизайн-токены ЗАЗЕМЛИ.
- * Источник: ../zazemli-vault/Маркетинг/Бренд/Айдентика/tokens.json v1.0.1
- * (+ color-system.md, typography.md). Правка значений — только вслед за tokens.json.
+ * Источник: ../zazemli-vault/Айти/Сайт/tokens.json v1.1.0
+ * (+ prototypes/landing.html — прототипные цвета текста, помечены ниже).
+ * Правка значений — только вслед за tokens.json.
  * Запреты DS: box-shadow нет (shadow: null), радиусы только 0 / 2px / pill,
  * earth-палитра — только в MaterialDot, dark-режима у бренда нет.
+ * Контраст-политика: текст/ссылки/латынь на bone — moss-ink (#406C4F, AA 5.5)
+ * или charcoal; raw moss (#4A7C59, 4.43) — только заливки/фльероны/крупное ≥18pt
+ * с меткой `ds-allow: moss-large`. SKU-цвета — только декор, не текст/кнопки.
  */
 
 :root {
-  /* Бренд-палитра */
-  --bone: #f6f4f0;
-  --charcoal: #1c1c1c;
-  --moss: #4a7c59;
-  --chalk: #edebe6;
+  /* Бренд-палитра (tokens.color.brand) */
+  --color-bone: #f6f4f0;
+  --color-charcoal: #1c1c1c;
+  --color-moss: #4a7c59;
+  --color-moss-ink: #406c4f;
+  --color-chalk: #edebe6;
 
-  /* Earth-палитра (только MaterialDot) */
-  --graphite: #2e2e2e;
-  --soil: #6b4d35;
-  --ceramsite: #b08c5a;
-  --pumice: #b5afa3;
-  --sand: #c8b8a8;
-  --gravel: #d2c9b8;
+  /* Earth-палитра (tokens.color.earth; только MaterialDot) */
+  --color-graphite: #2e2e2e;
+  --color-soil: #6b4d35;
+  --color-ceramsite: #b08c5a;
+  --color-pumice: #b5afa3;
+  --color-sand: #c8b8a8;
+  --color-gravel: #d2c9b8;
 
-  /* SKU-палитра (только на /collectio/[plant]) */
-  --cosmos: #be3a6b;
-  --iris: #7e6aaf;
-  --buttercup: #c47a10;
-  --sky: #2878ae;
-  --poppy: #c03a30;
+  /* SKU-палитра (tokens.color.sku; только декор соответствующего SKU,
+     никогда 2+ SKU-цветов на странице) */
+  --color-sku-monstera: #4a7c59;
+  --color-sku-epipremnum: #4a7c59;
+  --color-sku-ficus: #be3a6b;
+  --color-sku-aglaonema: #7e6aaf;
+  --color-sku-zamioculcas: #c47a10;
+  --color-sku-spathiphyllum: #2878ae;
+  --color-sku-anthurium: #c03a30;
+  /* Имена цветов SKU (tokens.color.skuByName) */
+  --color-cosmos: var(--color-sku-ficus);
+  --color-iris: var(--color-sku-aglaonema);
+  --color-buttercup: var(--color-sku-zamioculcas);
+  --color-sky: var(--color-sku-spathiphyllum);
+  --color-poppy: var(--color-sku-anthurium);
 
-  /* Семантика shadcn поверх бренда */
-  --background: var(--bone);
-  --foreground: var(--charcoal);
-  --card: var(--bone);
-  --card-foreground: var(--charcoal);
-  --popover: var(--bone);
-  --popover-foreground: var(--charcoal);
-  --primary: var(--charcoal);
-  --primary-foreground: var(--bone);
-  --secondary: var(--chalk);
-  --secondary-foreground: var(--charcoal);
-  --muted: var(--chalk);
-  --muted-foreground: rgb(28 28 28 / 0.5);
-  --accent: var(--moss);
-  --accent-foreground: var(--bone);
-  --destructive: var(--poppy);
+  /* Цвета текста прототипов (prototypes/landing.html :root; в tokens.json
+     v1.1.0 отсутствуют — кандидаты в v1.1.1): muted — вторичный текст
+     (--muted, 4.9:1 на bone), ink-muted — мелкий текст (--tx3, 6.25:1) */
+  --color-text-muted: #6b6862;
+  --color-ink-muted: #5d5a55;
+
+  /* Opacity-шкала (tokens.opacity) */
+  --opacity-text-display: 0.8;
+  --opacity-text-latin: 0.75;
+  --opacity-text-narrative: 0.7;
+  --opacity-text-secondary: 0.5;
+  --opacity-text-caption: 0.4;
+  --opacity-border-divider: 0.3;
+  --opacity-ritual: 0.85; /* tokens.opacity — роль рукописной приписки */
+  --opacity-day-labels: 0.55;
+
+  /* Семантика shadcn поверх бренда. Текстовые роли — по контраст-политике:
+     accent как ЦВЕТ ТЕКСТА — только moss-ink; заливки могут быть raw moss */
+  --background: var(--color-bone);
+  --foreground: var(--color-charcoal);
+  --card: var(--color-bone);
+  --card-foreground: var(--color-charcoal);
+  --popover: var(--color-bone);
+  --popover-foreground: var(--color-charcoal);
+  --primary: var(--color-charcoal);
+  --primary-foreground: var(--color-bone);
+  --secondary: var(--color-chalk);
+  --secondary-foreground: var(--color-charcoal);
+  --muted: var(--color-chalk);
+  --muted-foreground: var(--color-text-muted);
+  --accent: var(--color-moss-ink);
+  --accent-foreground: var(--color-bone);
+  --destructive: var(--color-poppy);
   --border: rgb(28 28 28 / 0.3);
   --input: rgb(28 28 28 / 0.15);
-  --ring: var(--moss);
+  --ring: var(--color-moss);
   --radius: 2px;
 }
 
 @theme inline {
   /* Цвета: бренд */
-  --color-bone: var(--bone);
-  --color-charcoal: var(--charcoal);
-  --color-moss: var(--moss);
-  --color-chalk: var(--chalk);
+  --color-bone: var(--color-bone);
+  --color-charcoal: var(--color-charcoal);
+  --color-moss: var(--color-moss);
+  --color-moss-ink: var(--color-moss-ink);
+  --color-chalk: var(--color-chalk);
   /* Цвета: earth */
-  --color-graphite: var(--graphite);
-  --color-soil: var(--soil);
-  --color-ceramsite: var(--ceramsite);
-  --color-pumice: var(--pumice);
-  --color-sand: var(--sand);
-  --color-gravel: var(--gravel);
+  --color-graphite: var(--color-graphite);
+  --color-soil: var(--color-soil);
+  --color-ceramsite: var(--color-ceramsite);
+  --color-pumice: var(--color-pumice);
+  --color-sand: var(--color-sand);
+  --color-gravel: var(--color-gravel);
   /* Цвета: SKU */
-  --color-cosmos: var(--cosmos);
-  --color-iris: var(--iris);
-  --color-buttercup: var(--buttercup);
-  --color-sky: var(--sky);
-  --color-poppy: var(--poppy);
+  --color-sku-monstera: var(--color-sku-monstera);
+  --color-sku-epipremnum: var(--color-sku-epipremnum);
+  --color-sku-ficus: var(--color-sku-ficus);
+  --color-sku-aglaonema: var(--color-sku-aglaonema);
+  --color-sku-zamioculcas: var(--color-sku-zamioculcas);
+  --color-sku-spathiphyllum: var(--color-sku-spathiphyllum);
+  --color-sku-anthurium: var(--color-sku-anthurium);
+  --color-cosmos: var(--color-cosmos);
+  --color-iris: var(--color-iris);
+  --color-buttercup: var(--color-buttercup);
+  --color-sky: var(--color-sky);
+  --color-poppy: var(--color-poppy);
+  /* Цвета: текст прототипов */
+  --color-text-muted: var(--color-text-muted);
+  --color-ink-muted: var(--color-ink-muted);
   /* Цвета: семантика shadcn */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -101,6 +143,17 @@
   --font-voice: var(--font-voice);
   --font-ui: var(--font-ui);
 
+  /* Типо-шкала ролей, десктоп px (tokens.typography.roles v1.1.0):
+     84 / 52 / 34 / 24 / 18 / 15 / 13 / 12 */
+  --text-display: 5.25rem;
+  --text-h1: 3.25rem;
+  --text-h2: 2.125rem;
+  --text-take: 1.5rem;
+  --text-body: 1.125rem;
+  --text-small: 0.9375rem;
+  --text-caption: 0.8125rem;
+  --text-eyebrow: 0.75rem;
+
   /* Type-scale Major Third ×1.25 (tokens.typography.scale) */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -124,12 +177,27 @@
   --leading-narrative: 1.65;
   --leading-ritual: 1.3; /* tokens.lineHeight — роль рукописной приписки (имя в tokens.json — от выведенного семейства) */
 
-  /* Letter-spacing (tokens.typography.letterSpacing) */
+  /* Letter-spacing (tokens.typography.letterSpacing + прототипы) */
   --tracking-kicker: 0.18em;
   --tracking-caption: 0.25em;
+  --tracking-eyebrow: 0.22em; /* prototypes/landing.html .eyebrow */
   --tracking-heading-tight: -0.025em;
   --tracking-display-tight: -0.05em;
   --tracking-display-xtight: -0.075em;
+
+  /* Spacing: база 4px = дефолтная шкала Tailwind (tokens.space);
+     семантика секций (tokens.space.semantic) */
+  --spacing-section-y: 6rem;
+  --spacing-section-y-mobile: 4rem;
+  --spacing-section-gap: 4rem;
+  --spacing-section-gap-mobile: 3rem;
+  --spacing-block-gap: 2rem;
+  --spacing-item-gap: 1rem;
+  --spacing-tight-gap: 0.5rem;
+
+  /* Брейкпоинты: 640/768/1024/1280/1536 — дефолт Tailwind = tokens.breakpoint;
+     layout-брейкпоинт прототипов (бургер, сетки) */
+  --breakpoint-layout: 860px;
 
   /* Радиусы: только flat 0 / tight 2 / pill (tokens.radius) */
   --radius-sm: var(--radius);
