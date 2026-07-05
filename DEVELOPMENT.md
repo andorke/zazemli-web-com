@@ -29,8 +29,7 @@
 .
 ├─ AGENTS.md / CONTEXT.md / ...   # документы проекта (см. AGENTS.md «Порядок чтения»)
 ├─ docs/
-│  ├─ zazemli_design_arts/        # ассеты фаундера: бриф HANDOFF, шрифты, дудлы, QR
-│  └─ zazemli_knowledge_base/     # база знаний (точка входа НАВИГАЦИЯ.md) — только чтение
+│  └─ zazemli_design_arts/        # ассеты фаундера: бриф HANDOFF, шрифты, дудлы, QR
 ├─ openspec/                      # OpenSpec: specs и changes
 ├─ example_docs/                  # примеры заполнения документов (не копировать контент)
 ├─ my_tasks/                      # входящие задачи от пользователя
@@ -45,6 +44,8 @@
    ├─ fonts/                      # woff2 для next/font/local
    └─ styles/                     # globals.css: токены из tokens.json → CSS-переменные
 ```
+
+> **База знаний** вынесена во внешний Obsidian-vault `../zazemli-vault/` (репо `VesnaPenguin/zazemli-vault`, только чтение). Точка входа — `НАВИГАЦИЯ.md`, синхронизация — `scripts/sync-vault.sh`.
 
 ## Локальный запуск
 ```bash
