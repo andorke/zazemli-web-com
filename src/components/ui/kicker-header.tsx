@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/* Кикер над заголовком секции: ui-роль, КАПС (переходный вид; вёрстка по прототипу — в 3.x) */
+/* Кикер (.eyebrow прототипов): ui-роль 500, eyebrow-размер, КАПС, tracking 0.22em, muted */
 export function KickerHeader({
   className,
   ...props
@@ -8,8 +8,8 @@ export function KickerHeader({
   return (
     <p
       className={cn(
-        "tracking-kicker font-ui text-[10px] font-normal uppercase",
-        "text-moss",
+        "tracking-eyebrow font-ui text-eyebrow font-medium uppercase",
+        "text-muted-foreground",
         className,
       )}
       {...props}
