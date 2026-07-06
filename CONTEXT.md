@@ -9,7 +9,8 @@
 ## Что сделано
 | Дата | Что сделано |
 |------|-------------|
-| 2026-07-06 | `ds-migration`: verify + code review закрыты. Verify нашёл и починил сломанные refs SoilVial (`var(--soil)` → `--color-*`, ds-lint-правило от рецидива), удалил осиротевшие `public/qr`. Review (субагент): 1 Critical — якоря `#collectio` не существовало, все три меню-ссылки били в пустоту (закрыт: id+scroll-mt+e2e на viewport); preload шрифтов закрыт замером LH (mobile: с preload FCP 1.4s/LCP 8.8s, без — 3.6s/9.2s → preload оставлен; узкое место LCP — soil-vial.png 266КБ + JS, уходит в landing-redesign; desktop 0.93/1.8s); minors: скан ds-lint расширен на весь `src/`, `var(--moss-ink)` ловится, вес заглушек 600, watermark-opacity, hover BrandButton по прототипу. Итог: unit 83 + e2e 42 + ds-lint 25 + build зелёные. Осталось: sync → archive |
+| 2026-07-06 | `ds-migration` **заархивирован** (`archive/2026-07-06-ds-migration`): delta-спеки синкнуты в main-спеки (design-system: 2 семейства по ролям + контраст-политика moss-ink + токены v1.1.0; site-shell: header/footer по прототипу), `openspec validate` 4/4. Ветка `worktree-ds-migration` (9 коммитов) готова к мержу в main |
+| 2026-07-06 | `ds-migration`: verify + code review закрыты. Verify нашёл и починил сломанные refs SoilVial (`var(--soil)` → `--color-*`, ds-lint-правило от рецидива), удалил осиротевшие `public/qr`. Review (субагент): 1 Critical — якоря `#collectio` не существовало, все три меню-ссылки били в пустоту (закрыт: id+scroll-mt+e2e на viewport); preload шрифтов закрыт замером LH (mobile: с preload FCP 1.4s/LCP 8.8s, без — 3.6s/9.2s → preload оставлен; узкое место LCP — soil-vial.png 266КБ + JS, уходит в landing-redesign; desktop 0.93/1.8s); minors: скан ds-lint расширен на весь `src/`, `var(--moss-ink)` ловится, вес заглушек 600, watermark-opacity, hover BrandButton по прототипу. Итог: unit 83 + e2e 42 + ds-lint 25 + build зелёные |
 | 2026-07-05 | Реализован change `ds-migration` (18 задач, TDD, worktree `ds-migration`): шрифты → роли voice/ui (**Literata** временно вместо Newsreader — у того не оказалось кириллицы ни на GF, ни в upstream; прототипы рендерили русский Georgia-фолбэком), токены v1.1.0 (moss-ink, SKU-палитра, шкалы ролей), атомы (RitualNote, DetailsAccordion, BrandButton, KickerHeader по прототипу), header/footer по `landing.html`, ds-lint с контраст-политикой (`npm run ds-lint`). Unit 81 + e2e 41 + build зелёные; скриншоты 5 роутов ×2 вьюпорта сняты (переходный вид старых секций). Ждёт: verify → review → sync → archive |
 | 2026-07-05 | Аудит обновлённого vault: source of truth вёрстки теперь HTML-прототипы `Айти/Сайт/prototypes/` + tokens v1.1.0 (Newsreader/Commissioner, moss-ink), не Figma 185:2. Брейнсторминг → дизайн-спека `docs/superpowers/specs/2026-07-05-site-redesign-design.md`. Созданы 4 OpenSpec change: `ds-migration` → `landing-redesign` → `product-pages` ∥ `guide-lab` (архив: product-pages до guide-lab) |
 | 2026-06-13 | Реализован change `site-skeleton` (29 задач, TDD): Next 16 static export, токены→Tailwind, 3 шрифта woff2, 5 роутов, header/footer, cookie-consent + Метрика, главная по Figma 185:2 (9 секций). Unit 52 + e2e 30 зелёные. Lighthouse desktop 99/96/100/100 |
@@ -21,7 +22,7 @@
 > Новые записи добавляются **сверху**. Не переписывай историю — это журнал, а не спека.
 
 ## Текущая задача
-`ds-migration` реализован (все 18 задач) — дальше по циклу: `/opsx:verify ds-migration` → code review → `/opsx:sync` → `/opsx:archive`. Затем `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell).
+`ds-migration` закрыт полностью (apply → verify → review → sync → archive). Ветку `worktree-ds-migration` смержить в main, затем `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell).
 
 ## Ключевые архитектурные решения
 | Решение | Выбор | Обоснование |
@@ -47,7 +48,8 @@
 - [x] git init + первый коммит документов
 - [x] Реализовать каркас (`/opsx:apply site-skeleton`), заархивировать
 - [x] Реализовать `ds-migration` (`/opsx:apply`)
-- [ ] `/opsx:verify ds-migration` → code review → `/opsx:sync` → `/opsx:archive`
+- [x] `/opsx:verify ds-migration` → code review → `/opsx:sync` → `/opsx:archive`
+- [ ] Смержить `worktree-ds-migration` в main
 - [ ] `landing-redesign`, затем `product-pages` ∥ `guide-lab`
 - [ ] Передать Насте открытые вопросы (см. ниже)
 
