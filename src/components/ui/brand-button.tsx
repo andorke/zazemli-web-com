@@ -22,10 +22,10 @@ export function BrandButton({
     <Comp
       className={cn(
         "font-ui text-small inline-flex items-center gap-[0.6em] rounded-none border font-medium tracking-[0.02em]",
-        "cursor-pointer px-[1.9em] py-[0.95em] no-underline transition-opacity",
+        "cursor-pointer px-[1.9em] py-[0.95em] no-underline transition-[opacity,gap] hover:gap-[1em]",
         "outline-none focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         solid
-          ? "border-moss bg-moss text-bone hover:opacity-90"
+          ? "border-moss bg-moss text-bone hover:opacity-[0.88]"
           : "border-current bg-transparent hover:opacity-70",
         className,
       )}

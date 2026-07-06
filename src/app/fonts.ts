@@ -27,6 +27,13 @@ export const voice = localFont({
   ],
   variable: "--font-voice",
   display: "swap",
+  /*
+   * Preload обоих voice-файлов (~390 КБ) — осознанно. Замер LH mobile на
+   * static export (2026-07-06): с preload perf 0.75 / FCP 1.4s / LCP 8.8s,
+   * с preload:false — 0.67 / 3.6s / 9.2s (поздний swap бьёт сильнее).
+   * Узкое место мобильного LCP — не шрифты (soil-vial.png 266 КБ + JS),
+   * секция и ассет уходят в landing-redesign. Desktop: 0.93, LCP 1.8s.
+   */
 });
 
 export const ui = localFont({

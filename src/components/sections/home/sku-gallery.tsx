@@ -24,7 +24,10 @@ const dotBg: Record<SkuColor, string> = {
 export function SkuGallery() {
   const { skuGallery } = home;
   return (
-    <section className="bg-bone text-charcoal relative flex flex-col gap-12 overflow-hidden px-6 py-20 lg:px-30 lg:py-35">
+    <section
+      id="collectio"
+      className="bg-bone text-charcoal relative flex scroll-mt-6 flex-col gap-12 overflow-hidden px-6 py-20 lg:px-30 lg:py-35"
+    >
       <span
         aria-hidden="true"
         className="text-charcoal/7 pointer-events-none absolute top-16 right-6 font-voice text-[200px] leading-none font-light select-none lg:right-30"

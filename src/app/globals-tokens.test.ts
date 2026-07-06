@@ -48,6 +48,8 @@ describe("токены v1.1.0 на :root", () => {
     expect(has(root, "--opacity-text-secondary: 0.5")).toBe(true);
     expect(has(root, "--opacity-text-caption: 0.4")).toBe(true);
     expect(has(root, "--opacity-border-divider: 0.3")).toBe(true);
+    expect(has(root, "--opacity-watermark-min: 0.06")).toBe(true);
+    expect(has(root, "--opacity-watermark-max: 0.2")).toBe(true);
   });
 });
 

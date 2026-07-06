@@ -30,7 +30,7 @@ const RULES: Array<{ name: string; pattern: RegExp; allowMark?: string }> = [
   {
     name: "устаревшее имя токена: var(--moss|--soil|…) → var(--color-*)",
     pattern:
-      /var\(--(?:bone|charcoal|moss|chalk|graphite|soil|ceramsite|pumice|sand|gravel|cosmos|iris|buttercup|sky|poppy)(?![-a-z])/,
+      /var\(--(?:bone|charcoal|moss-ink|moss|chalk|graphite|soil|ceramsite|pumice|sand|gravel|cosmos|iris|buttercup|sky|poppy)(?![-a-z])/,
   },
 ];
 

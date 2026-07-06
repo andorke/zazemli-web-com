@@ -33,6 +33,19 @@ test.describe("topbar", () => {
     await expect(page.getByRole("banner").getByText(/Ozon/i)).toHaveCount(0);
   });
 
+  test("клик «Коллекция» с внутренней страницы приводит к секции галереи", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop", "десктоп-меню");
+    await page.goto("/lab");
+    await page
+      .getByRole("banner")
+      .getByRole("link", { name: "Коллекция" })
+      .click();
+    await expect(page).toHaveURL(/\/#collectio$/);
+    await expect(page.locator("#collectio")).toBeInViewport();
+  });
+
   test("бургер на 360px: aria-expanded переключается, панель с 3 пунктами", async ({
     page,
   }, testInfo) => {

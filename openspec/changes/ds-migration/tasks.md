@@ -40,7 +40,7 @@
 ## 6. Верификация
 
 - [x] 6.1 Полный прогон: unit + e2e + `npm run build` (static export) зелёные
-  > Unit 81, e2e 41 (5 skipped — фильтры проектов desktop/mobile), build static export без ошибок.
+  > Финально (после verify и code review): unit 83, e2e 42 (6 skipped — фильтры проектов desktop/mobile), ds-lint 25, build static export без ошибок. Lighthouse на export: desktop 0.93 (LCP 1.8s); mobile 0.75 (LCP 8.8s — тянут soil-vial.png и JS, наследие site-skeleton, уходит в landing-redesign; preload шрифтов оставлен — замер показал, что без него хуже).
 - [x] 6.2 Визуальная проверка 5 роутов на 1440px и 360px: типографика voice/ui применена, контраст-политика соблюдена, «переходный» вид старых секций зафиксирован скриншотами
   > Скриншоты: scratchpad сессии `screens/{home,collectio,lab,guide,diary}-{1440,360}.png`. Найден и закрыт пробел: h1 заглушек наследовал ui-роль от body — добавлено базовое правило прототипов `h1,h2,h3 → voice` в globals.
 - [x] 6.3 Обновить CONTEXT.md (журнал + текущая задача) и файл «вопросы Насте» (кириллица шрифтов — если возник, реквизиты ИП, дисклеймер весь сайт vs /lab)

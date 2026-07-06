@@ -79,6 +79,8 @@ describe("checkDsViolations", () => {
   it("находит устаревшие имена токенов var(--moss) → var(--color-moss)", () => {
     expect(checkDsViolations('fill: "var(--soil)"')).not.toHaveLength(0);
     expect(checkDsViolations("color: var(--moss)")).not.toHaveLength(0);
+    /* --moss-ink никогда не существовал на :root — только --color-moss-ink */
+    expect(checkDsViolations("color: var(--moss-ink)")).not.toHaveLength(0);
   });
 
   it("пропускает актуальные var(--color-*) и семантику shadcn", () => {
@@ -100,16 +102,19 @@ describe("checkCssViolations", () => {
   });
 });
 
-/* Инвариант DS: компоненты и роуты не содержат hex, теней и чужих радиусов.
-   Цвета — только через токены globals.css (источник tokens.json v1.0.1). */
+/* Инвариант DS: исходники не содержат hex, теней, чужих радиусов и прочих
+   нарушений правил. Цвета — только через токены globals.css (источник
+   tokens.json v1.1.0). Скан — весь src/ (кроме тестов и самого ds-lint.ts:
+   его правила содержат запрещённые паттерны как литералы). */
 describe("DS-инвариант по src/", () => {
-  const roots = ["src/components", "src/app"];
+  const roots = ["src"];
 
   const collect = (dir: string): string[] =>
     readdirSync(dir).flatMap((name) => {
       const full = join(dir, name);
       if (statSync(full).isDirectory()) return collect(full);
       if (!/\.(ts|tsx)$/.test(name) || /\.test\./.test(name)) return [];
+      if (name === "ds-lint.ts") return [];
       return [full];
     });
 

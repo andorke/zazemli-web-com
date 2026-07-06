@@ -62,6 +62,8 @@
   --opacity-border-divider: 0.3;
   --opacity-ritual: 0.85; /* tokens.opacity — роль рукописной приписки */
   --opacity-day-labels: 0.55;
+  --opacity-watermark-min: 0.06;
+  --opacity-watermark-max: 0.2;
 
   /* Семантика shadcn поверх бренда. Текстовые роли — по контраст-политике:
      accent как ЦВЕТ ТЕКСТА — только moss-ink; заливки могут быть raw moss */
