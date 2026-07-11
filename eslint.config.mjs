@@ -19,6 +19,8 @@ const eslintConfig = defineConfig([
     "example_docs/**",
     "openspec/**",
     "my_tasks/**",
+    // Служебные worktree-копии Claude Code — не наш код
+    ".claude/**",
   ]),
 ]);
 

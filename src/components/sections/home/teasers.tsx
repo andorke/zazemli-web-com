@@ -3,33 +3,37 @@ import Link from "next/link";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
-/* Тизеры 185:181 — два столбца (Гайд / Лаборатория), верхняя линия, кикер+мета, заголовок, текст, линк */
+/*
+ * Тизеры ×3 по прототипу: Лаборатория → /lab, Гайд → /guide, Дневник — текстом без ссылки
+ * (инвариант «diary вне навигации», вход только по QR из бокса).
+ */
 export function Teasers() {
   return (
-    <section className="bg-bone text-charcoal flex flex-col gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:px-30 lg:pt-20 lg:pb-25">
+    <section className="bg-bone text-charcoal grid gap-12 px-6 py-20 lg:grid-cols-3 lg:gap-16 lg:px-30 lg:py-28">
       {home.teasers.map((teaser) => (
         <article
-          key={teaser.kicker}
-          className="border-charcoal flex flex-1 flex-col gap-4 border-t pt-6"
+          key={teaser.eyebrow}
+          className="border-charcoal flex flex-col gap-4 border-t pt-6"
         >
-          <div className="flex items-center justify-between">
-            <KickerHeader>{teaser.kicker}</KickerHeader>
-            <span className="tracking-kicker text-charcoal/45 font-sans text-[10px]">
-              {teaser.meta}
-            </span>
-          </div>
-          <h2 className="text-charcoal/85 font-serif text-[26px] italic">
+          <KickerHeader>{teaser.eyebrow}</KickerHeader>
+          <h3 className="font-serif text-[clamp(1.5rem,1vw+1rem,1.7rem)] leading-snug">
             {teaser.title}
-          </h2>
-          <p className="text-charcoal/70 max-w-lg font-serif text-base leading-relaxed">
+          </h3>
+          <p className="text-charcoal/70 font-serif text-base leading-relaxed">
             {teaser.body}
           </p>
-          <Link
-            href={teaser.link.href}
-            className="text-charcoal/75 w-fit font-serif text-base underline underline-offset-4"
-          >
-            {teaser.link.label}
-          </Link>
+          {teaser.link ? (
+            <Link
+              href={teaser.link.href}
+              className="text-moss-ink mt-auto w-fit pt-2 font-sans text-[12px] font-medium tracking-wide no-underline"
+            >
+              {teaser.link.label}
+            </Link>
+          ) : (
+            <span className="text-charcoal/50 mt-auto pt-2 font-sans text-[11px] tracking-wide">
+              {teaser.note}
+            </span>
+          )}
         </article>
       ))}
     </section>

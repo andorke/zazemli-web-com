@@ -1,24 +1,29 @@
-import { CaveatNote } from "@/components/ui/caveat-note";
+import { Fleuron } from "@/components/ui/fleuron";
+import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
-/* «О нас» 185:173 — bone, центрированная цитата основательницы + нарратив + Caveat-подпись */
+/*
+ * «О нас» по прототипу: chalk, центр, узкая колонка, подпись «— Настя, основательница ❦»
+ * (единственный фльерон страницы). Caveat на лендинге не используется (канон Pre-publish).
+ */
 export function About() {
   const { about } = home;
   return (
-    <section className="bg-bone text-charcoal flex flex-col items-center gap-7 px-6 py-20 text-center lg:px-30 lg:py-35">
-      <blockquote className="text-charcoal/80 font-serif text-[clamp(2rem,4vw,3rem)] leading-tight italic">
-        {about.quote.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
+    <section className="bg-chalk text-charcoal px-6 py-20 lg:px-30 lg:py-28">
+      <div className="mx-auto flex max-w-[42rem] flex-col items-center gap-6 text-center">
+        <KickerHeader>{about.eyebrow}</KickerHeader>
+        {about.paragraphs.map((paragraph) => (
+          <p
+            key={paragraph.slice(0, 24)}
+            className="text-charcoal/85 font-serif text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] font-light leading-normal"
+          >
+            {paragraph}
+          </p>
         ))}
-      </blockquote>
-      <p className="leading-narrative text-charcoal/70 max-w-3xl font-serif text-lg">
-        {about.body}
-      </p>
-      <CaveatNote className="text-charcoal/55 text-2xl">
-        {about.signature}
-      </CaveatNote>
+        <p className="text-moss-ink font-serif text-[17px] italic">
+          {about.signature} <Fleuron className="not-italic" />
+        </p>
+      </div>
     </section>
   );
 }

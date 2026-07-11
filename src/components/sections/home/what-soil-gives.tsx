@@ -1,49 +1,20 @@
-import { ImageSlot } from "@/components/sections/home/image-slot";
-import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
-/* «Что даёт земля» 185:159 — тёмная (soil), слева фото-слот, справа две колонки + closing */
+/* «Что даёт» по прототипу: две колонки «Растению»/«Тебе», italic-moss заголовки, без кикера */
 export function WhatSoilGives() {
   const { whatSoilGives } = home;
   return (
-    <section className="bg-soil text-bone relative flex flex-col gap-12 px-6 py-20 lg:flex-row lg:items-center lg:gap-20 lg:px-30 lg:py-28">
-      <ImageSlot
-        tone="dark"
-        caption={whatSoilGives.photoSlot}
-        className="aspect-[3/2] w-full lg:flex-1"
-      />
-
-      <div className="flex flex-col gap-8 lg:flex-1">
-        <div className="flex flex-col gap-2">
-          <span className="bg-buttercup h-0.5 w-12" />
-          <KickerHeader className="text-bone/60">
-            {whatSoilGives.kicker}
-          </KickerHeader>
-        </div>
-
-        <div className="flex flex-col gap-7">
-          {whatSoilGives.columns.map((col) => (
-            <div
-              key={col.label}
-              className="border-bone/14 flex flex-col gap-3 border-b pb-7 last:border-b-0"
-            >
-              <span className="text-bone/65 font-serif text-[17px] italic">
-                {col.label}
-              </span>
-              <p className="text-bone/70 font-serif text-[27px] leading-snug">
-                {col.text.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </p>
-            </div>
-          ))}
-          <p className="text-bone/85 font-serif text-[17px] italic">
-            {whatSoilGives.closing}
+    <section className="bg-bone text-charcoal grid gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:px-30 lg:py-28">
+      {whatSoilGives.columns.map((col) => (
+        <div key={col.label} className="flex flex-col gap-3">
+          <h3 className="text-moss font-serif text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic">
+            {col.label}
+          </h3>
+          <p className="text-charcoal/70 max-w-[38rem] font-serif text-base leading-relaxed">
+            {col.text}
           </p>
         </div>
-      </div>
+      ))}
     </section>
   );
 }

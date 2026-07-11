@@ -9,6 +9,7 @@
 ## Что сделано
 | Дата | Что сделано |
 |------|-------------|
+| 2026-07-06 | Реализован change `landing-redesign` (11 задач, TDD): главная пересобрана под прототип `landing.html` + канон `home.md` v2.1 — 11 блоков, новые секции manifesto / how-it-works / photo-band, галерея 7 кликабельных карточек «N° 01» + приглашение «N° 08 — ?», мост «почему именно так →» на /lab (добавлен токен `--moss-ink`), Statement удалён. Реализовано **до** `ds-migration` (решение пользователя): вёрстка на текущих токенах/шрифтах, DS-миграция перекрасит глобально. Unit 106 + e2e 36 зелёные, static export ок. Расхождения канон↔прототип — в «Вопросы Насте» |
 | 2026-07-05 | Аудит обновлённого vault: source of truth вёрстки теперь HTML-прототипы `Айти/Сайт/prototypes/` + tokens v1.1.0 (Newsreader/Commissioner, moss-ink), не Figma 185:2. Брейнсторминг → дизайн-спека `docs/superpowers/specs/2026-07-05-site-redesign-design.md`. Созданы 4 OpenSpec change: `ds-migration` → `landing-redesign` → `product-pages` ∥ `guide-lab` (архив: product-pages до guide-lab) |
 | 2026-06-13 | Реализован change `site-skeleton` (29 задач, TDD): Next 16 static export, токены→Tailwind, 3 шрифта woff2, 5 роутов, header/footer, cookie-consent + Метрика, главная по Figma 185:2 (9 секций). Unit 52 + e2e 30 зелёные. Lighthouse desktop 99/96/100/100 |
 | 2026-06-12 | Создан OpenSpec change `site-skeleton` (proposal/design/4 specs/tasks) через /opsx:propose |
@@ -19,7 +20,7 @@
 > Новые записи добавляются **сверху**. Не переписывай историю — это журнал, а не спека.
 
 ## Текущая задача
-Реализация редизайна: `/opsx:apply ds-migration` (блокирует остальные) → `landing-redesign` → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell). Каждый change: apply → verify → sync → archive.
+Реализация редизайна. `landing-redesign` реализован (11/11 задач; по решению пользователя — раньше `ds-migration`, на токенах v1.0.1 + moss-ink): дальше verify → code review → sync → archive. Затем `/opsx:apply ds-migration` (шрифты Newsreader/Commissioner, токены v1.1.0, topbar/footer — перекрасят готовую главную) → `product-pages` и `guide-lab` (архивировать product-pages раньше guide-lab — оба меняют «Заглушки» site-shell). Каждый change: apply → verify → sync → archive.
 
 ## Ключевые архитектурные решения
 | Решение | Выбор | Обоснование |
@@ -45,10 +46,19 @@
 - [x] git init + первый коммит документов
 - [x] Создать OpenSpec change на каркас (`/opsx:propose`)
 - [x] Реализовать каркас (`/opsx:apply site-skeleton`)
-- [ ] `/opsx:verify site-skeleton` → code review → `/opsx:sync` → `/opsx:archive`
+- [x] Реализовать главную по прототипу (`/opsx:apply landing-redesign`)
+- [ ] `/opsx:verify landing-redesign` → code review → `/opsx:sync` → `/opsx:archive`
+- [ ] `/opsx:apply ds-migration` (шрифты/токены v1.1.0 поверх готовой главной)
 - [ ] Передать Насте открытые вопросы (см. ниже)
 
 ## Открытые вопросы Насте
+- **[landing-redesign] Порядок блоков «колбы ↔ что в боксе»** — прототип `landing.html`: галерея → колбы → бокс; канон `home.md` v2.1: галерея → бокс → колбы. Собрано по прототипу — подтвердить.
+- **[landing-redesign] Нумерация SKU** — лендинг «N° 01» (прототип) vs страницы товара «N°001». Нужен единый формат?
+- **[landing-redesign] Опись бокса** — канон: 5 позиций (конвертик «Забота о корнях и твоих руках»: перчатки, корневин, 2 апельсиновые палочки); прототип: 6 позиций («Корневин, 5 г», «Нитриловые перчатки», без палочек). Взят канон дословно — что верно?
+- **[landing-redesign] Канон «о нас» нарушает блэклист** — «двадцати пяти **уникальных** растений» («уникальный» в блэклисте BUILD-SPEC). Взята прототип-редакция (без «уникальных», сокращения «в экране», «о растениях»). Обновить канон?
+- **[landing-redesign] Мелкие текстовые расхождения канон ↔ прототип** — CTA галереи «Открыть коллекцию →» vs «Вся коллекция →» (взят прототип); «три размера» (канон, Ozon) vs «три объёма» (прототип, hero-прайс) — сейчас на странице оба варианта; «структура не слёживается» в «Что даёт» есть только в прототипе (не взято).
+- **[landing-redesign] Карточка «N° 08 — ?»** — в прототипе форма «подскажи растение»; на static export канала приёма нет — реализована без формы, текстом. Нужен канал (email/TG) или оставить?
+- **[landing-redesign] Блоки вне канона** — «Как это работает» и атмосферный баннер отсутствуют в `home.md` (тексты взяты из прототипа) — добавить в канон.
 - **Ozon-store URL** — пока `ozonStoreUrl: null` → кнопки «Скоро на Ozon».
 - **Файлы шрифтов**: woff2 в ассетах битые (по 39 байт) — взяты ttf и пересобраны в woff2 субсеттингом. Нет весов Unbounded 500 (Medium) и Spectral 300 (Light, hero) / 700 (Bold) — временно заменены ближайшими. Нужны оригиналы.
 - **noindex на `/diary-signup`** — наше допущение (вход только по QR), подтвердить.

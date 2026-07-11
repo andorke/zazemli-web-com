@@ -16,6 +16,8 @@
   --bone: #f6f4f0;
   --charcoal: #1c1c1c;
   --moss: #4a7c59;
+  /* moss-ink — текстовый акцент (ссылки-мосты): tokens.json v1.1.0, требование spec landing-redesign */
+  --moss-ink: #406c4f;
   --chalk: #edebe6;
 
   /* Earth-палитра (только MaterialDot) */
@@ -60,6 +62,7 @@
   --color-bone: var(--bone);
   --color-charcoal: var(--charcoal);
   --color-moss: var(--moss);
+  --color-moss-ink: var(--moss-ink);
   --color-chalk: var(--chalk);
   /* Цвета: earth */
   --color-graphite: var(--graphite);

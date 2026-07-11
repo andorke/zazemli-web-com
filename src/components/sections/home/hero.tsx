@@ -3,31 +3,44 @@ import Link from "next/link";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
-/* Hero 185:13 — full-bleed земля (soil), контент слева снизу, plate-метка справа внизу */
+/*
+ * Hero по прототипу landing.html: full-bleed фото-фон (пока слот-плейсхолдер на charcoal),
+ * контент прижат вниз — eyebrow, H1 канона (вторая фраза em), sub, CTA на #collectio + прайс.
+ * Топбар поверх фото — scope ds-migration, здесь его нет.
+ */
 export function Hero() {
   const { hero } = home;
   return (
-    <section className="bg-soil text-bone relative flex min-h-[640px] flex-col justify-end overflow-hidden px-6 py-16 lg:min-h-[760px] lg:px-30 lg:py-35">
-      <div className="flex flex-col gap-7">
-        <KickerHeader className="text-bone/85">{hero.kicker}</KickerHeader>
-        <h1 className="leading-hero font-serif text-[clamp(2.75rem,8vw,5.25rem)] font-light">
-          {hero.title.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
-        </h1>
-        <p className="text-bone/85 max-w-xl font-serif text-lg">{hero.sub}</p>
-        <Link
-          href={hero.cta.href}
-          className="bg-bone text-charcoal mt-2 w-fit px-[30px] py-[17px] font-serif text-[17px]"
-        >
-          {hero.cta.label}
-        </Link>
-      </div>
-      <span className="bg-bone text-charcoal absolute right-6 bottom-6 px-3 py-[7px] font-sans text-[10px] tracking-[0.12em] opacity-75 lg:right-30 lg:bottom-10">
-        {hero.plate}
+    <section className="bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden px-6 pt-24 pb-14 lg:px-30 lg:pb-24">
+      <span
+        aria-hidden="true"
+        className="text-bone/40 absolute right-6 bottom-5 font-serif text-sm italic select-none lg:right-30"
+      >
+        [ {hero.photoSlot} ]
       </span>
+
+      <div className="flex flex-col gap-7">
+        <KickerHeader className="text-bone/60">{hero.eyebrow}</KickerHeader>
+        <h1 className="leading-hero font-serif text-[clamp(2.9rem,6.5vw,5.5rem)] font-light tracking-[-0.025em]">
+          {hero.title[0]}{" "}
+          {/* block: вторая фраза всегда с новой строки, как в прототипе */}
+          <em className="block italic">{hero.title[1]}</em>
+        </h1>
+        <p className="text-bone/70 max-w-[32rem] font-serif text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal">
+          {hero.sub}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-6">
+          <Link
+            href={hero.cta.href}
+            className="bg-moss text-bone border-moss border px-8 py-4 font-serif text-[17px]"
+          >
+            {hero.cta.label}
+          </Link>
+          <span className="text-bone/55 font-sans text-[11px] tracking-wide">
+            {hero.price}
+          </span>
+        </div>
+      </div>
     </section>
   );
 }

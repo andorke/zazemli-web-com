@@ -4,8 +4,9 @@
  * Латынь — только род (typography.md §2). Дудлы — по SKU (docs/.../doodles/colored),
  * на главной рендерятся монохромно (charcoal) через CSS-маску (бриф §7 «на главной — в графите»).
  *
- * NB tagline + potSize: транскрибированы с рендера Figma 185:2 (галерея 185:39),
- * т.к. data API Figma в rate limit. Сверить с текстовыми нодами после сброса лимита.
+ * Мета карточек (components/volumes/priceFrom) и биотопы колб — из прототипа
+ * ../zazemli-vault/Айти/Сайт/prototypes/landing.html (в каноне home.md их нет — вопрос Насте).
+ * В ценах — неразрывный пробел (U+00A0), чтобы «1 890» не рвалось на переносе.
  */
 
 export type SkuColor =
@@ -26,7 +27,17 @@ export type Sku = {
   potSize: string;
   doodle: string;
   ozonUrl: string | null;
+  components: number;
+  volumes: string;
+  priceFrom: string;
+  /* родной биотоп — подпись колбы на лендинге; пока есть только у трио из прототипа */
+  biotope?: string;
 };
+
+/* Нумерация лендинга: «N° 01» (пробел, 2 цифры) — design-решение 5; на товарных остаётся N°001 */
+export function landingNumber(number: Sku["number"]): string {
+  return `N° ${number.slice(-2)}`;
+}
 
 export const skus: Sku[] = [
   {
@@ -39,6 +50,9 @@ export const skus: Sku[] = [
     potSize: "для горшка 15–20 см",
     doodle: "/doodles/monstera-moss.svg",
     ozonUrl: null,
+    components: 10,
+    volumes: "2,2 / 3,5 л",
+    priceFrom: "от 2 190 ₽",
   },
   {
     number: "N°002",
@@ -50,6 +64,10 @@ export const skus: Sku[] = [
     potSize: "для горшка 15–20 см",
     doodle: "/doodles/ficus-cosmos.svg",
     ozonUrl: null,
+    components: 9,
+    volumes: "2,2 / 3,5 л",
+    priceFrom: "от 2 190 ₽",
+    biotope: "тропики Юго-Восточной Азии",
   },
   {
     number: "N°003",
@@ -61,6 +79,10 @@ export const skus: Sku[] = [
     potSize: "для горшка 12–16 см",
     doodle: "/doodles/anturium-poppy.svg",
     ozonUrl: null,
+    components: 10,
+    volumes: "1,2 / 2,2 л",
+    priceFrom: "от 1 890 ₽",
+    biotope: "горные леса Анд",
   },
   {
     number: "N°004",
@@ -72,6 +94,9 @@ export const skus: Sku[] = [
     potSize: "для горшка 12–16 см",
     doodle: "/doodles/aglaonema-zagogulya.svg",
     ozonUrl: null,
+    components: 10,
+    volumes: "1,2 / 2,2 л",
+    priceFrom: "от 1 890 ₽",
   },
   {
     number: "N°005",
@@ -83,6 +108,9 @@ export const skus: Sku[] = [
     potSize: "для горшка 12–20 см",
     doodle: "/doodles/spatifillum-kaplya.svg",
     ozonUrl: null,
+    components: 11,
+    volumes: "1,2 / 2,2 / 3,5 л",
+    priceFrom: "от 1 890 ₽",
   },
   {
     number: "N°006",
@@ -94,6 +122,10 @@ export const skus: Sku[] = [
     potSize: "для горшка 15–20 см",
     doodle: "/doodles/zamiokulkas-buttercup.svg",
     ozonUrl: null,
+    components: 8,
+    volumes: "1,2 / 2,2 / 3,5 л",
+    priceFrom: "от 1 890 ₽",
+    biotope: "сухая Восточная Африка",
   },
   {
     number: "N°007",
@@ -101,9 +133,12 @@ export const skus: Sku[] = [
     nameRu: "эпипремнум",
     latin: "Epipremnum",
     color: "moss",
-    tagline: "лиана, что не остановишь",
+    tagline: "лиана, что не остановить",
     potSize: "для горшка 12–16 см",
     doodle: "/doodles/epipremnum-moss.svg",
     ozonUrl: null,
+    components: 9,
+    volumes: "1,2 / 2,2 л",
+    priceFrom: "от 1 890 ₽",
   },
 ];

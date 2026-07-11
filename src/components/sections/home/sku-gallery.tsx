@@ -1,78 +1,89 @@
 import Link from "next/link";
 
-import { Doodle } from "@/components/ui/doodle";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
-import { skus, type SkuColor } from "@/content/sku";
+import { landingNumber, skus } from "@/content/sku";
 
 /*
- * Галерея 7 SKU 185:39 — bone, кикер + заголовок + декоративная «7» + сетка карточек + линк.
- * Карточка по эталону: дудл (графит) · SKU-точка + N° · название · фраза · размер горшка.
- * Карточки некликабельны на MVP (бриф §2).
- * NB: SKU-цветные точки на главной — по Figma 185:2; формально color-system требует SKU-цвета
- * только на /collectio/[plant]. Точки 7px — декоративные маркеры (тип MaterialDot). Вопрос к CDO.
+ * Галерея #collectio по прототипу landing.html: типографическая сетка с hairline-линиями
+ * (gap-1px по подложке), 7 кликабельных карточек (фото-слот · N° 01 · имя · фраза · мета)
+ * + карточка-приглашение N° 08 + CTA. До change product-pages карточки ведут на #collectio
+ * (не битые ссылки, design-решение 3); SKU-цвета на главной запрещены (spec).
  */
-const dotBg: Record<SkuColor, string> = {
-  moss: "bg-moss",
-  cosmos: "bg-cosmos",
-  iris: "bg-iris",
-  buttercup: "bg-buttercup",
-  sky: "bg-sky",
-  poppy: "bg-poppy",
-};
-
 export function SkuGallery() {
   const { skuGallery } = home;
   return (
-    <section className="bg-bone text-charcoal relative flex flex-col gap-12 overflow-hidden px-6 py-20 lg:px-30 lg:py-35">
-      <span
-        aria-hidden="true"
-        className="text-charcoal/7 pointer-events-none absolute top-16 right-6 font-serif text-[200px] leading-none font-light select-none lg:right-30"
-      >
-        {skuGallery.decorative}
-      </span>
-
-      <div className="flex flex-col gap-6">
-        <KickerHeader>{skuGallery.kicker}</KickerHeader>
-        <h2 className="leading-heading max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)]">
-          {skuGallery.title}
-        </h2>
+    <section
+      id="collectio"
+      className="bg-bone text-charcoal flex flex-col px-6 py-20 lg:px-30 lg:py-28"
+    >
+      <div className="mb-12 grid items-end gap-5 lg:mb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+        <div className="flex flex-col gap-5">
+          <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
+          <h2 className="leading-heading max-w-[14ch] font-serif text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+            {skuGallery.title}
+          </h2>
+        </div>
+        <p className="text-charcoal/70 max-w-[38rem] font-serif text-base leading-relaxed">
+          {skuGallery.lead}
+        </p>
       </div>
 
-      <ul className="grid grid-cols-2 justify-items-center gap-x-8 gap-y-14 pt-4 sm:grid-cols-3 lg:grid-cols-4">
+      <ul className="border-charcoal/15 bg-charcoal/15 grid list-none gap-px border-y [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))]">
         {skus.map((sku) => (
-          <li
-            key={sku.number}
-            className="flex w-40 flex-col items-center gap-1.5 text-center"
-          >
-            <Doodle src={sku.doodle} className="h-32 w-24" />
-            <span className="flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className={`inline-block size-[7px] rounded-full ${dotBg[sku.color]}`}
-              />
-              <span className="tracking-kicker text-charcoal/45 font-sans text-[10px]">
-                {sku.number}
+          <li key={sku.number} className="contents">
+            <Link
+              href="#collectio"
+              className="bg-bone group flex flex-col no-underline"
+            >
+              <span className="bg-chalk relative block aspect-[3/4]">
+                <span className="text-charcoal/40 absolute top-1/2 left-1/2 -translate-1/2 font-serif text-sm italic">
+                  фото
+                </span>
               </span>
-            </span>
-            <span className="text-charcoal font-sans text-xl capitalize">
-              {sku.nameRu}
-            </span>
-            <span className="text-charcoal/40 font-serif text-sm italic">
-              {sku.tagline}
-            </span>
-            <span className="text-charcoal/20 mt-1.5 font-sans text-[10px] tracking-wide">
-              {sku.potSize}
-            </span>
+              <span className="flex flex-col gap-1.5 px-6 pt-5 pb-7">
+                <span className="tracking-kicker text-charcoal/50 font-sans text-[10px]">
+                  {landingNumber(sku.number)}
+                </span>
+                <span className="font-serif text-[1.55rem] leading-tight">
+                  {sku.nameRu}
+                </span>
+                <span className="text-charcoal/45 font-serif text-base italic">
+                  {sku.tagline}
+                </span>
+                <span className="border-charcoal/10 text-charcoal/50 mt-3 flex flex-col gap-1 border-t pt-3 font-sans text-[10px] tracking-wide tabular-nums">
+                  <span>{sku.components} компонентов</span>
+                  <span>
+                    {sku.volumes} · {sku.priceFrom}
+                  </span>
+                </span>
+                <span className="text-moss-ink mt-3 text-[13px] font-medium opacity-0 transition-opacity group-hover:opacity-100">
+                  {skuGallery.cardCta}
+                </span>
+              </span>
+            </Link>
           </li>
         ))}
+        <li className="contents">
+          <div className="bg-chalk flex flex-col gap-3 px-6 py-8">
+            <span className="tracking-kicker text-charcoal/50 font-sans text-[10px]">
+              {skuGallery.invite.number}
+            </span>
+            <span className="text-charcoal/60 max-w-[16ch] font-serif text-[1.3rem] leading-snug italic">
+              {skuGallery.invite.question}
+            </span>
+            <span className="text-charcoal/55 font-serif text-sm">
+              {skuGallery.invite.note}
+            </span>
+          </div>
+        </li>
       </ul>
 
       <Link
-        href={skuGallery.link.href}
-        className="text-charcoal/70 w-fit font-serif text-lg underline underline-offset-4"
+        href={skuGallery.cta.href}
+        className="border-charcoal text-charcoal mt-10 w-fit border px-8 py-4 font-serif text-[15px]"
       >
-        {skuGallery.link.label}
+        {skuGallery.cta.label}
       </Link>
     </section>
   );

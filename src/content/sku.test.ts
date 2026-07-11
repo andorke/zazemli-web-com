@@ -39,4 +39,25 @@ describe("Коллекция SKU", () => {
       expect(sku.doodle).toMatch(/^\/doodles\/.+\.svg$/);
     }
   });
+
+  it("фразы-характеры — дословно из канона home.md блок 7", () => {
+    expect(skus.map((s) => s.tagline)).toEqual([
+      "мох держит влагу джунглей",
+      "плотная, стабильная земля",
+      "воздух, как на дереве",
+      "тень и мягкая кислинка",
+      "любит воду, не терпит болота",
+      "почти песок",
+      "лиана, что не остановить",
+    ]);
+  });
+
+  it("мета карточек лендинга: компоненты и объёмы с ценой (прототип)", () => {
+    for (const sku of skus) {
+      expect(sku.components).toBeGreaterThanOrEqual(8);
+      expect(sku.components).toBeLessThanOrEqual(11);
+      expect(sku.volumes).toMatch(/л$/);
+      expect(sku.priceFrom).toMatch(/^от \d\u00A0\d{3} ₽$/u);
+    }
+  });
 });
