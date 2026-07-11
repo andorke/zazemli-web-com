@@ -29,3 +29,6 @@ npm-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+
+# night-shift runtime (queue, state, logs) — не коммитится
+.night/

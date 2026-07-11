@@ -189,3 +189,13 @@ fix: skip cache when token is rotating
 
 Заголовок PR — на **английском** (тот же стиль, что и commit subject).
 <!-- END commit-style -->
+
+## Ночной флоу (night-shift)
+
+Проект подключён к **night-shift** — ночной автономной разработке поверх OpenSpec (день propose — ночь apply). Копия скилла: `.claude/skills/night-shift/` (project copy wins, обновление — `/night-shift upgrade`); конфиг — `night.config.json` в корне.
+
+- **Очередь** собирается только из OpenSpec-changes с незакрытыми задачами (`openspec/changes/*/tasks.md` с `- [ ]`). Вечером: «покажи changes» (list) → «запусти ночь 01:30-06:30 с changes N,M» (start). Утром: «что сделала ночь» (report).
+- **Спеки ночью read-only**: ночной агент реализует `tasks.md` и отмечает `- [x]`, но не меняет `proposal.md`/`design.md`/`specs/**` и main-спеки `openspec/specs/` (закрыто `forbidden_paths`). Расхождение план↔код — эскалация в PROGRESS.md, разбор днём.
+- **Статусы, очередь, логи и отчёты** живут в `.night/` (в git не попадает). Ночные ветки — `night/<change>` от `base_ref` (по умолчанию origin/main); гейт каждого эпизода — `verify`+`lint` из `night.config.json`.
+- **MR не создаётся** (remote — GitHub, раннер поддерживает только GitLab API): ветки пушатся, PR утром руками — `gh pr create --draft --base main --head night/<change>`.
+- Ручные проверки (smoke, визуальная сверка) ночь не закрывает — их собирает утренний report в чек-лист «Что просмоучить»; это критерий приёмки перед мержем.

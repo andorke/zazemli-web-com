@@ -1,0 +1,42 @@
+{
+  "schedule": {
+    "start": "01:00",
+    "end": "07:00",
+    "grace_min": 15
+  },
+  "verify": "HTTP_PROXY= HTTPS_PROXY= http_proxy= https_proxy= npm ci && npm run typecheck && npm run test && npm run build",
+  "lint": "npm run lint",
+  "models": {
+    "apply": "claude-opus-4-8",
+    "apply_fallback": "claude-sonnet-5",
+    "review": "claude-opus-4-8",
+    "fix": "claude-opus-4-8",
+    "summary": "haiku",
+    "subagent": null
+  },
+  "max_episodes": 12,
+  "episode_max_turns": 40,
+  "episode_timeout_min": 60,
+  "review_fix_cycles": 2,
+  "forbidden_paths": [
+    "docs/",
+    "example_docs/",
+    "my_tasks/",
+    "openspec/specs/",
+    ".claude/",
+    "night.config.json"
+  ],
+  "mr": {
+    "provider": "gitlab",
+    "host": "",
+    "project": "",
+    "target_branch": "main",
+    "draft": true
+  },
+  "branch_prefix": "night/",
+  "base_ref": null,
+  "worktree_copy_files": [],
+  "claude_bin": "claude",
+  "pinned_claude_version": "",
+  "git_no_proxy": false
+}

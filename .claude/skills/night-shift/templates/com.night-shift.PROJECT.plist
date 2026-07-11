@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.night-shift.{{PROJECT}}</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>{{RUNNER}}</string></array>
+  <key>WorkingDirectory</key><string>{{REPO}}</string>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>{{HH}}</integer><key>Minute</key><integer>{{MM}}</integer></dict>
+  <key>KeepAlive</key><dict><key>Crashed</key><true/></dict>
+  <key>StandardOutPath</key><string>{{REPO}}/.night/logs/launchd.out.log</string>
+  <key>StandardErrorPath</key><string>{{REPO}}/.night/logs/launchd.err.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>{{PATHV}}</string>
+    <key>HOME</key><string>{{HOMEV}}</string>
+    <key>CLAUDE_CODE_OAUTH_TOKEN</key><string>{{OAUTH}}</string>
+    <key>GITLAB_TOKEN</key><string>{{GLTOKEN}}</string>
+  </dict>
+</dict>
+</plist>
