@@ -14,7 +14,7 @@
     "summary": "haiku",
     "subagent": null
   },
-  "max_episodes": 12,
+  "max_episodes": 20,
   "episode_max_turns": 40,
   "episode_timeout_min": 60,
   "review_fix_cycles": 2,
