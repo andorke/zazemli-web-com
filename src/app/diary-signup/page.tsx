@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
+import { Echo } from "@/components/sections/diary/echo";
+import { Inside } from "@/components/sections/diary/inside";
 import { SignupForm } from "@/components/sections/diary/signup-form";
+import { Why } from "@/components/sections/diary/why";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { diary } from "@/content/diary";
 
@@ -19,8 +22,9 @@ export const metadata: Metadata = {
 
 /*
  * Страница-форма по прототипу diary-signup.html v3: hero (выгода-результат) высоко,
- * форма above the fold на мобиле. Состояния/confirmation (2.3), попап политики (2.4)
- * и секции «Почему тебе» / «Что внутри» / эхо (2.5) — следующие задачи. Копи — из diary.ts.
+ * форма above the fold на мобиле, затем «Почему тебе» (3 выгоды) → «Что внутри»
+ * (таймлайн 7 писем) → эхо + повтор CTA — секции разделены border-top в одной колонке.
+ * Реальный сетевой submit (POST на РФ-эндпоинт) — интеграционная точка task 3.2. Копи — из diary.ts.
  */
 export default function DiarySignupPage() {
   const { hero, gift } = diary;
@@ -41,6 +45,9 @@ export default function DiarySignupPage() {
         </p>
         <SignupForm />
       </section>
+      <Why />
+      <Inside />
+      <Echo />
     </main>
   );
 }
