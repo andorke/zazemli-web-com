@@ -120,6 +120,10 @@ export const productPage = {
   /* buybar (прототип collectio, блок 9) — точная копи eyebrow/title вопрос Насте */
   buyEyebrow: "Заземлить",
   buyTitle: "Выбери объём.",
+  /* founder-quote + футер-мост (прототип collectio, блоки 10–11) — постоянные для всех SKU */
+  founderQuote: "«Для тех, кто создаёт цифровое, а руками тянется к земле.»",
+  founderSign: "— Настя, основательница",
+  collectionBridge: "← Вся коллекция",
 } as const;
 
 /* H1 hero и CTA собираются из винительного падежа названия (design-решение 2, вариант A). */

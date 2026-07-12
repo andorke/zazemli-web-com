@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Buybar } from "@/components/sections/product/buybar";
 import { Care } from "@/components/sections/product/care";
 import { Composition } from "@/components/sections/product/composition";
+import { FounderQuote } from "@/components/sections/product/founder-quote";
 import { ProductHero } from "@/components/sections/product/hero";
 import { Ritual } from "@/components/sections/product/ritual";
 import { WhatsInBox } from "@/components/sections/product/whats-in-box";
@@ -45,8 +46,7 @@ export default async function ProductPage({ params }: Params) {
   const sku = skus.find((s) => s.slug === slug);
   if (!sku) notFound();
 
-  /* Секции шаблона по прототипу collectio-*.html. Founder-quote и
-     футер-мост «← Вся коллекция» — задача 2.5. */
+  /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (
     <main className="flex flex-1 flex-col">
       <ProductHero sku={sku} />
@@ -56,6 +56,7 @@ export default async function ProductPage({ params }: Params) {
       <Care sku={sku} />
       <Ritual sku={sku} />
       <Buybar sku={sku} />
+      <FounderQuote />
     </main>
   );
 }
