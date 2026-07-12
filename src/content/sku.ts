@@ -83,6 +83,8 @@ export type Sku = {
   /* --- страница товара /collectio/[slug] --- */
   /* винительный падеж названия — H1 «Заземли {accusative}.» и CTA hero (design-решение 2, вариант A) */
   accusative: string;
+  /* родительный падеж названия — H2 «…земля {genitive}.» и «…пересадку {genitive}.» (прототип collectio) */
+  genitive: string;
   /* описание грунта под hero (прототип collectio, блок .sub) */
   heroSub: string;
   /* проза «Зачем именно эта земля» (прототип collectio, блок .biotope) */
@@ -108,6 +110,13 @@ export const productPage = {
   whyEyebrow: "Зачем именно эта земля",
   sourceBadge: "рецензируемо",
   labBridge: "Весь состав и источники → в лаборатории",
+  boxEyebrow: "Что в боксе",
+  careEyebrow: "После пересадки",
+  careTitle: "Уход мы расписали за тебя.",
+  careSources: "источники рекомендаций",
+  diaryEyebrow: "Дневник на год",
+  ritualEyebrow: "Ритуал",
+  guideBridge: "Как пересадить, по шагам →",
 } as const;
 
 /* H1 hero и CTA собираются из винительного падежа названия (design-решение 2, вариант A). */
@@ -120,6 +129,17 @@ export function heroCtaLabel(sku: Sku): string {
 /* Мост на реестр источников в лаборатории — якорь рецепта SKU (прототип collectio). */
 export function labHref(sku: Sku): string {
   return `/lab#rec-${sku.slug}`;
+}
+
+/* Заголовки блоков «Состав» и «Что в боксе» варьируются родительным падежом (прототип collectio). */
+export function compositionEyebrow(sku: Sku): string {
+  return `Состав · ${sku.components} компонентов`;
+}
+export function compositionTitle(sku: Sku): string {
+  return `Из чего собрана земля ${sku.genitive}.`;
+}
+export function boxTitle(sku: Sku): string {
+  return `Всё на одну пересадку ${sku.genitive}.`;
 }
 
 /* Ритуал-строка одна на все SKU (прототипы collectio); варьируется только приписка ritualPhrase. */
@@ -149,6 +169,7 @@ export const skus: Sku[] = [
     volumes: "2,2 / 3,5 л",
     priceFrom: "от 2 190 ₽",
     accusative: "монстеру",
+    genitive: "монстеры",
     heroSub:
       "Рыхлый грунт под монстеру: кора, цеолит, мох, кокос. Корни дышат, как на дереве.",
     whyProse:
@@ -209,6 +230,7 @@ export const skus: Sku[] = [
     priceFrom: "от 2 190 ₽",
     biotope: "тропики Юго-Восточной Азии",
     accusative: "фикус",
+    genitive: "фикуса",
     heroSub:
       "Плотный, стабильный грунт под фикус: торф, биочар, диатомит, цеолит. Держит влагу ровно, без скачков.",
     whyProse:
@@ -268,6 +290,7 @@ export const skus: Sku[] = [
     priceFrom: "от 1 890 ₽",
     biotope: "горные леса Анд",
     accusative: "антуриум",
+    genitive: "антуриума",
     heroSub:
       "Воздушный грунт под антуриум: кора, кокос, мох. Корни дышат, как на дереве, и не терпят болота.",
     whyProse:
@@ -327,6 +350,7 @@ export const skus: Sku[] = [
     volumes: "1,2 / 2,2 л",
     priceFrom: "от 1 890 ₽",
     accusative: "аглаонему",
+    genitive: "аглаонемы",
     heroSub:
       "Грунт под аглаонему: кислый торф, кора, кокос, цеолит. Держит влагу и мягкую кислинку, как на лесной подстилке.",
     whyProse:
@@ -386,6 +410,7 @@ export const skus: Sku[] = [
     volumes: "1,2 / 2,2 / 3,5 л",
     priceFrom: "от 1 890 ₽",
     accusative: "спатифиллум",
+    genitive: "спатифиллума",
     heroSub:
       "Грунт под спатифиллум: кислый торф, цеолит, кора, кокос. Держит влагу для жаждущего цветка, но без болота.",
     whyProse:
@@ -447,6 +472,7 @@ export const skus: Sku[] = [
     priceFrom: "от 1 890 ₽",
     biotope: "сухая Восточная Африка",
     accusative: "замиокулькас",
+    genitive: "замиокулькаса",
     heroSub:
       "Минеральный грунт под замиокулькас: цеолит, пеностекло, песок. Отводит лишнюю влагу мгновенно, как в засушливой Африке.",
     whyProse:
@@ -505,6 +531,7 @@ export const skus: Sku[] = [
     volumes: "1,2 / 2,2 л",
     priceFrom: "от 1 890 ₽",
     accusative: "эпипремнум",
+    genitive: "эпипремнума",
     heroSub:
       "Грунт под эпипремнум: торф, кора, мох. Питание, воздух и влага для лианы, которую не остановить.",
     whyProse:

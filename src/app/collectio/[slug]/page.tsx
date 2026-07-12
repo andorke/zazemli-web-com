@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { Care } from "@/components/sections/product/care";
+import { Composition } from "@/components/sections/product/composition";
 import { ProductHero } from "@/components/sections/product/hero";
+import { Ritual } from "@/components/sections/product/ritual";
+import { WhatsInBox } from "@/components/sections/product/whats-in-box";
 import { WhySoil } from "@/components/sections/product/why-soil";
 import { skus } from "@/content/sku";
 
@@ -40,12 +44,16 @@ export default async function ProductPage({ params }: Params) {
   const sku = skus.find((s) => s.slug === slug);
   if (!sku) notFound();
 
-  /* Секции шаблона по прототипу collectio-*.html. Состав, «Что в боксе», care,
-     ритуал, buybar, founder-quote и футер-мост «← Вся коллекция» — задачи 2.3–2.5. */
+  /* Секции шаблона по прототипу collectio-*.html. Buybar, founder-quote и
+     футер-мост «← Вся коллекция» — задачи 2.4–2.5. */
   return (
     <main className="flex flex-1 flex-col">
       <ProductHero sku={sku} />
       <WhySoil sku={sku} />
+      <Composition sku={sku} />
+      <WhatsInBox sku={sku} />
+      <Care sku={sku} />
+      <Ritual sku={sku} />
     </main>
   );
 }
