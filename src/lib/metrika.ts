@@ -13,7 +13,8 @@ export type MetrikaGoal =
   | "ozon-click"
   | "lab-to-collectio"
   | "guide-to-collectio"
-  | "sku-open";
+  | "sku-open"
+  | "diary_signup_submit";
 
 export function reachGoal(goal: MetrikaGoal): void {
   const id = process.env.NEXT_PUBLIC_METRIKA_ID;

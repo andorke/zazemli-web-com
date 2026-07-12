@@ -1,9 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SignupForm } from "@/components/sections/diary/signup-form";
 import { diary } from "@/content/diary";
+import { reachGoal } from "@/lib/metrika";
+
+vi.mock("@/lib/metrika", () => ({ reachGoal: vi.fn() }));
 
 /*
  * Форма подписки /diary-signup (task 2.2): валидация email по формату, два
@@ -156,5 +159,47 @@ describe("SignupForm — ссылка CB1 → /privacy и попап полит�
     render(<SignupForm />);
     await userEvent.click(screen.getByRole("link", { name: pdnLink?.label }));
     expect(screen.getAllByRole("checkbox")[0]).not.toBeChecked();
+  });
+});
+
+/*
+ * Event аналитики (task 3.1). На успешный submit шлём цель diary_signup_submit
+ * через lib/metrika. Consent-gate — в самом reachGoal: window.ym определён
+ * только когда Метрика загружена, а она грузится лишь при granted-согласии
+ * (design Decision 6). При ошибке отправки событие не летит.
+ */
+describe("SignupForm — event diary_signup_submit (task 3.1)", () => {
+  beforeEach(() => vi.mocked(reachGoal).mockClear());
+
+  async function fillValid() {
+    await userEvent.type(
+      screen.getByLabelText(diary.form.label),
+      "me@example.com",
+    );
+    for (const box of screen.getAllByRole("checkbox"))
+      await userEvent.click(box);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+  }
+
+  it("успешный submit шлёт цель diary_signup_submit", async () => {
+    render(<SignupForm />);
+    await fillValid();
+    await screen.findByRole("status");
+
+    expect(reachGoal).toHaveBeenCalledWith("diary_signup_submit");
+  });
+
+  it("ошибка отправки не шлёт event", async () => {
+    render(
+      <SignupForm
+        onSubmit={async () => ({ ok: false, state: "network" }) as const}
+      />,
+    );
+    await fillValid();
+    await screen.findByText(diary.states.network);
+
+    expect(reachGoal).not.toHaveBeenCalled();
   });
 });

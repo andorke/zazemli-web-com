@@ -7,6 +7,7 @@ import { PolicyModal } from "@/components/sections/diary/policy-modal";
 import { Button } from "@/components/ui/button";
 import { Fleuron } from "@/components/ui/fleuron";
 import { diary, type DiaryConsent } from "@/content/diary";
+import { reachGoal } from "@/lib/metrika";
 
 /* Формат email — тот же паттерн, что в прототипе diary-signup.html v3 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -154,8 +155,11 @@ export function SignupForm({
     // всё валидно → отправка через интеграционную точку (task 3.2)
     setSubmitError(null);
     const result = await onSubmit();
-    if (result.ok) setPhase("sent");
-    else setSubmitError(result.state);
+    if (result.ok) {
+      // consent-gate — в самом reachGoal: ym есть только при granted (task 3.1)
+      reachGoal("diary_signup_submit");
+      setPhase("sent");
+    } else setSubmitError(result.state);
   }
 
   if (phase === "sent") {
