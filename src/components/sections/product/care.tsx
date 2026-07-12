@@ -4,7 +4,8 @@ import { productPage, type Sku } from "@/content/sku";
 /*
  * «Уход мы расписали за тебя» по прототипу collectio (блок 6): подводка, грид из
  * трёх колонок ухода (care.items), аккордеон источников рекомендаций и дневник-панель.
- * Бордер дневник-панели в 2.6 получит SKU-цвет; сейчас — moss (бренд-акцент).
+ * Бордер дневник-панели — SKU-цвет (var(--sku), design-решение 6); аккордеон
+ * источников остаётся на moss (бренд-акцент, не SKU-декор).
  */
 export function Care({ sku }: { sku: Sku }) {
   const { care } = sku;
@@ -40,7 +41,10 @@ export function Care({ sku }: { sku: Sku }) {
         </div>
       </details>
 
-      <div className="border-moss mt-10 max-w-[42rem] border-l-2 pl-5">
+      <div
+        className="mt-10 max-w-[42rem] border-l-2 pl-5"
+        style={{ borderColor: "var(--sku)" }}
+      >
         <KickerHeader className="text-moss-ink">
           {productPage.diaryEyebrow}
         </KickerHeader>

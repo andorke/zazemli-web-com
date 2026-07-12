@@ -46,9 +46,16 @@ export default async function ProductPage({ params }: Params) {
   const sku = skus.find((s) => s.slug === slug);
   if (!sku) notFound();
 
+  /*
+   * SKU-цвет — CSS-переменная на корне страницы (design-решение 6): декор секций
+   * ссылается на var(--sku), поэтому на странице ровно один SKU-цвет. Значение —
+   * токен палитры SKU из globals.css (moss/cosmos/iris/buttercup/sky/poppy).
+   */
+  const skuStyle = { "--sku": `var(--${sku.color})` } as React.CSSProperties;
+
   /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (
-    <main className="flex flex-1 flex-col">
+    <main className="flex flex-1 flex-col" style={skuStyle}>
       <ProductHero sku={sku} />
       <WhySoil sku={sku} />
       <Composition sku={sku} />

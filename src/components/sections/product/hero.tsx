@@ -13,14 +13,18 @@ import {
  * Hero страницы товара по прототипу collectio-*.html: kicker (партия + номер),
  * H1 «Заземли {растение}.» (винительный, вариант A), латынь рода italic, описание
  * грунта, solid-CTA на buybar (#buy добавит 2.4) и строка объёмов/цены.
- * Единственный h1 страницы. SKU-цвет не применяется — акценты moss-ink/charcoal (spec).
+ * Единственный h1 страницы. SKU-цвет — только акцент номера в кикере (var(--sku));
+ * текст и CTA остаются на moss-ink/charcoal (spec: кнопки не окрашены в SKU-цвет).
  */
 export function ProductHero({ sku }: { sku: Sku }) {
   return (
     <section className="text-charcoal flex flex-col px-6 pt-16 pb-20 lg:px-30 lg:pt-24 lg:pb-28">
       <div className="flex max-w-[36rem] flex-col gap-6">
         <KickerHeader>
-          {productPage.heroKicker} · {landingNumber(sku.number)}
+          {`${productPage.heroKicker} · `}
+          <span style={{ color: "var(--sku)" }}>
+            {landingNumber(sku.number)}
+          </span>
         </KickerHeader>
         <h1 className="leading-hero font-serif text-[clamp(2.6rem,5.5vw,4.4rem)] font-light tracking-[-0.02em]">
           {heroTitle(sku)}

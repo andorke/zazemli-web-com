@@ -1,3 +1,4 @@
+import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import ProductPage, {
@@ -39,5 +40,24 @@ describe("Роут /collectio/[slug]", () => {
     await expect(
       ProductPage({ params: Promise.resolve({ slug: "ficus-lyrata" }) }),
     ).rejects.toThrow(/404/);
+  });
+
+  /* Требование spec «SKU-цвет — только декор, один на страницу» (design-решение 6) */
+  it("один SKU-цвет на страницу: --sku на корне = цвет SKU, декор через var(--sku), чужих палитр нет", async () => {
+    const ui = await ProductPage({
+      params: Promise.resolve({ slug: "ficus" }),
+    });
+    const { container } = render(ui);
+    /* фикус = cosmos (#BE3A6B) — единственный SKU-цвет, задан на корне страницы */
+    expect(container.querySelector("main")).toHaveStyle({
+      "--sku": "var(--cosmos)",
+    });
+    const html = container.innerHTML;
+    /* декоративные места ссылаются на переменную, а не хардкодят цвет */
+    expect(html).toContain("var(--sku)");
+    /* ни одной чужой SKU-палитры на странице (cosmos — свой, moss — бренд-акцент) */
+    for (const alien of ["iris", "buttercup", "sky", "poppy"]) {
+      expect(html).not.toContain(alien);
+    }
   });
 });

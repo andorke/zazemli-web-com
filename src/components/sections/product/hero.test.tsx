@@ -7,11 +7,14 @@ import { skus } from "@/content/sku";
 const monstera = skus.find((s) => s.slug === "monstera")!;
 
 describe("ProductHero (страница товара)", () => {
-  it("kicker с партией и номером лендинга", () => {
+  it("kicker с партией и номером-акцентом SKU (var(--sku))", () => {
     render(<ProductHero sku={monstera} />);
     expect(
-      screen.getByText("Collectio Zazemli · Партия 0 · N° 01"),
+      screen.getByText(/Collectio Zazemli · Партия 0/),
     ).toBeInTheDocument();
+    const number = screen.getByText("N° 01");
+    expect(number).toBeInTheDocument();
+    expect(number).toHaveStyle({ color: "var(--sku)" });
   });
 
   it("H1 «Заземли {растение}.» в винительном падеже", () => {
@@ -31,6 +34,8 @@ describe("ProductHero (страница товара)", () => {
     render(<ProductHero sku={monstera} />);
     const cta = screen.getByRole("link", { name: "Заземлить монстеру →" });
     expect(cta).toHaveAttribute("href", "#buy");
+    /* CTA — бренд-акцент moss-ink, не SKU-цвет (spec: кнопки не окрашены в SKU-цвет) */
+    expect(cta.className).toContain("moss-ink");
   });
 
   it("строка объёмов и цены рядом с CTA", () => {
