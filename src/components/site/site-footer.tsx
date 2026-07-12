@@ -85,6 +85,12 @@ export function SiteFooter() {
             {footer.ogrnip ? ` · ОГРНИП ${footer.ogrnip}` : ""}
           </p>
           <p className="leading-body text-xs opacity-50">{footer.disclaimer}</p>
+          <Link
+            href="/privacy"
+            className="text-xs opacity-70 transition-opacity hover:opacity-100"
+          >
+            Политика конфиденциальности
+          </Link>
         </div>
       </div>
 

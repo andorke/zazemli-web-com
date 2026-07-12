@@ -21,6 +21,14 @@ describe("SiteFooter", () => {
     expect(screen.getByText(/ИП Минетто/)).toBeInTheDocument();
   });
 
+  it("ссылка на политику конфиденциальности ведёт на /privacy", () => {
+    render(<SiteFooter />);
+    const link = screen.getByRole("link", {
+      name: "Политика конфиденциальности",
+    });
+    expect(link).toHaveAttribute("href", "/privacy");
+  });
+
   it("QR-блок: 4 кода, без diary", () => {
     render(<SiteFooter />);
     const qrImages = screen.getAllByRole("img");
