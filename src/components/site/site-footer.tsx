@@ -1,11 +1,13 @@
 import Link from "next/link";
 
 import { footer, mainNav } from "@/content/site";
+import { FooterDisclaimer } from "./footer-disclaimer";
 
 /*
  * Футер по прототипу landing.html: 3 колонки (бренд+тэглайн · Связь · Разделы)
  * + legal-строка. QR-блок и гигантский wordmark прежнего футера удалены;
- * глобальный дисклеймер не рендерится (остаётся контентом для /lab).
+ * глобальный дисклеймер не рендерится — слот FooterDisclaimer включает его
+ * только на /lab (design decision 3 guide-lab).
  */
 export function SiteFooter() {
   const columnHeading =
@@ -62,6 +64,7 @@ export function SiteFooter() {
         </div>
 
         <p className="text-caption leading-body text-bone/40 pb-10">
+          <FooterDisclaimer />
           {footer.legalName}
           {footer.ogrnip ? ` · ОГРНИП ${footer.ogrnip}` : ""} ·{" "}
           {footer.legalTail}
