@@ -19,6 +19,6 @@
 
 ## 4. Верификация
 
-- [ ] 4.1 e2e: submit заблокирован без обоих согласий; невалидный email → ошибка + focus; happy-path → confirmation + event; ссылка CB1 и попап ведут на `/privacy`; `noindex` сохранён, нет в навигации/sitemap
+- [x] 4.1 e2e: submit заблокирован без обоих согласий; невалидный email → ошибка + focus; happy-path → confirmation + event; ссылка CB1 и попап ведут на `/privacy`; `noindex` сохранён, нет в навигации/sitemap
 - [ ] 4.2 Полный прогон unit + e2e + static export + ds-lint; визуальная сверка с прототипом на 1440px и 360px (форма above the fold на мобиле), `prefers-reduced-motion`
 - [ ] 4.3 Обновить CONTEXT.md; в вопросы Насте: дата включения реального сбора (РФ-хостинг + Sendsay + уведомление РКН), поведение формы при выключенном сборе
