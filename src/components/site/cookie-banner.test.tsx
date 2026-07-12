@@ -44,4 +44,12 @@ describe("CookieBanner", () => {
       screen.queryByRole("button", { name: "Принять" }),
     ).not.toBeInTheDocument();
   });
+
+  it("текст нотиса содержит ссылку на /privacy", async () => {
+    render(<CookieBanner />);
+    const link = await screen.findByRole("link", {
+      name: /политик/i,
+    });
+    expect(link).toHaveAttribute("href", "/privacy");
+  });
 });
