@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { SignupForm } from "@/components/sections/diary/signup-form";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { diary } from "@/content/diary";
 
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
 
 /*
  * Страница-форма по прототипу diary-signup.html v3: hero (выгода-результат) высоко,
- * форма above the fold на мобиле. Форма, состояния, попап политики и секции
- * «Почему тебе» / «Что внутри» / эхо — следующие задачи (2.2–2.5). Копи — из diary.ts.
+ * форма above the fold на мобиле. Состояния/confirmation (2.3), попап политики (2.4)
+ * и секции «Почему тебе» / «Что внутри» / эхо (2.5) — следующие задачи. Копи — из diary.ts.
  */
 export default function DiarySignupPage() {
   const { hero, gift } = diary;
@@ -38,6 +39,7 @@ export default function DiarySignupPage() {
           <span className="text-charcoal font-medium">{gift.lead}</span>{" "}
           {gift.body}
         </p>
+        <SignupForm />
       </section>
     </main>
   );
