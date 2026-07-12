@@ -4,21 +4,23 @@ import { home } from "@/content/home";
 export function WhatSoilGives() {
   const { whatSoilGives } = home;
   return (
-    <section className="bg-bone text-charcoal grid gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:px-30 lg:py-28">
-      {whatSoilGives.columns.map((col) => (
-        <div key={col.label} className="flex flex-col gap-3">
-          <h3
-            className={
-              "text-moss font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic" // ds-allow: moss-large — заголовок колонки 24–27px (≥18pt)
-            }
-          >
-            {col.label}
-          </h3>
-          <p className="text-charcoal/70 max-w-[38rem] font-voice text-base leading-relaxed">
-            {col.text}
-          </p>
-        </div>
-      ))}
+    <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:gap-20">
+        {whatSoilGives.columns.map((col) => (
+          <div key={col.label} className="flex flex-col gap-3">
+            <h3
+              className={
+                "text-moss font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic" // ds-allow: moss-large — заголовок колонки 24–27px (≥18pt)
+              }
+            >
+              {col.label}
+            </h3>
+            <p className="text-charcoal/70 font-voice max-w-[38rem] text-base leading-relaxed">
+              {col.text}
+            </p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

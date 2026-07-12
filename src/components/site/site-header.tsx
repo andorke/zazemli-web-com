@@ -9,27 +9,29 @@ import { mainNav } from "@/content/site";
  */
 export function SiteHeader() {
   return (
-    <header className="flex items-center justify-between gap-6 px-6 py-6 lg:px-16">
-      <Link
-        href="/"
-        className="text-charcoal font-voice text-[1.3rem] tracking-[0.06em]"
-      >
-        ЗАЗЕМЛИ
-      </Link>
+    <header className="px-6 py-6 lg:px-16">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
+        <Link
+          href="/"
+          className="text-charcoal font-voice text-[1.3rem] tracking-[0.06em]"
+        >
+          ЗАЗЕМЛИ
+        </Link>
 
-      <nav className="layout:flex hidden items-center gap-9">
-        {mainNav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="text-charcoal/70 hover:text-charcoal font-ui text-small font-medium transition-colors"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+        <nav className="layout:flex hidden items-center gap-9">
+          {mainNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-charcoal/70 hover:text-charcoal font-ui text-small font-medium transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
-      <MobileNav />
+        <MobileNav />
+      </div>
     </header>
   );
 }
