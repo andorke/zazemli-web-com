@@ -7,8 +7,8 @@ import { landingNumber, skus } from "@/content/sku";
 /*
  * Галерея #collectio по прототипу landing.html: типографическая сетка с hairline-линиями
  * (gap-1px по подложке), 7 кликабельных карточек (фото-слот · N° 01 · имя · фраза · мета)
- * + карточка-приглашение N° 08 + CTA. До change product-pages карточки ведут на #collectio
- * (не битые ссылки, design-решение 3); SKU-цвета на главной запрещены (spec).
+ * + карточка-приглашение N° 08 + CTA. Карточки ведут на страницы товара /collectio/[slug]
+ * (change product-pages); SKU-цвета на главной запрещены (spec).
  */
 export function SkuGallery() {
   const { skuGallery } = home;
@@ -33,7 +33,7 @@ export function SkuGallery() {
         {skus.map((sku) => (
           <li key={sku.number} className="contents">
             <Link
-              href="#collectio"
+              href={`/collectio/${sku.slug}`}
               className="bg-bone group flex flex-col no-underline"
             >
               <span className="bg-chalk relative block aspect-[3/4]">
