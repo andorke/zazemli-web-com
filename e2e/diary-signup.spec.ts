@@ -27,22 +27,23 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test("submit заблокирован, пока не отмечены оба согласия", async ({ page }) => {
+test("submit заблокирован, пока не отмечено согласие на обработку данных", async ({
+  page,
+}) => {
   await page.goto("/diary-signup");
   const email = page.getByLabel("Твоя почта");
   await email.fill("me@example.com");
-  // уводим фокус до клика: иначе blur email на mousedown покажет ok-микрокопи,
-  // сдвинет layout, и клик по кнопке «съестся» на layout shift
   await email.blur();
-  await page.getByRole("button", { name: SUBMIT }).click();
 
-  await expect(
-    page.getByText("Чтобы подписаться, отметь оба согласия."),
-  ).toBeVisible();
-  // confirmation не показан, форма на месте, фокус — на первом чекбоксе
-  await expect(page.getByRole("status")).toHaveCount(0);
-  await expect(email).toBeVisible();
-  await expect(page.getByRole("checkbox").first()).toBeFocused();
+  const submit = page.getByRole("button", { name: SUBMIT });
+  await expect(submit).toBeDisabled();
+
+  // рекламное согласие (CB2) кнопку не разблокирует — обязательно только CB1
+  await page.getByRole("checkbox").nth(1).check();
+  await expect(submit).toBeDisabled();
+
+  await page.getByRole("checkbox").first().check();
+  await expect(submit).toBeEnabled();
 });
 
 test("невалидный email → микрокопи ошибки, aria-invalid и фокус на поле", async ({
@@ -52,8 +53,8 @@ test("невалидный email → микрокопи ошибки, aria-inval
   const email = page.getByLabel("Твоя почта");
   await email.fill("не-почта");
   await email.blur(); // см. коммент выше — стабилизируем layout до кликов
-  // отмечаем оба согласия, чтобы первой ошибкой был именно email
-  for (const box of await page.getByRole("checkbox").all()) await box.check();
+  // согласие на обработку ПДн — единственное обязательное для сабмита
+  await page.getByRole("checkbox").first().check();
   await page.getByRole("button", { name: SUBMIT }).click();
 
   await expect(email).toHaveAttribute("aria-invalid", "true");
@@ -63,14 +64,14 @@ test("невалидный email → микрокопи ошибки, aria-inval
   await expect(email).toBeFocused();
 });
 
-test("happy-path: валидный email и оба согласия → confirmation", async ({
+test("happy-path: валидный email и согласие на обработку данных (без рекламного) → confirmation", async ({
   page,
 }) => {
   await page.goto("/diary-signup");
   const email = page.getByLabel("Твоя почта");
   await email.fill("me@example.com");
   await email.blur(); // см. коммент выше — стабилизируем layout до кликов
-  for (const box of await page.getByRole("checkbox").all()) await box.check();
+  await page.getByRole("checkbox").first().check();
   await page.getByRole("button", { name: SUBMIT }).click();
 
   const status = page.getByRole("status");

@@ -112,24 +112,23 @@ export function SignupForm({
   }
 
   function toggleConsent(which: "pdn" | "ads", checked: boolean) {
-    const nextPdn = which === "pdn" ? checked : pdn;
-    const nextAds = which === "ads" ? checked : ads;
-    if (which === "pdn") setPdn(checked);
-    else setAds(checked);
-    if (nextPdn && nextAds) setConsentError(false);
+    if (which === "pdn") {
+      setPdn(checked);
+      if (checked) setConsentError(false);
+    } else {
+      setAds(checked);
+    }
   }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const okEmail = EMAIL_RE.test(email.trim());
-    const okConsent = pdn && ads;
     setEmailValid(okEmail);
-    setConsentError(!okConsent);
+    setConsentError(!pdn);
 
     let firstError: HTMLInputElement | null = null;
     if (!okEmail) firstError = emailRef.current;
-    if (!okConsent && !firstError)
-      firstError = pdn ? adsRef.current : pdnRef.current;
+    if (!pdn && !firstError) firstError = pdnRef.current;
 
     if (firstError) {
       firstError.focus();
@@ -263,7 +262,7 @@ export function SignupForm({
         </p>
       )}
 
-      <Button type="submit" size="lg" className="w-full">
+      <Button type="submit" size="lg" className="w-full" disabled={!pdn}>
         {form.submit}
       </Button>
       <p className="text-charcoal/60 text-xs">{form.trust}</p>

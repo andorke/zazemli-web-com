@@ -48,21 +48,7 @@ describe("SignupForm — валидация и согласия (task 2.2)", () 
     expect(email).toHaveAttribute("aria-invalid", "false");
   });
 
-  it("submit без согласий (email валиден) → ошибка согласий и фокус на первый чекбокс", async () => {
-    render(<SignupForm />);
-    await userEvent.type(
-      screen.getByLabelText(diary.form.label),
-      "me@example.com",
-    );
-    await userEvent.click(
-      screen.getByRole("button", { name: diary.form.submit }),
-    );
-
-    expect(screen.getByText(diary.form.consentError)).toBeInTheDocument();
-    expect(screen.getAllByRole("checkbox")[0]).toHaveFocus();
-  });
-
-  it("submit с одним согласием → фокус на второй, непроставленный чекбокс", async () => {
+  it("submit с одним согласием (на обработку ПДн, без рекламного) → форма отправляется", async () => {
     render(<SignupForm />);
     await userEvent.type(
       screen.getByLabelText(diary.form.label),
@@ -73,16 +59,33 @@ describe("SignupForm — валидация и согласия (task 2.2)", () 
       screen.getByRole("button", { name: diary.form.submit }),
     );
 
-    expect(screen.getAllByRole("checkbox")[1]).toHaveFocus();
+    expect(await screen.findByRole("status")).toBeInTheDocument();
+  });
+});
+
+/*
+ * Блокировка кнопки (не только post-submit ошибка): согласие на обработку ПДн —
+ * обязательное условие сабмита, рекламное согласие — нет. Кнопка недоступна для
+ * клика/Enter, пока не отмечен именно первый чекбокс.
+ */
+describe("SignupForm — кнопка submit заблокирована до согласия на обработку ПДн", () => {
+  it("кнопка disabled, пока не отмечено ни одно согласие", () => {
+    render(<SignupForm />);
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeDisabled();
   });
 
-  it("фокус на первую ошибку: email и согласия невалидны → фокус на email", async () => {
+  it("отметка только рекламного согласия (CB2) кнопку не разблокирует", async () => {
     render(<SignupForm />);
-    await userEvent.click(
-      screen.getByRole("button", { name: diary.form.submit }),
-    );
+    await userEvent.click(screen.getAllByRole("checkbox")[1]);
 
-    expect(screen.getByLabelText(diary.form.label)).toHaveFocus();
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeDisabled();
+  });
+
+  it("отметка согласия на обработку ПДн (CB1) разблокирует кнопку", async () => {
+    render(<SignupForm />);
+    await userEvent.click(screen.getAllByRole("checkbox")[0]);
+
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeEnabled();
   });
 });
 
