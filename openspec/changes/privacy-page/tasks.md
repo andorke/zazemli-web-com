@@ -6,7 +6,7 @@
 
 ## 2. Страница
 
-- [ ] 2.1 Роут `app/privacy/page.tsx` по прототипу: typography-first вне DS (системный шрифт, ограниченная ширина, без медиа/SKU), один h1, дата вступления вверху, метаданные (title/description/canonical на `/privacy`, robots индексируемый)
+- [x] 2.1 Роут `app/privacy/page.tsx` по прототипу: typography-first вне DS (системный шрифт, ограниченная ширина, без медиа/SKU), один h1, дата вступления вверху, метаданные (title/description/canonical на `/privacy`, robots индексируемый)
 - [ ] 2.2 Контент-тесты privacy зелёные; e2e: `/privacy` открывается, один h1, 11 h2-разделов по порядку
 
 ## 3. Ссылки на политику
