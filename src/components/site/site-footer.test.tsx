@@ -48,6 +48,14 @@ describe("SiteFooter (по прототипу)", () => {
     expect(legal).toHaveTextContent("не является публичной офертой");
   });
 
+  it("ссылка на политику конфиденциальности ведёт на /privacy", () => {
+    render(<SiteFooter />);
+    const link = screen.getByRole("link", {
+      name: "Политика конфиденциальности",
+    });
+    expect(link).toHaveAttribute("href", "/privacy");
+  });
+
   it("QR-кодов (и вообще img) в футере нет", () => {
     render(<SiteFooter />);
     expect(screen.queryAllByRole("img")).toHaveLength(0);

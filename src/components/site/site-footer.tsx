@@ -64,7 +64,13 @@ export function SiteFooter() {
         <p className="text-caption leading-body text-bone/40 pb-10">
           {footer.legalName}
           {footer.ogrnip ? ` · ОГРНИП ${footer.ogrnip}` : ""} ·{" "}
-          {footer.legalTail}
+          {footer.legalTail} ·{" "}
+          <Link
+            href="/privacy"
+            className="underline underline-offset-2 transition-opacity hover:opacity-100"
+          >
+            Политика конфиденциальности
+          </Link>
         </p>
       </div>
     </footer>
