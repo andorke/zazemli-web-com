@@ -15,13 +15,13 @@ export function FounderQuote() {
   return (
     <section className="bg-bone text-charcoal px-6 py-20 text-center lg:px-30 lg:py-28">
       <div className="mx-auto flex max-w-[38rem] flex-col items-center gap-3">
-        <p className="text-charcoal font-serif text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal font-light">
+        <p className="text-charcoal font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal font-light">
           {productPage.founderQuote}
         </p>
-        <p className="text-moss-ink font-serif text-[17px] italic">
+        <p className="text-moss-ink font-voice text-[17px] italic">
           {productPage.founderSign} <Fleuron className="not-italic" />
         </p>
-        <p className="mt-6 font-sans text-[13px]">
+        <p className="mt-6 font-ui text-[13px]">
           <Link href="/#collectio" className="text-moss-ink no-underline">
             {productPage.collectionBridge}
           </Link>

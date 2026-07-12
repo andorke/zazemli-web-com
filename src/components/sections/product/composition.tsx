@@ -13,7 +13,7 @@ export function Composition({ sku }: { sku: Sku }) {
     <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
       <div className="mb-10 flex max-w-[34ch] flex-col gap-4 lg:mb-12">
         <KickerHeader>{compositionEyebrow(sku)}</KickerHeader>
-        <h2 className="leading-heading font-serif text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+        <h2 className="leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
           {compositionTitle(sku)}
         </h2>
       </div>
@@ -24,8 +24,8 @@ export function Composition({ sku }: { sku: Sku }) {
             className="border-charcoal/15 grid grid-cols-[auto_1fr_auto] items-baseline gap-3 border-b py-3"
           >
             <MaterialDot material={c.material} className="self-center" />
-            <span className="font-serif text-[17px]">{c.name}</span>
-            <span className="text-charcoal/60 font-sans text-sm tabular-nums">
+            <span className="font-voice text-[17px]">{c.name}</span>
+            <span className="text-charcoal/60 font-ui text-sm tabular-nums">
               {c.pct}%
             </span>
           </li>

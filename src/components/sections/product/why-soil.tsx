@@ -17,24 +17,24 @@ export function WhySoil({ sku }: { sku: Sku }) {
       <div className="mx-auto grid max-w-[70rem] grid-cols-1 items-center gap-12 md:grid-cols-[1.2fr_0.8fr] md:gap-16">
         <div className="flex flex-col gap-5">
           <KickerHeader>{productPage.whyEyebrow}</KickerHeader>
-          <p className="text-charcoal/85 max-w-[34rem] font-serif text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-relaxed font-light">
+          <p className="text-charcoal/85 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-relaxed font-light">
             {sku.whyProse}
           </p>
 
           <details className="mt-1 max-w-[34rem]">
-            <summary className="text-moss-ink inline-block cursor-pointer list-none font-sans text-[13px] tracking-wide underline decoration-dotted underline-offset-4 [&::-webkit-details-marker]:hidden">
+            <summary className="text-moss-ink inline-block cursor-pointer list-none font-ui text-[13px] tracking-wide underline decoration-dotted underline-offset-4 [&::-webkit-details-marker]:hidden">
               {sku.sourceNote.summary}
             </summary>
-            <div className="border-moss bg-bone text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-sans text-[13px] leading-relaxed">
-              <span className="text-moss-ink font-sans text-[11px] tracking-wide uppercase">
+            <div className="border-moss bg-bone text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-[13px] leading-relaxed">
+              <span className="text-moss-ink font-ui text-[11px] tracking-wide uppercase">
                 {productPage.sourceBadge}
               </span>
               <p className="mt-1">{sku.sourceNote.claim}</p>
-              <p className="mt-1 font-serif italic">{sku.sourceNote.source}</p>
+              <p className="mt-1 font-voice italic">{sku.sourceNote.source}</p>
             </div>
           </details>
 
-          <p className="mt-1 font-sans text-[13px]">
+          <p className="mt-1 font-ui text-[13px]">
             <Link href={labHref(sku)} className="text-moss-ink no-underline">
               {productPage.labBridge}
             </Link>
@@ -47,7 +47,7 @@ export function WhySoil({ sku }: { sku: Sku }) {
             labels={false}
             className="w-[clamp(120px,16vw,168px)]"
           />
-          <ul className="text-charcoal/60 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 font-sans text-[11px]">
+          <ul className="text-charcoal/60 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 font-ui text-[11px]">
             {legend.map((g) => (
               <li key={g.key} className="inline-flex items-center gap-2">
                 <span

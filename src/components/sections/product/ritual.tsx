@@ -17,16 +17,16 @@ export function Ritual({ sku }: { sku: Sku }) {
         <KickerHeader className="text-moss-ink">
           {productPage.ritualEyebrow}
         </KickerHeader>
-        <p className="text-charcoal mt-2 max-w-[34rem] font-serif text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal font-light">
+        <p className="text-charcoal mt-2 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal font-light">
           {ritualLine}
         </p>
         <p
-          className="font-serif text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic"
+          className="font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic"
           style={{ color: "var(--sku)" }}
         >
           {sku.ritualPhrase}
         </p>
-        <p className="mt-4 font-sans text-[13px]">
+        <p className="mt-4 font-ui text-[13px]">
           <Link href="/guide" className="text-moss-ink no-underline">
             {productPage.guideBridge}
           </Link>

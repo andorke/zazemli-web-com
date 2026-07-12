@@ -24,7 +24,7 @@ export function Buybar({ sku }: { sku: Sku }) {
       <KickerHeader className="text-bone/55">
         {productPage.buyEyebrow}
       </KickerHeader>
-      <h2 className="leading-heading max-w-[18ch] font-serif text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+      <h2 className="leading-heading max-w-[18ch] font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
         {productPage.buyTitle}
       </h2>
 
@@ -39,14 +39,14 @@ export function Buybar({ sku }: { sku: Sku }) {
             type="button"
             onClick={() => setSelected(i)}
             aria-pressed={i === selected}
-            className="border-bone/25 text-bone aria-pressed:bg-bone aria-pressed:text-charcoal rounded-lg border px-6 py-3 font-sans text-[15px] transition-colors"
+            className="border-bone/25 text-bone aria-pressed:bg-bone aria-pressed:text-charcoal rounded-lg border px-6 py-3 font-ui text-[15px] transition-colors"
           >
             {s.volume}
           </button>
         ))}
       </div>
 
-      <p className="font-serif text-[clamp(2rem,3vw+1rem,2.8rem)] font-light tabular-nums">
+      <p className="font-voice text-[clamp(2rem,3vw+1rem,2.8rem)] font-light tabular-nums">
         {size.price}
       </p>
 
