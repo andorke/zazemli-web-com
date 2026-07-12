@@ -51,7 +51,9 @@ export default async function ProductPage({ params }: Params) {
    * ссылается на var(--sku), поэтому на странице ровно один SKU-цвет. Значение —
    * токен палитры SKU из globals.css (moss/cosmos/iris/buttercup/sky/poppy).
    */
-  const skuStyle = { "--sku": `var(--${sku.color})` } as React.CSSProperties;
+  const skuStyle = {
+    "--sku": `var(--color-${sku.color})`,
+  } as React.CSSProperties;
 
   /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (

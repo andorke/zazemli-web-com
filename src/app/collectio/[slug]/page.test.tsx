@@ -50,7 +50,7 @@ describe("Роут /collectio/[slug]", () => {
     const { container } = render(ui);
     /* фикус = cosmos (#BE3A6B) — единственный SKU-цвет, задан на корне страницы */
     expect(container.querySelector("main")).toHaveStyle({
-      "--sku": "var(--cosmos)",
+      "--sku": "var(--color-cosmos)",
     });
     const html = container.innerHTML;
     /* декоративные места ссылаются на переменную, а не хардкодят цвет */
