@@ -17,7 +17,8 @@
 
 ## Decisions
 
-1. **Шрифты — variable woff2, self-hosted.** Newsreader (оси opsz+wght, roman + italic — 2 файла) и Commissioner (ось wght — 1 файл) скачиваются с Google Fonts и субсетятся (кириллица+латиница+пунктуация) существующим пайплайном репо. `next/font/local` поддерживает variable-оси. Альтернатива — 7 статических экземпляров: больше файлов, теряется opsz; берём variable, откат на статику — если субсеттинг сломает оси.
+1. **Шрифты — variable woff2, self-hosted.** Voice-семейство (оси opsz+wght, roman + italic — 2 файла) и Commissioner (ось wght — 1 файл) скачиваются с Google Fonts и субсетятся (кириллица+латиница+пунктуация) существующим пайплайном репо. `next/font/local` поддерживает variable-оси. Альтернатива — 7 статических экземпляров: больше файлов, теряется opsz; берём variable, откат на статику — если субсеттинг сломает оси.
+   **Правка 2026-07-05:** voice-роль временно закрывает **Literata** (дублёр): у Newsreader v1.003 кириллицы нет ни на Google Fonts, ни в upstream Production Type — запись «кириллица полная» в typography.md v2.0 ошибочна, русский текст в прототипах фактически рендерит Georgia-фолбэк. Literata — ближайший editorial-serif (opsz 7–72 ≈ Newsreader 6–72, родная кириллица, variable italic). Финальное voice-семейство — решение Насти; замена = swap woff2 + weight-диапазон в `fonts.ts`.
 2. **Роли вместо семейств в именах переменных.** `--font-voice` (Newsreader: заголовки, нарратив, латынь, italic-акценты) и `--font-ui` (Commissioner: кикеры, кнопки, навигация, мелкий UI). Маппинг старого: display(Unbounded)+narrative(Spectral) → voice; ui-роль — новая. Имена по ролям переживут будущие смены семейств.
 3. **CaveatNote → RitualNote.** Caveat с веба выведен (tokens v1.1.0). Рукописный акцент в прототипах — `font-style: italic` + акцентный цвет в voice-семействе (класс `.caveat` в прототипах — наследие имени). Атом переименовывается в `RitualNote` (Newsreader italic + цвет), старое имя удаляется. Запрет «italic только Spectral» → «italic только Newsreader».
 4. **KickerHeader переезжает на Commissioner** (ui-роль), letter-spacing по прототипам.
@@ -30,7 +31,7 @@
 
 - [Переходный вид старых секций до `landing-redesign`] → осознанно; сборка и тесты зелёные, показ Насте — только после `landing-redesign`.
 - [Субсеттинг variable-шрифтов может уронить оси (opsz)] → проверка визуально + `fc-scan`/pyftsubset с `--flavor=woff2 --layout-features='*'`; откат на статические экземпляры.
-- [Newsreader/Commissioner могут не иметь полного кириллического покрытия в нужных весах] → проверить до начала: оба заявлены с cyrillic subset на Google Fonts; если пробел — вопрос Насте немедленно (блокер всей типографики).
+- [Newsreader/Commissioner могут не иметь полного кириллического покрытия в нужных весах] → **сработал 2026-07-05**: Newsreader без кириллицы вовсе; решение — дублёр Literata (см. правку решения 1), вопрос Насте зафиксирован. Commissioner — покрытие полное.
 - [ds-lint allowlist по комментsocket может зарастать] → каждое ds-allow требует причины в комменте; ревью на verify.
 
 ## Migration Plan

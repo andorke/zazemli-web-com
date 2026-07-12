@@ -31,6 +31,63 @@ describe("checkDsViolations", () => {
       ),
     ).toHaveLength(0);
   });
+
+  it("находит выведенные семейства (unbounded|spectral|caveat)", () => {
+    expect(checkDsViolations('variable: "--font-unbounded"')).not.toHaveLength(
+      0,
+    );
+    expect(checkDsViolations("/* Spectral italic */")).not.toHaveLength(0);
+    expect(
+      checkDsViolations('className="font-hand" /* Caveat */'),
+    ).not.toHaveLength(0);
+  });
+
+  it("находит text-moss без метки ds-allow: moss-large", () => {
+    expect(checkDsViolations('className="text-moss"')).not.toHaveLength(0);
+    expect(checkDsViolations('className="hover:text-moss"')).not.toHaveLength(
+      0,
+    );
+  });
+
+  it("пропускает text-moss-ink и text-moss с меткой ds-allow: moss-large", () => {
+    expect(checkDsViolations('className="text-moss-ink"')).toHaveLength(0);
+    expect(
+      checkDsViolations(
+        '"text-moss opacity-80", // ds-allow: moss-large — фльерон',
+      ),
+    ).toHaveLength(0);
+  });
+
+  it("находит SKU-цвет как цвет текста", () => {
+    expect(checkDsViolations('className="text-sku-ficus"')).not.toHaveLength(
+      0,
+    );
+    expect(checkDsViolations('className="text-poppy"')).not.toHaveLength(0);
+  });
+
+  it("пропускает SKU-цвет в декоре (bg/border) и с меткой ds-allow: sku-accent", () => {
+    expect(
+      checkDsViolations('className="bg-sku-ficus border-sku-monstera"'),
+    ).toHaveLength(0);
+    expect(
+      checkDsViolations(
+        '"text-sku-ficus", // ds-allow: sku-accent — рукописный акцент SKU',
+      ),
+    ).toHaveLength(0);
+  });
+
+  it("находит устаревшие имена токенов var(--moss) → var(--color-moss)", () => {
+    expect(checkDsViolations('fill: "var(--soil)"')).not.toHaveLength(0);
+    expect(checkDsViolations("color: var(--moss)")).not.toHaveLength(0);
+    /* --moss-ink никогда не существовал на :root — только --color-moss-ink */
+    expect(checkDsViolations("color: var(--moss-ink)")).not.toHaveLength(0);
+  });
+
+  it("пропускает актуальные var(--color-*) и семантику shadcn", () => {
+    expect(checkDsViolations('fill: "var(--color-soil)"')).toHaveLength(0);
+    expect(checkDsViolations("var(--color-moss-ink)")).toHaveLength(0);
+    expect(checkDsViolations("var(--background)")).toHaveLength(0);
+  });
 });
 
 describe("checkCssViolations", () => {
@@ -45,16 +102,19 @@ describe("checkCssViolations", () => {
   });
 });
 
-/* Инвариант DS: компоненты и роуты не содержат hex, теней и чужих радиусов.
-   Цвета — только через токены globals.css (источник tokens.json v1.0.1). */
+/* Инвариант DS: исходники не содержат hex, теней, чужих радиусов и прочих
+   нарушений правил. Цвета — только через токены globals.css (источник
+   tokens.json v1.1.0). Скан — весь src/ (кроме тестов и самого ds-lint.ts:
+   его правила содержат запрещённые паттерны как литералы). */
 describe("DS-инвариант по src/", () => {
-  const roots = ["src/components", "src/app"];
+  const roots = ["src"];
 
   const collect = (dir: string): string[] =>
     readdirSync(dir).flatMap((name) => {
       const full = join(dir, name);
       if (statSync(full).isDirectory()) return collect(full);
       if (!/\.(ts|tsx)$/.test(name) || /\.test\./.test(name)) return [];
+      if (name === "ds-lint.ts") return [];
       return [full];
     });
 

@@ -23,7 +23,7 @@ export function CookieBanner() {
       className="border-charcoal/15 bg-bone fixed inset-x-0 bottom-0 z-50 border-t px-6 py-5 lg:px-16"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <p className="text-charcoal/70 leading-body max-w-2xl font-serif text-sm">
+        <p className="text-charcoal/70 leading-body max-w-2xl font-voice text-sm">
           Мы используем cookie для аналитики — чтобы понимать, как улучшить
           сайт. Необязательные cookie включаются только с твоего согласия.
         </p>

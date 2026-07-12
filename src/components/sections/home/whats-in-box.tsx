@@ -10,7 +10,7 @@ export function WhatsInBox() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-5">
           <KickerHeader>{whatsInBox.eyebrow}</KickerHeader>
-          <h2 className="leading-heading font-serif text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+          <h2 className="leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
             {whatsInBox.title}
           </h2>
         </div>
@@ -21,15 +21,15 @@ export function WhatsInBox() {
               key={item.n}
               className="border-charcoal/10 flex items-baseline gap-6 border-b py-4"
             >
-              <span className="tracking-kicker text-charcoal/45 font-sans text-[10px] tabular-nums">
+              <span className="tracking-kicker text-charcoal/45 font-ui text-[10px] tabular-nums">
                 {item.n}
               </span>
-              <span className="font-serif text-[17px]">{item.text}</span>
+              <span className="font-voice text-[17px]">{item.text}</span>
             </li>
           ))}
         </ol>
 
-        <p className="text-charcoal/50 font-serif text-lg italic">
+        <p className="text-charcoal/50 font-voice text-lg italic">
           {whatsInBox.after}
         </p>
       </div>

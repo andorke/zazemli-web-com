@@ -1,44 +1,49 @@
 import localFont from "next/font/local";
 
 /*
- * DS-контракт: ровно 3 семейства (typography.md, решение 27 мая), self-hosted.
- * woff2 получены конвертацией+субсеттингом из ttf (woff2 в ассетах были битые).
- * Недостающие веса (Unbounded 500, Spectral 700) — открытый вопрос Насте:
- * роли Medium временно закрывает 400, bold-роль Spectral — SemiBold 600.
+ * DS-контракт v1.1.0 (typography.md v2.0): ровно 2 семейства, self-hosted,
+ * variable woff2 (оси сохранены субсеттингом: кириллица+латиница+пунктуация).
+ * Имена переменных — по ролям (--font-voice / --font-ui), а не по семействам:
+ * роли переживут смену гарнитуры.
  *
- * preload: Unbounded и Spectral — над фолдом (Hero), preload включён.
- * Caveat нужен только в подписи «О нас» и CaveatNote ниже фолда — preload off,
- * иначе он отнимает полосу у LCP-текста hero (Lighthouse: LCP 4.0s → цель <2.5s).
+ * ВРЕМЕННЫЙ ДУБЛЁР: voice-роль закрывает Literata (opsz 7–72, wght 300–600),
+ * а не Newsreader из typography.md — у Newsreader v1.003 нет кириллицы вообще
+ * (проверено: Google Fonts и upstream Production Type, 2026-07-05). Финальное
+ * voice-семейство — решение Насти; замена = замена woff2 + weight-диапазона.
  */
 
-export const unbounded = localFont({
+export const voice = localFont({
   src: [
-    { path: "../fonts/unbounded-300.woff2", weight: "300", style: "normal" },
-    { path: "../fonts/unbounded-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/unbounded-700.woff2", weight: "700", style: "normal" },
-    { path: "../fonts/unbounded-900.woff2", weight: "900", style: "normal" },
-  ],
-  variable: "--font-unbounded",
-  display: "swap",
-});
-
-export const spectral = localFont({
-  src: [
-    { path: "../fonts/spectral-400.woff2", weight: "400", style: "normal" },
     {
-      path: "../fonts/spectral-400-italic.woff2",
-      weight: "400",
+      path: "../fonts/literata-var.woff2",
+      weight: "300 600",
+      style: "normal",
+    },
+    {
+      path: "../fonts/literata-var-italic.woff2",
+      weight: "300 600",
       style: "italic",
     },
-    { path: "../fonts/spectral-600.woff2", weight: "600", style: "normal" },
   ],
-  variable: "--font-spectral",
+  variable: "--font-voice",
   display: "swap",
+  /*
+   * Preload обоих voice-файлов (~390 КБ) — осознанно. Замер LH mobile на
+   * static export (2026-07-06): с preload perf 0.75 / FCP 1.4s / LCP 8.8s,
+   * с preload:false — 0.67 / 3.6s / 9.2s (поздний swap бьёт сильнее).
+   * Узкое место мобильного LCP — не шрифты (soil-vial.png 266 КБ + JS),
+   * секция и ассет уходят в landing-redesign. Desktop: 0.93, LCP 1.8s.
+   */
 });
 
-export const caveat = localFont({
-  src: [{ path: "../fonts/caveat-400.woff2", weight: "400", style: "normal" }],
-  variable: "--font-caveat",
+export const ui = localFont({
+  src: [
+    {
+      path: "../fonts/commissioner-var.woff2",
+      weight: "400 500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-ui",
   display: "swap",
-  preload: false,
 });

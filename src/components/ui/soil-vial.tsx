@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  *   стенками, при любых segments и любой ширине. Маску генерит scripts из самого PNG (по строкам
  *   тела с эрозией на толщину стенки) — заменишь колбу, перегенеришь маску.
  * Поверх слоёв лежит PNG через mix-blend-multiply: белый фон стекла уходит в bone, штриховка и
- * мерные засечки ложатся на землю как настоящее стекло. Подписи групп — справа, Spectral italic.
+ * мерные засечки ложатся на землю как настоящее стекло. Подписи групп — справа, voice italic.
  * Порядок снизу вверх: основа → дренаж → влага → воздух. Сегмент 0% не рисуется.
  * Цвет сегмента = по группе (земляные токены — санкционировано спекой для иллюстрации).
  */
@@ -23,10 +23,10 @@ export type VialSegments = {
 
 // снизу вверх; экспорт — для легенды секции колб (цвет легенды = цвет заливки)
 export const GROUPS = [
-  { key: "base", label: "основа и питание", fill: "var(--soil)" },
-  { key: "drainage", label: "дренаж и каркас", fill: "var(--ceramsite)" },
-  { key: "moisture", label: "влага", fill: "var(--moss)" },
-  { key: "air", label: "воздух", fill: "var(--pumice)" },
+  { key: "base", label: "основа и питание", fill: "var(--color-soil)" },
+  { key: "drainage", label: "дренаж и каркас", fill: "var(--color-ceramsite)" },
+  { key: "moisture", label: "влага", fill: "var(--color-moss)" },
+  { key: "air", label: "воздух", fill: "var(--color-pumice)" },
 ] as const;
 
 // Вертикальная зона тела (% от рамки PNG 600×900) — должна совпадать с y0/y1 в генераторе маски.
@@ -107,7 +107,7 @@ export function SoilVial({
         bands.map((b) => (
           <span
             key={b.key}
-            className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-serif text-sm leading-none italic whitespace-nowrap"
+            className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-voice text-sm leading-none italic whitespace-nowrap"
             style={{ left: `${GLASS_RIGHT}%`, top: `${b.mid}%` }}
           >
             {b.label}
