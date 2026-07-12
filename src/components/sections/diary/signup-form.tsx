@@ -83,6 +83,8 @@ export function SignupForm({
   // "idle" — форма; "sent" — форма подменена confirmation-блоком
   const [phase, setPhase] = useState<"idle" | "sent">("idle");
   const [submitError, setSubmitError] = useState<SubmitErrorState | null>(null);
+  // блокирует повторный submit, пока предыдущий запрос ещё в полёте (дубль-POST с ПДн)
+  const [submitting, setSubmitting] = useState(false);
   // попап-резюме политики (открывается ссылкой в CB1) — task 2.4
   const [policyOpen, setPolicyOpen] = useState(false);
 
@@ -122,6 +124,7 @@ export function SignupForm({
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (submitting) return;
     const okEmail = EMAIL_RE.test(email.trim());
     setEmailValid(okEmail);
     setConsentError(!pdn);
@@ -137,15 +140,20 @@ export function SignupForm({
 
     // всё валидно → отправка через интеграционную точку (task 3.2)
     setSubmitError(null);
-    const result = await onSubmit({
-      email: email.trim(),
-      consents: { pdn, ads },
-    });
-    if (result.ok) {
-      // consent-gate — в самом reachGoal: ym есть только при granted (task 3.1)
-      reachGoal("diary_signup_submit");
-      setPhase("sent");
-    } else setSubmitError(result.state);
+    setSubmitting(true);
+    try {
+      const result = await onSubmit({
+        email: email.trim(),
+        consents: { pdn, ads },
+      });
+      if (result.ok) {
+        // consent-gate — в самом reachGoal: ym есть только при granted (task 3.1)
+        reachGoal("diary_signup_submit");
+        setPhase("sent");
+      } else setSubmitError(result.state);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (phase === "sent") {
@@ -262,7 +270,7 @@ export function SignupForm({
         </p>
       )}
 
-      <Button type="submit" size="lg" className="w-full" disabled={!pdn}>
+      <Button type="submit" size="lg" className="w-full" disabled={!pdn || submitting}>
         {form.submit}
       </Button>
       <p className="text-charcoal/60 text-xs">{form.trust}</p>
