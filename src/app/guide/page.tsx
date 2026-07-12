@@ -5,6 +5,7 @@ import { GuideGlance } from "@/components/sections/guide/glance";
 import { GuideHero } from "@/components/sections/guide/hero";
 import { GuideOzonCta } from "@/components/sections/guide/ozon-cta";
 import { GuideStages } from "@/components/sections/guide/stages";
+import { guide } from "@/content/guide";
 
 /* Meta-content — канон guide.md v3.0 §Meta (= прототип guide.html <title>/<meta>) */
 export const metadata: Metadata = {
@@ -16,10 +17,30 @@ export const metadata: Metadata = {
   alternates: { canonical: "/guide" },
 };
 
+/* Schema.org HowTo — 5 шагов = 5 CJM-стадий, строится из guide.stages (design decision 4) */
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: guide.hero.title,
+  description: guide.hero.sub,
+  step: guide.stages.map((stage) => ({
+    "@type": "HowToStep",
+    name: stage.title,
+    text: stage.steps.map((s) => s.text).join(" "),
+  })),
+};
+
 /* /guide — hero → тиры → 5 стадий CJM → Ozon → «На главную» (прототип guide.html) */
 export default function GuidePage() {
   return (
     <main className="flex-1">
+      {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <GuideHero />
       <GuideGlance />
       <GuideStages />

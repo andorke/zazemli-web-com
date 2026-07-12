@@ -44,3 +44,34 @@ describe("/guide: сборка страницы", () => {
     expect(back).toHaveAttribute("href", "/");
   });
 });
+
+/* Schema.org HowTo: 5 HowToStep = 5 стадий по порядку, text — из шагов стадии */
+describe("/guide: JSON-LD HowTo", () => {
+  it("HowTo с 5 HowToStep = заголовки стадий по порядку", () => {
+    const { container } = render(<GuidePage />);
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
+    expect(script).toBeInTheDocument();
+
+    const data = JSON.parse(script!.textContent ?? "{}");
+    expect(data["@context"]).toBe("https://schema.org");
+    expect(data["@type"]).toBe("HowTo");
+    expect(data.step).toHaveLength(guide.stages.length);
+    expect(data.step.map((s: { name: string }) => s.name)).toEqual(
+      guide.stages.map((stage) => stage.title),
+    );
+  });
+
+  it("каждый HowToStep несёт текст своих шагов", () => {
+    const { container } = render(<GuidePage />);
+    const data = JSON.parse(
+      container.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? "{}",
+    );
+    guide.stages.forEach((stage, i) => {
+      expect(data.step[i]["@type"]).toBe("HowToStep");
+      expect(data.step[i].text).toContain(stage.steps[0].text);
+    });
+  });
+});
