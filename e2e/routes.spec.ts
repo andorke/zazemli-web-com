@@ -1,11 +1,6 @@
 import { expect, test } from "@playwright/test";
 
 const pages = [
-  {
-    path: "/collectio",
-    h1: "Коллекция",
-    title: /Коллекция · 7 родов растений/,
-  },
   { path: "/lab", h1: "Лаборатория", title: /Лаборатория грунта/ },
   { path: "/guide", h1: "Гайд", title: /Гайд по пересадке/ },
   { path: "/diary-signup", h1: "Дневник растения", title: /Дневник растения/ },
@@ -49,6 +44,24 @@ test("diary-signup: noindex и отсутствие в sitemap", async ({
   const sitemap = await (await request.get("/sitemap.xml")).text();
   expect(sitemap).not.toContain("diary-signup");
   expect(sitemap).toContain("https://zazemli.com/lab");
+});
+
+test("/collectio: открытие приводит на /#collectio (секция коллекции)", async ({
+  page,
+}) => {
+  await page.goto("/collectio");
+  await expect(page).toHaveURL(/\/#collectio$/);
+  await expect(page.locator("section#collectio")).toBeInViewport();
+});
+
+test("/collectio: редирект-страница noindex и canonical на главную", async ({
+  request,
+}) => {
+  const html = await (await request.get("/collectio")).text();
+  expect(html).toContain('http-equiv="refresh"');
+  expect(html).toContain("0;url=/#collectio");
+  expect(html).toMatch(/name="robots"\s+content="noindex/);
+  expect(html).toMatch(/rel="canonical"\s+href="https:\/\/zazemli\.com\/?"/);
 });
 
 test("404 для несуществующего URL", async ({ page }) => {
