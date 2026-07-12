@@ -1,22 +1,37 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import { PageStub } from "@/components/site/page-stub";
+import { GuideGlance } from "@/components/sections/guide/glance";
+import { GuideHero } from "@/components/sections/guide/hero";
+import { GuideOzonCta } from "@/components/sections/guide/ozon-cta";
+import { GuideStages } from "@/components/sections/guide/stages";
 
-/* Копи: Маркетинг/Каналы/Сайт/guide.md v1.1 §Meta-content */
+/* Meta-content — канон guide.md v3.0 §Meta (= прототип guide.html <title>/<meta>) */
 export const metadata: Metadata = {
   title: {
-    absolute: "Как заземлить растение · Гайд по пересадке за 5 шагов · ЗАЗЕМЛИ",
+    absolute: "Пересадка растения за пять шагов · гайд · ЗАЗЕМЛИ",
   },
   description:
-    "Универсальный ритуал пересадки комнатного растения за 5 шагов. Подготовка, дренаж, грунт, посадка. Подходит для любого вида.",
+    "Как пересадить комнатное растение: подготовка, корни, дренаж, грунт, забота. Универсальный ритуал для любого растения с боксом ЗАЗЕМЛИ.",
   alternates: { canonical: "/guide" },
 };
 
+/* /guide — hero → тиры → 5 стадий CJM → Ozon → «На главную» (прототип guide.html) */
 export default function GuidePage() {
   return (
-    <PageStub
-      h1="Гайд"
-      lead="Универсальный ритуал пересадки комнатного растения за 5 шагов. Подготовка, дренаж, грунт, посадка. Подходит для любого вида."
-    />
+    <main className="flex-1">
+      <GuideHero />
+      <GuideGlance />
+      <GuideStages />
+      <GuideOzonCta />
+      <div className="bg-bone pb-16 text-center">
+        <Link
+          href="/"
+          className="text-moss-ink font-ui text-small underline decoration-dotted underline-offset-4 transition-opacity hover:opacity-70"
+        >
+          ← На главную
+        </Link>
+      </div>
+    </main>
   );
 }
