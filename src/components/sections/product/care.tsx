@@ -1,3 +1,4 @@
+import { DetailsAccordion } from "@/components/ui/details-accordion";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { productPage, type Sku } from "@/content/sku";
 
@@ -32,14 +33,14 @@ export function Care({ sku }: { sku: Sku }) {
         ))}
       </div>
 
-      <details className="mt-8 max-w-[34rem]">
-        <summary className="text-moss-ink inline-block cursor-pointer list-none font-ui text-[13px] tracking-wide underline decoration-dotted underline-offset-4 [&::-webkit-details-marker]:hidden">
-          {productPage.careSources}
-        </summary>
+      <DetailsAccordion
+        className="mt-8 max-w-[34rem]"
+        summary={productPage.careSources}
+      >
         <div className="border-moss bg-chalk text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-[13px] leading-relaxed">
           {care.sources}
         </div>
-      </details>
+      </DetailsAccordion>
 
       <div
         className="mt-10 max-w-[42rem] border-l-2 pl-5"

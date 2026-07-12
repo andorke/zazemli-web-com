@@ -1,12 +1,13 @@
 import Link from "next/link";
 
+import { DetailsAccordion } from "@/components/ui/details-accordion";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { GROUPS, SoilVial } from "@/components/ui/soil-vial";
 import { labHref, productPage, type Sku } from "@/content/sku";
 
 /*
  * «Зачем именно эта земля» по прототипу collectio: chalk-фон, слева — проза биотопа,
- * SourceNote (нативный details с бейджем «рецензируемо» и рецензируемым источником) и
+ * SourceNote (атом DetailsAccordion с бейджем «рецензируемо» и рецензируемым источником) и
  * мост на реестр источников /lab; справа — мерная колба SoilVial + легенда групп с %.
  * SKU-цвет здесь не применяется (задача 2.6); акценты — moss/moss-ink.
  */
@@ -21,10 +22,10 @@ export function WhySoil({ sku }: { sku: Sku }) {
             {sku.whyProse}
           </p>
 
-          <details className="mt-1 max-w-[34rem]">
-            <summary className="text-moss-ink inline-block cursor-pointer list-none font-ui text-[13px] tracking-wide underline decoration-dotted underline-offset-4 [&::-webkit-details-marker]:hidden">
-              {sku.sourceNote.summary}
-            </summary>
+          <DetailsAccordion
+            className="mt-1 max-w-[34rem]"
+            summary={sku.sourceNote.summary}
+          >
             <div className="border-moss bg-bone text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-[13px] leading-relaxed">
               <span className="text-moss-ink font-ui text-[11px] tracking-wide uppercase">
                 {productPage.sourceBadge}
@@ -32,7 +33,7 @@ export function WhySoil({ sku }: { sku: Sku }) {
               <p className="mt-1">{sku.sourceNote.claim}</p>
               <p className="mt-1 font-voice italic">{sku.sourceNote.source}</p>
             </div>
-          </details>
+          </DetailsAccordion>
 
           <p className="mt-1 font-ui text-[13px]">
             <Link href={labHref(sku)} className="text-moss-ink no-underline">
