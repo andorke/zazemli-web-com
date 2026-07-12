@@ -117,6 +117,9 @@ export const productPage = {
   diaryEyebrow: "Дневник на год",
   ritualEyebrow: "Ритуал",
   guideBridge: "Как пересадить, по шагам →",
+  /* buybar (прототип collectio, блок 9) — точная копи eyebrow/title вопрос Насте */
+  buyEyebrow: "Заземлить",
+  buyTitle: "Выбери объём.",
 } as const;
 
 /* H1 hero и CTA собираются из винительного падежа названия (design-решение 2, вариант A). */
@@ -140,6 +143,11 @@ export function compositionTitle(sku: Sku): string {
 }
 export function boxTitle(sku: Sku): string {
   return `Всё на одну пересадку ${sku.genitive}.`;
+}
+
+/* CTA buybar под выбранный размер: «Купить {объём} на Ozon» (design-решение 4). */
+export function buyCtaLabel(size: Size): string {
+  return `Купить ${size.volume} на Ozon`;
 }
 
 /* Ритуал-строка одна на все SKU (прототипы collectio); варьируется только приписка ritualPhrase. */

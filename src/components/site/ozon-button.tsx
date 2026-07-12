@@ -14,11 +14,14 @@ export function OzonButton({
   skuNumber,
   className,
   size,
+  label = "Купить на Ozon",
 }: {
   href: string | null;
   skuNumber?: `N°${string}`;
   className?: string;
   size?: ComponentProps<typeof Button>["size"];
+  /* текст активной ссылки; buybar передаёт «Купить {размер} на Ozon» (задача 2.4) */
+  label?: string;
 }) {
   if (href === null) {
     return (
@@ -35,7 +38,7 @@ export function OzonButton({
         rel="noopener noreferrer"
         onClick={() => reachGoal("ozon-click")}
       >
-        Купить на Ozon
+        {label}
       </a>
     </Button>
   );
