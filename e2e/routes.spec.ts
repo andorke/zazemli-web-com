@@ -1,8 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 const pages = [
-  { path: "/lab", h1: "Лаборатория", title: /Лаборатория грунта/ },
-  { path: "/guide", h1: "Гайд", title: /Гайд по пересадке/ },
+  { path: "/lab", h1: "Лаборатория грунта.", title: /Лаборатория грунта/ },
+  {
+    path: "/guide",
+    h1: "Руки в землю — голова свободна.",
+    title: /Пересадка растения за пять шагов/,
+  },
   {
     path: "/diary-signup",
     // h1 = diary.hero.title (заглушка стала формой в task 2.1)

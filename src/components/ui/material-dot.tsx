@@ -13,7 +13,8 @@ export type MaterialName =
   | "gravel"
   | "moss";
 
-const dotColor: Record<MaterialName, string> = {
+/* Экспортирована для переиспользования (полоска долей g4 на /lab) — тот же цвет, что и точка */
+export const dotColor: Record<MaterialName, string> = {
   graphite: "bg-graphite",
   soil: "bg-soil",
   ceramsite: "bg-ceramsite",
