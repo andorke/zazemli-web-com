@@ -7,7 +7,7 @@
 
 ## 2. Шаблон страницы
 
-- [ ] 2.1 Роут `app/collectio/[slug]/page.tsx` + `generateStaticParams` (7 slug), метаданные (title/description/canonical), 404 на неизвестный slug
+- [x] 2.1 Роут `app/collectio/[slug]/page.tsx` + `generateStaticParams` (7 slug), метаданные (title/description/canonical), 404 на неизвестный slug
 - [ ] 2.2 Секции шаблона: hero (kicker, H1 «Заземли {растение}.», латынь, CTA, цены) и «Зачем именно эта земля» (+ SourceNote-аккордеон, колба-%, мост на /lab)
 - [ ] 2.3 Секции: состав с MaterialDot, «Что в боксе», care-блок с дневник-панелью, Ритуал (RitualNote)
 - [ ] 2.4 Buybar: клиентский размер-селектор (объём/цена/CTA-текст), состояние «Скоро на Ozon» при `null`, UTM `utm_content=sku00X` при URL
