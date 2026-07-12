@@ -135,14 +135,23 @@ for (( i=0; i<$(q_len); i++ )); do
   MODEL="$(q_get "$i" model)"; [[ -z "$MODEL" ]] && MODEL="$(ns_cfg '.models.apply')"
   MAXEP="$(q_get "$i" max_episodes)"; [[ -z "$MAXEP" ]] && MAXEP="$(ns_cfg '.max_episodes' 6)"
   BR="$(ns_cfg '.branch_prefix' 'night/')$CH"
+  # per-item база: items[].base переопределяет глобальную BASE_REF (цепочка: ветвление
+  # от ночной ветки другого change этой же очереди — зависимый item ставь ПОЗЖЕ базового)
+  IBASE="$BASE_REF"; IBASE_RAW="$(q_get "$i" base)"
+  if [[ -n "$IBASE_RAW" ]]; then
+    if git rev-parse --verify -q "$IBASE_RAW" >/dev/null; then IBASE="$IBASE_RAW"
+    elif git rev-parse --verify -q "origin/$IBASE_RAW" >/dev/null; then IBASE="origin/$IBASE_RAW"
+    else q_set "$i" status failed; q_set "$i" note "база '$IBASE_RAW' не найдена (базовый change не отработал?)"; continue; fi
+    ns_log "$CH: база item = $IBASE"
+  fi
   WT="$NS_STATE/wt/$CH"; export NS_WT="$WT"
   git worktree remove -f "$WT" 2>/dev/null || true
   if git rev-parse --verify -q "$BR" >/dev/null; then git worktree add -q "$WT" "$BR"
-  else git worktree add -q -b "$BR" "$WT" "$BASE_REF"; fi
+  else git worktree add -q -b "$BR" "$WT" "$IBASE"; fi
   wt_seed "$WT"
   # merge-base, не tip: при резюме ветки tip уже содержит докрашевые коммиты,
   # а MR/ревью-диапазон должен покрывать всю ветку от точки ветвления
-  BASE_SHA="$(git -C "$WT" merge-base "$BASE_REF" HEAD)"
+  BASE_SHA="$(git -C "$WT" merge-base "$IBASE" HEAD)"
   LDIR="$NS_STATE/logs/$NS_NIGHT_DATE/$CH"
 
   PREV_DONE="$(q_get "$i" episodes_done)"; [[ "$PREV_DONE" =~ ^[0-9]+$ ]] || PREV_DONE=0

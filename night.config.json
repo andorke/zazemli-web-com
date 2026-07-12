@@ -1,7 +1,7 @@
 {
   "schedule": {
-    "start": "01:00",
-    "end": "07:00",
+    "start": "03:15",
+    "end": "10:30",
     "grace_min": 15
   },
   "verify": "HTTP_PROXY= HTTPS_PROXY= http_proxy= https_proxy= npm ci && npm run typecheck && npm run test && npm run build",
