@@ -7,33 +7,16 @@ import { PolicyModal } from "@/components/sections/diary/policy-modal";
 import { Button } from "@/components/ui/button";
 import { Fleuron } from "@/components/ui/fleuron";
 import { diary, type DiaryConsent } from "@/content/diary";
+import {
+  submitDiarySignup,
+  type DiarySubmitInput,
+  type SubmitErrorState,
+  type SubmitResult,
+} from "@/lib/diary-submit";
 import { reachGoal } from "@/lib/metrika";
 
 /* Формат email — тот же паттерн, что в прототипе diary-signup.html v3 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/*
- * Состояния submit — микрокопи из diary.states (network/server/maintenance/
- * duplicate, error-message.md v1.0.1). Реальную обёртку POST на РФ-эндпоинт
- * (флаг/null, payload с версией согласия) подключит task 3.2 через onSubmit.
- */
-export type SubmitErrorState =
-  | "network"
-  | "server"
-  | "maintenance"
-  | "duplicate";
-export type SubmitResult =
-  | { ok: true }
-  | { ok: false; state: SubmitErrorState };
-
-/*
- * Заглушка отправки по умолчанию: сбор выключен (нет РФ-бэкенда) → успех →
- * confirmation (design Decision 4 — до готовности бэкенда форма валидна и
- * показывает confirmation, реального POST с ПДн нет). task 3.2 подменит.
- */
-async function noopSubmit(): Promise<SubmitResult> {
-  return { ok: true };
-}
 
 /*
  * Текст согласия. У CB со ссылкой (link != null) встроенная ссылка на политику по
@@ -79,13 +62,14 @@ function ConsentText({
  * cookie-banner (тоже consent-UI 152-ФЗ). Копи — из diary.ts.
  *
  * onSubmit — интеграционная точка отправки (design Decision 4): по умолчанию
- * заглушка-успех; task 3.2 передаст обёртку POST с флагом/null-эндпоинтом.
- * Вне скоупа: встроенная ссылка CB1 → /privacy и попап-резюме — task 2.4.
+ * обёртка submitDiarySignup (POST за флагом NEXT_PUBLIC_DIARY_SUBMIT_ENDPOINT;
+ * без эндпоинта сбор выключен — реального POST нет). Тесты инъектят свой
+ * onSubmit, чтобы прогнать состояния ошибок отправки (task 3.2).
  */
 export function SignupForm({
-  onSubmit = noopSubmit,
+  onSubmit = submitDiarySignup,
 }: {
-  onSubmit?: () => Promise<SubmitResult>;
+  onSubmit?: (input: DiarySubmitInput) => Promise<SubmitResult>;
 }) {
   const { form, states, confirmation } = diary;
   const [pdnConsent, adsConsent] = form.consents;
@@ -154,7 +138,10 @@ export function SignupForm({
 
     // всё валидно → отправка через интеграционную точку (task 3.2)
     setSubmitError(null);
-    const result = await onSubmit();
+    const result = await onSubmit({
+      email: email.trim(),
+      consents: { pdn, ads },
+    });
     if (result.ok) {
       // consent-gate — в самом reachGoal: ym есть только при granted (task 3.1)
       reachGoal("diary_signup_submit");
