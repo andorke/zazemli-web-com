@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { SkuGallery } from "@/components/sections/home/sku-gallery";
+import { skus } from "@/content/sku";
 
 describe("SkuGallery (галерея #collectio по прототипу)", () => {
   it("секция несёт якорь id=collectio", () => {
@@ -17,21 +18,24 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
     );
   });
 
-  it("7 кликабельных карточек SKU с нумерацией «N° 01»…«N° 07» (href временно #collectio)", () => {
+  it("7 кликабельных карточек SKU с нумерацией «N° 01»…«N° 07»", () => {
     render(<SkuGallery />);
     const cards = screen.getAllByRole("link", { name: /Открыть →/ });
     expect(cards).toHaveLength(7);
-    for (const card of cards) {
-      expect(card).toHaveAttribute("href", "#collectio");
-    }
     expect(screen.getByText("N° 01")).toBeInTheDocument();
     expect(screen.getByText("N° 07")).toBeInTheDocument();
     expect(screen.getByText("монстера")).toBeInTheDocument();
     expect(screen.getByText("эпипремнум")).toBeInTheDocument();
   });
 
-  // TODO(product-pages): перевернуть на «карточки ведут на /collectio/[slug]», href = `/collectio/${slug}`
-  it.todo("после появления роута /collectio/[slug] карточки ведут на страницы товара");
+  it("карточки ведут на страницы товара /collectio/[slug]", () => {
+    render(<SkuGallery />);
+    const cards = screen.getAllByRole("link", { name: /Открыть →/ });
+    expect(cards).toHaveLength(skus.length);
+    cards.forEach((card, i) => {
+      expect(card).toHaveAttribute("href", `/collectio/${skus[i].slug}`);
+    });
+  });
 
   it("мета карточки: компоненты и объёмы с ценой", () => {
     render(<SkuGallery />);

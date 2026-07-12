@@ -61,3 +61,35 @@ describe("Коллекция SKU", () => {
     }
   });
 });
+
+describe("Инварианты данных SKU (страница товара)", () => {
+  it("slug уникальны", () => {
+    const slugs = skus.map((s) => s.slug);
+    expect(new Set(slugs).size).toBe(skus.length);
+  });
+
+  it("сумма процентов колбы = 100 у каждого SKU", () => {
+    for (const sku of skus) {
+      const { base, air, moisture, drainage } = sku.vial;
+      expect(base + air + moisture + drainage, `колба ${sku.slug}`).toBe(100);
+    }
+  });
+
+  it("сумма долей состава = 100 и совпадает с числом компонентов", () => {
+    for (const sku of skus) {
+      const total = sku.composition.reduce((sum, c) => sum + c.pct, 0);
+      expect(total, `состав ${sku.slug}`).toBe(100);
+      expect(sku.composition, `состав ${sku.slug}`).toHaveLength(sku.components);
+    }
+  });
+
+  it("цены всех размеров положительны", () => {
+    for (const sku of skus) {
+      for (const size of sku.sizes) {
+        /* "2 190 ₽" (U+00A0-разделитель) → 2190 */
+        const value = Number(size.price.replace(/\D/g, ""));
+        expect(value, `${sku.slug} · ${size.volume}`).toBeGreaterThan(0);
+      }
+    }
+  });
+});

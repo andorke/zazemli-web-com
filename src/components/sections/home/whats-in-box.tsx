@@ -1,5 +1,6 @@
 import { ImageSlot } from "@/components/sections/home/image-slot";
 import { KickerHeader } from "@/components/ui/kicker-header";
+import { NumberedList } from "@/components/ui/numbered-list";
 import { home } from "@/content/home";
 
 /* «Что в боксе» по прототипу: слева заголовок + опись канона (5 позиций), справа фото-слот 4/5 */
@@ -15,19 +16,7 @@ export function WhatsInBox() {
           </h2>
         </div>
 
-        <ol className="list-none">
-          {whatsInBox.items.map((item) => (
-            <li
-              key={item.n}
-              className="border-charcoal/10 flex items-baseline gap-6 border-b py-4"
-            >
-              <span className="tracking-kicker text-charcoal/45 font-ui text-[10px] tabular-nums">
-                {item.n}
-              </span>
-              <span className="font-voice text-[17px]">{item.text}</span>
-            </li>
-          ))}
-        </ol>
+        <NumberedList items={whatsInBox.items} />
 
         <p className="text-charcoal/50 font-voice text-lg italic">
           {whatsInBox.after}

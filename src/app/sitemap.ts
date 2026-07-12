@@ -1,10 +1,20 @@
 import type { MetadataRoute } from "next";
 
+import { skus } from "@/content/sku";
+
 export const dynamic = "force-static";
 
-/* 5 индексируемых страниц. /diary-signup намеренно отсутствует (вход только по QR) */
+/* 11 индексируемых страниц: главная, lab, guide, privacy + 7 страниц товара.
+   /diary-signup (вход только по QR) и редирект-страница /collectio намеренно отсутствуют. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["/", "/collectio", "/lab", "/guide", "/privacy"].map((path) => ({
+  const paths = [
+    "/",
+    "/lab",
+    "/guide",
+    "/privacy",
+    ...skus.map((sku) => `/collectio/${sku.slug}`),
+  ];
+  return paths.map((path) => ({
     url: `https://zazemli.com${path === "/" ? "" : path}`,
   }));
 }
