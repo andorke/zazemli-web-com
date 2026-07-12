@@ -81,6 +81,12 @@ export type Sku = {
   /* родной биотоп — подпись колбы на лендинге; пока есть только у трио из прототипа */
   biotope?: string;
   /* --- страница товара /collectio/[slug] --- */
+  /* винительный падеж названия — H1 «Заземли {accusative}.» и CTA hero (design-решение 2, вариант A) */
+  accusative: string;
+  /* описание грунта под hero (прототип collectio, блок .sub) */
+  heroSub: string;
+  /* проза «Зачем именно эта земля» (прототип collectio, блок .biotope) */
+  whyProse: string;
   vial: VialSegments;
   composition: CompositionItem[];
   boxContents: string[];
@@ -94,6 +100,26 @@ export type Sku = {
 /* Нумерация лендинга: «N° 01» (пробел, 2 цифры) — design-решение 5; на товарных остаётся N°001 */
 export function landingNumber(number: Sku["number"]): string {
   return `N° ${number.slice(-2)}`;
+}
+
+/* Постоянные строки шаблона страницы товара; варьируемое per-SKU — в полях Sku. */
+export const productPage = {
+  heroKicker: "Collectio Zazemli · Партия 0",
+  whyEyebrow: "Зачем именно эта земля",
+  sourceBadge: "рецензируемо",
+  labBridge: "Весь состав и источники → в лаборатории",
+} as const;
+
+/* H1 hero и CTA собираются из винительного падежа названия (design-решение 2, вариант A). */
+export function heroTitle(sku: Sku): string {
+  return `Заземли ${sku.accusative}.`;
+}
+export function heroCtaLabel(sku: Sku): string {
+  return `Заземлить ${sku.accusative} →`;
+}
+/* Мост на реестр источников в лаборатории — якорь рецепта SKU (прототип collectio). */
+export function labHref(sku: Sku): string {
+  return `/lab#rec-${sku.slug}`;
 }
 
 /* Ритуал-строка одна на все SKU (прототипы collectio); варьируется только приписка ritualPhrase. */
@@ -122,6 +148,11 @@ export const skus: Sku[] = [
     components: 10,
     volumes: "2,2 / 3,5 л",
     priceFrom: "от 2 190 ₽",
+    accusative: "монстеру",
+    heroSub:
+      "Рыхлый грунт под монстеру: кора, цеолит, мох, кокос. Корни дышат, как на дереве.",
+    whyProse:
+      "В джунглях корни висят в воздухе. Кора, цеолит и кокос делают грунт рыхлым, почти невесомым. Мох напоминает о влажности тропиков.",
     vial: { base: 50, air: 15, moisture: 25, drainage: 10 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 20 },
@@ -177,6 +208,11 @@ export const skus: Sku[] = [
     volumes: "2,2 / 3,5 л",
     priceFrom: "от 2 190 ₽",
     biotope: "тропики Юго-Восточной Азии",
+    accusative: "фикус",
+    heroSub:
+      "Плотный, стабильный грунт под фикус: торф, биочар, диатомит, цеолит. Держит влагу ровно, без скачков.",
+    whyProse:
+      "Укоренился — не сдвинешь. Торф нейтральный и биочар — основа стабильности. Диатомит и цеолит держат влажность ровно, без скачков.",
     vial: { base: 60, air: 10, moisture: 20, drainage: 10 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 30 },
@@ -231,6 +267,11 @@ export const skus: Sku[] = [
     volumes: "1,2 / 2,2 л",
     priceFrom: "от 1 890 ₽",
     biotope: "горные леса Анд",
+    accusative: "антуриум",
+    heroSub:
+      "Воздушный грунт под антуриум: кора, кокос, мох. Корни дышат, как на дереве, и не терпят болота.",
+    whyProse:
+      "В тропиках растёт на деревьях, а не в земле. Кора и кокос дают воздух корням-эпифитам, а мох держит влагу. Привык дышать — не потерпит болота.",
     vial: { base: 35, air: 20, moisture: 35, drainage: 10 },
     composition: [
       { name: "Кора сосновая", material: "ceramsite", pct: 20 },
@@ -285,6 +326,11 @@ export const skus: Sku[] = [
     components: 10,
     volumes: "1,2 / 2,2 л",
     priceFrom: "от 1 890 ₽",
+    accusative: "аглаонему",
+    heroSub:
+      "Грунт под аглаонему: кислый торф, кора, кокос, цеолит. Держит влагу и мягкую кислинку, как на лесной подстилке.",
+    whyProse:
+      "На лесной подстилке тропиков — тень, влага, кислинка. Кислый торф задаёт нужный pH. Кора, кокос и цеолит отвечают за воздух и влагу без застоя.",
     vial: { base: 60, air: 10, moisture: 15, drainage: 15 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 25 },
@@ -339,6 +385,11 @@ export const skus: Sku[] = [
     components: 11,
     volumes: "1,2 / 2,2 / 3,5 л",
     priceFrom: "от 1 890 ₽",
+    accusative: "спатифиллум",
+    heroSub:
+      "Грунт под спатифиллум: кислый торф, цеолит, кора, кокос. Держит влагу для жаждущего цветка, но без болота.",
+    whyProse:
+      "Кислый торф задаёт нужный pH для жителя лесной подстилки. Цеолит, кора и кокос — баланс влаги для жаждущего цветка. Пьёт много, но гнили не терпит.",
     vial: { base: 60, air: 10, moisture: 20, drainage: 10 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 25 },
@@ -395,6 +446,11 @@ export const skus: Sku[] = [
     volumes: "1,2 / 2,2 / 3,5 л",
     priceFrom: "от 1 890 ₽",
     biotope: "сухая Восточная Африка",
+    accusative: "замиокулькас",
+    heroSub:
+      "Минеральный грунт под замиокулькас: цеолит, пеностекло, песок. Отводит лишнюю влагу мгновенно, как в засушливой Африке.",
+    whyProse:
+      "В Африке выживает в засуху — запасает воду в клубнях. Цеолит, пеностекло и песок отводят лишнюю влагу мгновенно. Суккулент в душе, хоть и не признаётся.",
     vial: { base: 55, air: 0, moisture: 20, drainage: 25 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 25 },
@@ -448,6 +504,11 @@ export const skus: Sku[] = [
     components: 9,
     volumes: "1,2 / 2,2 л",
     priceFrom: "от 1 890 ₽",
+    accusative: "эпипремнум",
+    heroSub:
+      "Грунт под эпипремнум: торф, кора, мох. Питание, воздух и влага для лианы, которую не остановить.",
+    whyProse:
+      "Лиана из влажных джунглей — цепляется и летит. Торф для питания, кора для воздуха, мох для влаги. Прощает ошибки, но в хорошем грунте — не остановить.",
     vial: { base: 55, air: 15, moisture: 25, drainage: 5 },
     composition: [
       { name: "Торф нейтральный", material: "soil", pct: 30 },

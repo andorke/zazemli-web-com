@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { ProductHero } from "@/components/sections/product/hero";
+import { WhySoil } from "@/components/sections/product/why-soil";
 import { skus } from "@/content/sku";
 
 /* Static export: 7 товарных страниц из skus; неизвестный slug → 404 (design-решение 1) */
@@ -38,7 +40,12 @@ export default async function ProductPage({ params }: Params) {
   const sku = skus.find((s) => s.slug === slug);
   if (!sku) notFound();
 
-  /* Каркас роута. Секции шаблона (hero → founder-quote → футер-мост «← Вся коллекция»)
-     добавляются задачами 2.2–2.5. */
-  return <main className="flex flex-1 flex-col" />;
+  /* Секции шаблона по прототипу collectio-*.html. Состав, «Что в боксе», care,
+     ритуал, buybar, founder-quote и футер-мост «← Вся коллекция» — задачи 2.3–2.5. */
+  return (
+    <main className="flex flex-1 flex-col">
+      <ProductHero sku={sku} />
+      <WhySoil sku={sku} />
+    </main>
+  );
 }
