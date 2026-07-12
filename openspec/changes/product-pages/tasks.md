@@ -24,4 +24,4 @@
 
 - [x] 4.1 e2e: все 7 страниц открываются (smoke по каждой: h1, мост на /lab, buybar), один h1 на страницу
 - [ ] 4.2 Визуальная сверка 2–3 страниц с прототипами (monstera, zamioculcas — контраст-риск buttercup, anthurium) на 1440px; адаптив 360px
-- [ ] 4.3 Полный прогон unit + e2e + static export + ds-lint; обновить CONTEXT.md и вопросы Насте (A/B hero, формат N°)
+- [x] 4.3 Полный прогон unit + e2e + static export + ds-lint; обновить CONTEXT.md и вопросы Насте (A/B hero, формат N°)
