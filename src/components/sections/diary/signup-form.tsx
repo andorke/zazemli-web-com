@@ -1,25 +1,55 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Fleuron } from "@/components/ui/fleuron";
 import { diary } from "@/content/diary";
 
 /* Формат email — тот же паттерн, что в прототипе diary-signup.html v3 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /*
- * Форма подписки /diary-signup (task 2.2). Клиентский компонент: валидация email
- * по формату (aria-invalid, ok/err-микрокопи), два непредзаполненных согласия
- * (CB1 — 152-ФЗ, CB2 — 38-ФЗ), submit собирает ошибки и уводит фокус на первую.
- * Стек — чистый React, как cookie-banner (тоже consent-UI 152-ФЗ): форма из
- * одного email и двух чекбоксов, отдельный form-стек избыточен. Копи — из diary.ts.
- *
- * Вне скоупа 2.2: happy-path (отправка + confirmation) и микрокопи ошибок
- * отправки — task 2.3; встроенная ссылка CB1 → /privacy и попап-резюме — task 2.4.
+ * Состояния submit — микрокопи из diary.states (network/server/maintenance/
+ * duplicate, error-message.md v1.0.1). Реальную обёртку POST на РФ-эндпоинт
+ * (флаг/null, payload с версией согласия) подключит task 3.2 через onSubmit.
  */
-export function SignupForm() {
-  const { form, states } = diary;
+export type SubmitErrorState =
+  | "network"
+  | "server"
+  | "maintenance"
+  | "duplicate";
+export type SubmitResult =
+  | { ok: true }
+  | { ok: false; state: SubmitErrorState };
+
+/*
+ * Заглушка отправки по умолчанию: сбор выключен (нет РФ-бэкенда) → успех →
+ * confirmation (design Decision 4 — до готовности бэкенда форма валидна и
+ * показывает confirmation, реального POST с ПДн нет). task 3.2 подменит.
+ */
+async function noopSubmit(): Promise<SubmitResult> {
+  return { ok: true };
+}
+
+/*
+ * Форма подписки /diary-signup. Клиентский компонент: валидация email по формату
+ * (aria-invalid, ok/err-микрокопи), два непредзаполненных согласия (CB1 — 152-ФЗ,
+ * CB2 — 38-ФЗ), submit собирает ошибки и уводит фокус на первую (task 2.2).
+ * Успешная отправка подменяет форму confirmation-блоком, ошибка отправки
+ * показывает микрокопи из diary.states (task 2.3). Стек — чистый React, как
+ * cookie-banner (тоже consent-UI 152-ФЗ). Копи — из diary.ts.
+ *
+ * onSubmit — интеграционная точка отправки (design Decision 4): по умолчанию
+ * заглушка-успех; task 3.2 передаст обёртку POST с флагом/null-эндпоинтом.
+ * Вне скоупа: встроенная ссылка CB1 → /privacy и попап-резюме — task 2.4.
+ */
+export function SignupForm({
+  onSubmit = noopSubmit,
+}: {
+  onSubmit?: () => Promise<SubmitResult>;
+}) {
+  const { form, states, confirmation } = diary;
   const [pdnConsent, adsConsent] = form.consents;
 
   const [email, setEmail] = useState("");
@@ -28,10 +58,19 @@ export function SignupForm() {
   const [pdn, setPdn] = useState(false);
   const [ads, setAds] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  // "idle" — форма; "sent" — форма подменена confirmation-блоком
+  const [phase, setPhase] = useState<"idle" | "sent">("idle");
+  const [submitError, setSubmitError] = useState<SubmitErrorState | null>(null);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const pdnRef = useRef<HTMLInputElement>(null);
   const adsRef = useRef<HTMLInputElement>(null);
+  const confirmRef = useRef<HTMLDivElement>(null);
+
+  // подмена формы confirmation → переносим фокус на блок (a11y, как в прототипе)
+  useEffect(() => {
+    if (phase === "sent") confirmRef.current?.focus();
+  }, [phase]);
 
   function validateOnBlur() {
     if (email.trim() === "") {
@@ -56,7 +95,7 @@ export function SignupForm() {
     if (nextPdn && nextAds) setConsentError(false);
   }
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const okEmail = EMAIL_RE.test(email.trim());
     const okConsent = pdn && ads;
@@ -72,7 +111,41 @@ export function SignupForm() {
       firstError.focus();
       return;
     }
-    // всё валидно → отправка и confirmation — task 2.3
+
+    // всё валидно → отправка через интеграционную точку (task 3.2)
+    setSubmitError(null);
+    const result = await onSubmit();
+    if (result.ok) setPhase("sent");
+    else setSubmitError(result.state);
+  }
+
+  if (phase === "sent") {
+    return (
+      <div
+        id="signup"
+        ref={confirmRef}
+        role="status"
+        aria-live="polite"
+        tabIndex={-1}
+        className="border-charcoal/15 bg-bone mt-10 border p-6 outline-none lg:p-8"
+      >
+        <Fleuron className="text-xl" />
+        <h2 className="text-charcoal mt-2 font-serif text-2xl font-light">
+          {confirmation.title}
+        </h2>
+        {confirmation.body.map((line) => (
+          <p
+            key={line}
+            className="text-charcoal/70 leading-body mt-2 max-w-md text-base"
+          >
+            {line}
+          </p>
+        ))}
+        <p className="text-charcoal/50 mt-4 font-serif text-sm italic">
+          {confirmation.signature}
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -148,6 +221,12 @@ export function SignupForm() {
           </p>
         )}
       </div>
+
+      {submitError && (
+        <p role="alert" className="text-destructive text-sm">
+          {states[submitError]}
+        </p>
+      )}
 
       <Button type="submit" size="lg" className="w-full">
         {form.submit}

@@ -8,8 +8,8 @@ import { diary } from "@/content/diary";
 /*
  * Форма подписки /diary-signup (task 2.2): валидация email по формату, два
  * непредзаполненных согласия, submit собирает ошибки и уводит фокус на первую.
- * Happy-path (confirmation) и микрокопи ошибок отправки — task 2.3; встроенная
- * ссылка CB1 → /privacy и попап — task 2.4. Копи проверяем из diary.ts.
+ * Состояния отправки + confirmation — task 2.3 (ниже); встроенная ссылка CB1 →
+ * /privacy и попап — task 2.4. Копи проверяем из diary.ts.
  */
 describe("SignupForm — валидация и согласия (task 2.2)", () => {
   it("оба чекбокса согласия не предзаполнены", () => {
@@ -80,5 +80,51 @@ describe("SignupForm — валидация и согласия (task 2.2)", () 
     );
 
     expect(screen.getByLabelText(diary.form.label)).toHaveFocus();
+  });
+});
+
+/*
+ * Состояния отправки и confirmation (task 2.3). Успех подменяет форму
+ * confirmation-блоком (design Decision 4: сбор выключен → сразу confirmation);
+ * ошибка отправки показывает микрокопи из diary.states, форма остаётся.
+ * Реальную обёртку POST (флаг/null-эндпоинт, payload) подключит task 3.2.
+ */
+describe("SignupForm — состояния отправки и confirmation (task 2.3)", () => {
+  async function fillValid() {
+    await userEvent.type(
+      screen.getByLabelText(diary.form.label),
+      "me@example.com",
+    );
+    for (const box of screen.getAllByRole("checkbox"))
+      await userEvent.click(box);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+  }
+
+  it("валидный submit → форма скрыта, показан confirmation (role=status, копи из diary.ts)", async () => {
+    render(<SignupForm />);
+    await fillValid();
+
+    const status = await screen.findByRole("status");
+    expect(status).toHaveTextContent(diary.confirmation.title);
+    diary.confirmation.body.forEach((line) =>
+      expect(status).toHaveTextContent(line),
+    );
+    expect(status).toHaveTextContent(diary.confirmation.signature);
+    // форма подменена — поля email больше нет
+    expect(screen.queryByLabelText(diary.form.label)).not.toBeInTheDocument();
+  });
+
+  it("ошибка отправки → микрокопи из diary.states, форма остаётся для повтора", async () => {
+    render(
+      <SignupForm
+        onSubmit={async () => ({ ok: false, state: "network" }) as const}
+      />,
+    );
+    await fillValid();
+
+    expect(await screen.findByText(diary.states.network)).toBeInTheDocument();
+    expect(screen.getByLabelText(diary.form.label)).toBeInTheDocument();
   });
 });
