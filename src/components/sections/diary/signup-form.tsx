@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import { PolicyModal } from "@/components/sections/diary/policy-modal";
 import { Button } from "@/components/ui/button";
 import { Fleuron } from "@/components/ui/fleuron";
-import { diary } from "@/content/diary";
+import { diary, type DiaryConsent } from "@/content/diary";
 
 /* Формат email — тот же паттерн, что в прототипе diary-signup.html v3 */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,6 +32,41 @@ export type SubmitResult =
  */
 async function noopSubmit(): Promise<SubmitResult> {
   return { ok: true };
+}
+
+/*
+ * Текст согласия. У CB со ссылкой (link != null) встроенная ссылка на политику по
+ * подстроке link.label: href=/privacy (запасной вариант без JS), но клик открывает
+ * попап-резюме, не уводя со страницы. stopPropagation — чтобы клик по ссылке не
+ * всплыл к label и не отметил согласие (согласие — осознанное действие). (task 2.4)
+ */
+function ConsentText({
+  consent,
+  onPolicyClick,
+}: {
+  consent: DiaryConsent;
+  onPolicyClick: () => void;
+}) {
+  if (!consent.link) return <>{consent.text}</>;
+  const { label, href } = consent.link;
+  const [before, after] = consent.text.split(label);
+  return (
+    <>
+      {before}
+      <Link
+        href={href}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onPolicyClick();
+        }}
+        className="text-moss-ink underline underline-offset-2"
+      >
+        {label}
+      </Link>
+      {after}
+    </>
+  );
 }
 
 /*
@@ -61,6 +98,8 @@ export function SignupForm({
   // "idle" — форма; "sent" — форма подменена confirmation-блоком
   const [phase, setPhase] = useState<"idle" | "sent">("idle");
   const [submitError, setSubmitError] = useState<SubmitErrorState | null>(null);
+  // попап-резюме политики (открывается ссылкой в CB1) — task 2.4
+  const [policyOpen, setPolicyOpen] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const pdnRef = useRef<HTMLInputElement>(null);
@@ -202,7 +241,12 @@ export function SignupForm({
             onChange={(event) => toggleConsent("pdn", event.target.checked)}
             className="accent-moss mt-0.5 size-4 shrink-0"
           />
-          <span>{pdnConsent.text}</span>
+          <span>
+            <ConsentText
+              consent={pdnConsent}
+              onPolicyClick={() => setPolicyOpen(true)}
+            />
+          </span>
         </label>
         <label className="text-charcoal/80 leading-body flex gap-3 text-sm">
           <input
@@ -233,6 +277,8 @@ export function SignupForm({
       </Button>
       <p className="text-charcoal/60 text-xs">{form.trust}</p>
       <p className="text-charcoal/60 text-xs">{form.caveat}</p>
+
+      <PolicyModal open={policyOpen} onClose={() => setPolicyOpen(false)} />
     </form>
   );
 }

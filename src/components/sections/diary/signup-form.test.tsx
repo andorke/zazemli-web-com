@@ -128,3 +128,33 @@ describe("SignupForm — состояния отправки и confirmation (ta
     expect(screen.getByLabelText(diary.form.label)).toBeInTheDocument();
   });
 });
+
+/*
+ * Встроенная ссылка в CB1 и попап-резюме политики (task 2.4). Ссылка ведёт на
+ * /privacy (запасной вариант без JS), но клик открывает попап «Коротко о данных»,
+ * не уводя со страницы. Клик по ссылке не должен отмечать согласие.
+ */
+describe("SignupForm — ссылка CB1 → /privacy и попап политики (task 2.4)", () => {
+  const pdnLink = diary.form.consents[0].link;
+
+  it("ссылка в CB1 ведёт на /privacy", () => {
+    render(<SignupForm />);
+    const link = screen.getByRole("link", { name: pdnLink?.label });
+    expect(link).toHaveAttribute("href", pdnLink?.href);
+  });
+
+  it("клик по ссылке CB1 открывает попап-резюме политики", async () => {
+    render(<SignupForm />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("link", { name: pdnLink?.label }));
+    expect(
+      screen.getByRole("dialog", { name: diary.policyModal.title }),
+    ).toBeInTheDocument();
+  });
+
+  it("клик по ссылке CB1 не отмечает согласие", async () => {
+    render(<SignupForm />);
+    await userEvent.click(screen.getByRole("link", { name: pdnLink?.label }));
+    expect(screen.getAllByRole("checkbox")[0]).not.toBeChecked();
+  });
+});
