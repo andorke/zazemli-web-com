@@ -21,7 +21,11 @@ export function HowItWorks() {
       <div className="grid gap-10 sm:grid-cols-3 lg:gap-16">
         {howItWorks.steps.map((step) => (
           <div key={step.n} className="flex flex-col gap-2">
-            <span className="text-moss font-voice text-[1.6rem] leading-none tabular-nums">
+            <span
+              className={
+                "text-moss font-voice text-[1.6rem] leading-none tabular-nums" // ds-allow: moss-large — цифра шага ~26px (≥18pt), политика разрешает raw moss на крупном
+              }
+            >
               {step.n}
             </span>
             <h3 className="font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] leading-tight">
