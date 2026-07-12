@@ -1,0 +1,208 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { SignupForm } from "@/components/sections/diary/signup-form";
+import { diary } from "@/content/diary";
+import { reachGoal } from "@/lib/metrika";
+
+vi.mock("@/lib/metrika", () => ({ reachGoal: vi.fn() }));
+
+/*
+ * Форма подписки /diary-signup (task 2.2): валидация email по формату, два
+ * непредзаполненных согласия, submit собирает ошибки и уводит фокус на первую.
+ * Состояния отправки + confirmation — task 2.3 (ниже); встроенная ссылка CB1 →
+ * /privacy и попап — task 2.4. Копи проверяем из diary.ts.
+ */
+describe("SignupForm — валидация и согласия (task 2.2)", () => {
+  it("оба чекбокса согласия не предзаполнены", () => {
+    render(<SignupForm />);
+    const boxes = screen.getAllByRole("checkbox");
+    expect(boxes).toHaveLength(2);
+    boxes.forEach((box) => expect(box).not.toBeChecked());
+  });
+
+  it("невалидный email при submit → aria-invalid, микрокопи и фокус на поле", async () => {
+    render(<SignupForm />);
+    const email = screen.getByLabelText(diary.form.label);
+    await userEvent.type(email, "не-почта");
+    // отмечаем оба согласия, чтобы первой ошибкой был именно email
+    for (const box of screen.getAllByRole("checkbox"))
+      await userEvent.click(box);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+
+    expect(email).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByText(diary.states.validation)).toBeInTheDocument();
+    expect(email).toHaveFocus();
+  });
+
+  it("валидный email на blur → ok-микрокопи и aria-invalid=false", async () => {
+    render(<SignupForm />);
+    const email = screen.getByLabelText(diary.form.label);
+    await userEvent.type(email, "me@example.com");
+    await userEvent.tab();
+
+    expect(screen.getByText(diary.form.emailOk)).toBeInTheDocument();
+    expect(email).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("submit с одним согласием (на обработку ПДн, без рекламного) → форма отправляется", async () => {
+    render(<SignupForm />);
+    await userEvent.type(
+      screen.getByLabelText(diary.form.label),
+      "me@example.com",
+    );
+    await userEvent.click(screen.getAllByRole("checkbox")[0]);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+
+    expect(await screen.findByRole("status")).toBeInTheDocument();
+  });
+});
+
+/*
+ * Блокировка кнопки (не только post-submit ошибка): согласие на обработку ПДн —
+ * обязательное условие сабмита, рекламное согласие — нет. Кнопка недоступна для
+ * клика/Enter, пока не отмечен именно первый чекбокс.
+ */
+describe("SignupForm — кнопка submit заблокирована до согласия на обработку ПДн", () => {
+  it("кнопка disabled, пока не отмечено ни одно согласие", () => {
+    render(<SignupForm />);
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeDisabled();
+  });
+
+  it("отметка только рекламного согласия (CB2) кнопку не разблокирует", async () => {
+    render(<SignupForm />);
+    await userEvent.click(screen.getAllByRole("checkbox")[1]);
+
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeDisabled();
+  });
+
+  it("отметка согласия на обработку ПДн (CB1) разблокирует кнопку", async () => {
+    render(<SignupForm />);
+    await userEvent.click(screen.getAllByRole("checkbox")[0]);
+
+    expect(screen.getByRole("button", { name: diary.form.submit })).toBeEnabled();
+  });
+});
+
+/*
+ * Состояния отправки и confirmation (task 2.3). Успех подменяет форму
+ * confirmation-блоком (design Decision 4: сбор выключен → сразу confirmation);
+ * ошибка отправки показывает микрокопи из diary.states, форма остаётся.
+ * Реальную обёртку POST (флаг/null-эндпоинт, payload) подключит task 3.2.
+ */
+describe("SignupForm — состояния отправки и confirmation (task 2.3)", () => {
+  async function fillValid() {
+    await userEvent.type(
+      screen.getByLabelText(diary.form.label),
+      "me@example.com",
+    );
+    for (const box of screen.getAllByRole("checkbox"))
+      await userEvent.click(box);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+  }
+
+  it("валидный submit → форма скрыта, показан confirmation (role=status, копи из diary.ts)", async () => {
+    render(<SignupForm />);
+    await fillValid();
+
+    const status = await screen.findByRole("status");
+    expect(status).toHaveTextContent(diary.confirmation.title);
+    diary.confirmation.body.forEach((line) =>
+      expect(status).toHaveTextContent(line),
+    );
+    expect(status).toHaveTextContent(diary.confirmation.signature);
+    // форма подменена — поля email больше нет
+    expect(screen.queryByLabelText(diary.form.label)).not.toBeInTheDocument();
+  });
+
+  it("ошибка отправки → микрокопи из diary.states, форма остаётся для повтора", async () => {
+    render(
+      <SignupForm
+        onSubmit={async () => ({ ok: false, state: "network" }) as const}
+      />,
+    );
+    await fillValid();
+
+    expect(await screen.findByText(diary.states.network)).toBeInTheDocument();
+    expect(screen.getByLabelText(diary.form.label)).toBeInTheDocument();
+  });
+});
+
+/*
+ * Встроенная ссылка в CB1 и попап-резюме политики (task 2.4). Ссылка ведёт на
+ * /privacy (запасной вариант без JS), но клик открывает попап «Коротко о данных»,
+ * не уводя со страницы. Клик по ссылке не должен отмечать согласие.
+ */
+describe("SignupForm — ссылка CB1 → /privacy и попап политики (task 2.4)", () => {
+  const pdnLink = diary.form.consents[0].link;
+
+  it("ссылка в CB1 ведёт на /privacy", () => {
+    render(<SignupForm />);
+    const link = screen.getByRole("link", { name: pdnLink?.label });
+    expect(link).toHaveAttribute("href", pdnLink?.href);
+  });
+
+  it("клик по ссылке CB1 открывает попап-резюме политики", async () => {
+    render(<SignupForm />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("link", { name: pdnLink?.label }));
+    expect(
+      screen.getByRole("dialog", { name: diary.policyModal.title }),
+    ).toBeInTheDocument();
+  });
+
+  it("клик по ссылке CB1 не отмечает согласие", async () => {
+    render(<SignupForm />);
+    await userEvent.click(screen.getByRole("link", { name: pdnLink?.label }));
+    expect(screen.getAllByRole("checkbox")[0]).not.toBeChecked();
+  });
+});
+
+/*
+ * Event аналитики (task 3.1). На успешный submit шлём цель diary_signup_submit
+ * через lib/metrika. Consent-gate — в самом reachGoal: window.ym определён
+ * только когда Метрика загружена, а она грузится лишь при granted-согласии
+ * (design Decision 6). При ошибке отправки событие не летит.
+ */
+describe("SignupForm — event diary_signup_submit (task 3.1)", () => {
+  beforeEach(() => vi.mocked(reachGoal).mockClear());
+
+  async function fillValid() {
+    await userEvent.type(
+      screen.getByLabelText(diary.form.label),
+      "me@example.com",
+    );
+    for (const box of screen.getAllByRole("checkbox"))
+      await userEvent.click(box);
+    await userEvent.click(
+      screen.getByRole("button", { name: diary.form.submit }),
+    );
+  }
+
+  it("успешный submit шлёт цель diary_signup_submit", async () => {
+    render(<SignupForm />);
+    await fillValid();
+    await screen.findByRole("status");
+
+    expect(reachGoal).toHaveBeenCalledWith("diary_signup_submit");
+  });
+
+  it("ошибка отправки не шлёт event", async () => {
+    render(
+      <SignupForm
+        onSubmit={async () => ({ ok: false, state: "network" }) as const}
+      />,
+    );
+    await fillValid();
+    await screen.findByText(diary.states.network);
+
+    expect(reachGoal).not.toHaveBeenCalled();
+  });
+});

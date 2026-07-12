@@ -8,7 +8,12 @@ const pages = [
   },
   { path: "/lab", h1: "Лаборатория", title: /Лаборатория грунта/ },
   { path: "/guide", h1: "Гайд", title: /Гайд по пересадке/ },
-  { path: "/diary-signup", h1: "Дневник растения", title: /Дневник растения/ },
+  {
+    path: "/diary-signup",
+    // h1 = diary.hero.title (заглушка стала формой в task 2.1)
+    h1: "Растение прижилось. Дальше — по дневнику, не наугад.",
+    title: /Дневник растения/,
+  },
 ];
 
 for (const p of pages) {
