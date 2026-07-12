@@ -18,7 +18,7 @@
 
 - [x] 3.1 e2e: открытие `/collectio` приводит на `/#collectio`; noindex + canonical на `/` — красный → заменить заглушку `/collectio` редирект-страницей — зелёный
 - [x] 3.2 Переключить карточки галереи главной с `#collectio` на `/collectio/[slug]` (перевернуть TODO-тест landing-redesign)
-- [ ] 3.3 Обновить sitemap: +7 страниц товара, без `/collectio` и `/diary-signup`
+- [x] 3.3 Обновить sitemap: +7 страниц товара, без `/collectio` и `/diary-signup`
 
 ## 4. Верификация
 
