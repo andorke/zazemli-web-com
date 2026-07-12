@@ -2,7 +2,7 @@
 
 ## 1. Контент
 
-- [ ] 1.1 `src/content/diary.ts`: типы + hero, gift, 3 выгоды, таймлайн 7 писем, эхо; тексты чекбоксов дословно из `diary-signup.md` v2.2; микрокопи состояний дословно из `error-message.md` v1.0.1 (валидация/network/5xx/maintenance/duplicate/confirmation); контент-тесты (7 писем, verbatim чекбоксов, микрокопи) — красные
+- [x] 1.1 `src/content/diary.ts`: типы + hero, gift, 3 выгоды, таймлайн 7 писем, эхо; тексты чекбоксов дословно из `diary-signup.md` v2.2; микрокопи состояний дословно из `error-message.md` v1.0.1 (валидация/network/5xx/maintenance/duplicate/confirmation); контент-тесты (7 писем, verbatim чекбоксов, микрокопи) — красные
 
 ## 2. Форма и страница
 
