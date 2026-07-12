@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { setConsent, useConsent, type Consent } from "@/lib/consent";
 
@@ -26,6 +28,14 @@ export function CookieBanner() {
         <p className="text-charcoal/70 leading-body max-w-2xl font-serif text-sm">
           Мы используем cookie для аналитики — чтобы понимать, как улучшить
           сайт. Необязательные cookie включаются только с твоего согласия.
+          Подробнее — в{" "}
+          <Link
+            href="/privacy"
+            className="text-moss-ink underline underline-offset-2"
+          >
+            Политике конфиденциальности
+          </Link>
+          .
         </p>
         <div className="flex shrink-0 items-center gap-3">
           <Button variant="ghost" onClick={() => decide("denied")}>
