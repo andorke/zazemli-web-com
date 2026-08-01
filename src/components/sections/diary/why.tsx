@@ -8,7 +8,7 @@ export function Why() {
   const { why } = diary;
   return (
     <section className="border-charcoal/15 mx-auto mt-16 max-w-2xl border-t pt-12">
-      <h2 className="leading-heading text-charcoal max-w-[24ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
+      <h2 className="tracking-h2 leading-heading text-charcoal max-w-[24ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
         {why.title}
       </h2>
       <div className="mt-8 grid gap-8 sm:grid-cols-3">

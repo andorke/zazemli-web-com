@@ -11,7 +11,7 @@ import { FooterDisclaimer } from "./footer-disclaimer";
  */
 export function SiteFooter() {
   const columnHeading =
-    "text-bone font-ui text-eyebrow mb-4 font-medium tracking-[0.14em] uppercase";
+    "text-bone font-ui text-eyebrow tracking-eyebrow mb-4 font-medium uppercase";
   const columnLink =
     "text-bone/70 hover:text-bone text-small block w-fit transition-colors";
 

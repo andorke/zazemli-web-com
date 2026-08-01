@@ -24,7 +24,7 @@ export function Buybar({ sku }: { sku: Sku }) {
       <KickerHeader className="text-bone/55">
         {productPage.buyEyebrow}
       </KickerHeader>
-      <h2 className="leading-heading max-w-[18ch] font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+      <h2 className="tracking-h2 leading-heading max-w-[18ch] font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
         {productPage.buyTitle}
       </h2>
 

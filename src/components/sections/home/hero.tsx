@@ -21,7 +21,7 @@ export function Hero() {
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-7">
         <KickerHeader className="text-bone/60">{hero.eyebrow}</KickerHeader>
-        <h1 className="leading-hero font-voice text-[clamp(2.9rem,6.5vw,5.5rem)] font-light tracking-[-0.025em]">
+        <h1 className="leading-hero tracking-display-hero font-voice text-[clamp(2.9rem,6.5vw,5.5rem)] font-light">
           {hero.title[0]}{" "}
           {/* block: вторая фраза всегда с новой строки, как в прототипе */}
           <em className="block italic">{hero.title[1]}</em>

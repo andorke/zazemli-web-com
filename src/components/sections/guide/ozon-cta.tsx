@@ -17,7 +17,7 @@ export function GuideOzonCta() {
     <section className="bg-charcoal text-bone py-[clamp(3.5rem,7vw,6rem)] text-center">
       <div className="mx-auto flex max-w-[1080px] flex-col items-center gap-7 px-6 sm:px-8 lg:px-16">
         <KickerHeader className="text-bone/55">{ozon.eyebrow}</KickerHeader>
-        <h2 className="max-w-[22ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light leading-tight">
+        <h2 className="tracking-h2 max-w-[22ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light leading-tight">
           {ozon.title}
         </h2>
         <div className="flex flex-wrap items-center justify-center gap-4">

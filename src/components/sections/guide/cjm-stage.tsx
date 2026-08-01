@@ -18,7 +18,7 @@ function ZLabel({ children, dark = false }: { children: string; dark?: boolean }
   return (
     <span
       className={cn(
-        "font-ui text-eyebrow tracking-kicker mb-2 block font-medium uppercase",
+        "font-ui text-eyebrow tracking-eyebrow mb-2 block font-medium uppercase",
         dark ? "text-charcoal" : "text-text-muted",
       )}
     >
@@ -61,7 +61,7 @@ export function CjmStage({
           >
             {stage.num}
           </span>
-          <h2 className="font-voice text-[clamp(1.5rem,1vw_+_1rem,1.7rem)] font-normal">
+          <h2 className="tracking-h2 font-voice text-[clamp(1.5rem,1vw_+_1rem,1.7rem)] font-normal">
             {stage.title}
           </h2>
         </div>

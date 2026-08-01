@@ -11,7 +11,7 @@ export function Inside() {
   const lastIndex = inside.letters.length - 1;
   return (
     <section className="border-charcoal/15 mx-auto mt-16 max-w-2xl border-t pt-12">
-      <h2 className="leading-heading text-charcoal max-w-[26ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
+      <h2 className="tracking-h2 leading-heading text-charcoal max-w-[26ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
         {inside.title}
       </h2>
       <p className="text-charcoal/60 mt-3 max-w-xl text-sm">{inside.lead}</p>
