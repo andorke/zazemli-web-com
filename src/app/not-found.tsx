@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { OzonButton } from "@/components/site/ozon-button";
 import { Button } from "@/components/ui/button";
 import { ozonStoreUrl } from "@/content/site";
+
+/* Без собственного title 404 наследовала дефолтный title главной из layout */
+export const metadata: Metadata = { title: "Страница не нашлась" };
 
 /* Копи 404 — утверждённая: Голос/ui-microcopy/error-message.md v1.0.1 §1 (вариант A) */
 export default function NotFound() {

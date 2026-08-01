@@ -41,10 +41,51 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
+/* «2 190 ₽» (с U+00A0) → 2190 для Offer.price */
+function priceNumber(price: string): number {
+  return Number(price.replace(/\D/g, ""));
+}
+
 export default async function ProductPage({ params }: Params) {
   const { slug } = await params;
   const sku = skus.find((s) => s.slug === slug);
   if (!sku) notFound();
+
+  /*
+   * Product + BreadcrumbList JSON-LD (seo-research.md: «товары и цены» — поддержанный
+   * Яндексом тип, Product-сниппет — Google; BreadcrumbList понимают оба).
+   * availability PreOrder, пока Ozon-ссылок нет (sizes[].ozonListingUrl === null);
+   * при появлении магазина сменить на InStock.
+   */
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${cap(sku.nameRu)} · бокс на одну пересадку`,
+    description: sku.heroSub,
+    image: `https://zazemli.com${sku.doodle}`,
+    brand: { "@type": "Brand", name: "ЗАЗЕМЛИ" },
+    offers: sku.sizes.map((size) => ({
+      "@type": "Offer",
+      price: priceNumber(size.price),
+      priceCurrency: "RUB",
+      availability: "https://schema.org/PreOrder",
+      url: `https://zazemli.com/collectio/${sku.slug}`,
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Главная",
+        item: "https://zazemli.com",
+      },
+      { "@type": "ListItem", position: 2, name: cap(sku.nameRu) },
+    ],
+  };
 
   /*
    * SKU-цвет — CSS-переменная на корне страницы (design-решение 6): декор секций
@@ -58,6 +99,19 @@ export default async function ProductPage({ params }: Params) {
   /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (
     <main className="flex flex-1 flex-col" style={skuStyle}>
+      {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <ProductHero sku={sku} />
       <WhySoil sku={sku} />
       <Composition sku={sku} />

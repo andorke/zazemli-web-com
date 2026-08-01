@@ -38,4 +38,18 @@ describe("sitemap.xml", () => {
   it("/privacy индексируема (robots-метаданные не noindex)", () => {
     expect(metadata.robots).toMatchObject({ index: true, follow: true });
   });
+
+  /* Честный lastmod из git-дат контента: Google верит lastmod, только если он
+     достоверен; new Date() на каждый билд — антипаттерн (seo-research.md ч.1 §2). */
+  it("каждый URL несёт lastModified — валидную дату не из будущего", () => {
+    for (const entry of sitemap()) {
+      expect(entry.lastModified, `${entry.url} без lastModified`).toBeInstanceOf(
+        Date,
+      );
+      const time = (entry.lastModified as Date).getTime();
+      expect(Number.isNaN(time)).toBe(false);
+      expect(time).toBeLessThanOrEqual(Date.now());
+      expect(time).toBeGreaterThan(new Date("2025-01-01").getTime());
+    }
+  });
 });

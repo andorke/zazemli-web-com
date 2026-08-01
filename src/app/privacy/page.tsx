@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   description:
     "Политика в отношении обработки персональных данных на сайте zazemli.com. Оператор — ИП Минетто А. А.",
   alternates: { canonical: "/privacy" },
-  robots: { index: true, follow: true },
+  /* max-image-preview дублируем: свой robots перекрывает layout-версию целиком (shallow merge) */
+  robots: { index: true, follow: true, "max-image-preview": "large" },
 };
 
 const documentStyle: CSSProperties = {
