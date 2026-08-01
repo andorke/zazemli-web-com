@@ -16,9 +16,9 @@
 
 - [x] 3.1 Прогнать поиск `literata|newsreader` (без регистра) по `src/` — 0 совпадений; обновить ds-lint-паттерн старых семейств (`unbounded|spectral|caveat|literata|newsreader`)
 - [x] 3.2 Обновить `globals-tokens.test.ts`: наличие переменных трекинга, запрет нулевого трекинга заголовков
-- [ ] 3.3 `npm run typecheck && npm run test && npm run build` — зелёные
+- [x] 3.3 `npm run typecheck && npm run test && npm run build` — зелёные
 
 ## 4. Приёмка и доки
 
 - [ ] 4.1 Приёмка по PATCH-1 §1: имя voice-файла в `/_next/media/` содержит `mulish`; Network пуст по `fonts.googleapis.com`; заголовки с отрицательным трекингом; стык h2 → body различим на глаз
-- [ ] 4.2 Обновить `DEVELOPMENT.md` (источник типографики: typography.md v3.0 + прототипы; веса по прототипу) и записать решение 30.07 в `CONTEXT.md` (включая отставание tokens.json v1.1.0 — флаг Насте)
+- [x] 4.2 Обновить `DEVELOPMENT.md` (источник типографики: typography.md v3.0 + прототипы; веса по прототипу) и записать решение 30.07 в `CONTEXT.md` (включая отставание tokens.json v1.1.0 — флаг Насте)
