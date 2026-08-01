@@ -4,7 +4,7 @@
 
 - [x] 1.1 Получить Mulish variable (roman + italic, OFL) и субсетнуть cyrillic+latin+пунктуация с сохранением оси wght: `src/fonts/mulish-var.woff2` (300–600), `src/fonts/mulish-var-italic.woff2` (300–400)
 - [x] 1.2 Обновить `src/app/fonts.ts`: пути, weight-диапазоны, `fallback: ['Helvetica Neue','Arial','sans-serif']`, комментарий DS-контракта (убрать «временный дублёр», убрать opsz); preload оставить
-- [ ] 1.3 Удалить `src/fonts/literata-var*.woff2`
+- [x] 1.3 Удалить `src/fonts/literata-var*.woff2`
 
 ## 2. Трекинг и веса
 
