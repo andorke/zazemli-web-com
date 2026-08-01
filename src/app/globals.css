@@ -181,11 +181,22 @@
 
   /* Letter-spacing (tokens.typography.letterSpacing + прототипы) */
   --tracking-kicker: 0.18em;
-  --tracking-caption: 0.25em;
-  --tracking-eyebrow: 0.22em; /* prototypes/landing.html .eyebrow */
   --tracking-heading-tight: -0.025em;
   --tracking-display-tight: -0.05em;
   --tracking-display-xtight: -0.075em;
+
+  /* Трекинг ролей voice (PATCH-1 §1 + прототипы): заголовки набираются
+     с отрицательным трекингом, нулевой на display/h1/h2 недопустим */
+  --tracking-display-hero: -0.035em;
+  --tracking-display-product: -0.032em;
+  --tracking-display-page: -0.03em;
+  --tracking-h1: -0.028em;
+  --tracking-h2: -0.024em;
+  --tracking-take: -0.02em; /* take/lead */
+  --tracking-eyebrow: 0.2em; /* капс-кикер */
+  --tracking-body: 0em;
+  --tracking-small: 0em;
+  --tracking-caption: 0em;
 
   /* Spacing: база 4px = дефолтная шкала Tailwind (tokens.space);
      семантика секций (tokens.space.semantic) */
