@@ -32,7 +32,7 @@ describe("checkDsViolations", () => {
     ).toHaveLength(0);
   });
 
-  it("находит выведенные семейства (unbounded|spectral|caveat)", () => {
+  it("находит выведенные семейства (unbounded|spectral|caveat|literata|newsreader)", () => {
     expect(checkDsViolations('variable: "--font-unbounded"')).not.toHaveLength(
       0,
     );
@@ -40,6 +40,10 @@ describe("checkDsViolations", () => {
     expect(
       checkDsViolations('className="font-hand" /* Caveat */'),
     ).not.toHaveLength(0);
+    expect(
+      checkDsViolations('src: url("../fonts/literata-var.woff2")'),
+    ).not.toHaveLength(0);
+    expect(checkDsViolations("/* Newsreader italic */")).not.toHaveLength(0);
   });
 
   it("находит text-moss без метки ds-allow: moss-large", () => {

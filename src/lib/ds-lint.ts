@@ -13,8 +13,8 @@ const RULES: Array<{ name: string; pattern: RegExp; allowMark?: string }> = [
     pattern: /rounded-(?:2xl|3xl|4xl|\[\d)/,
   },
   {
-    name: "выведенное семейство (unbounded|spectral|caveat)",
-    pattern: /unbounded|spectral|caveat/i,
+    name: "выведенное семейство (unbounded|spectral|caveat|literata|newsreader)",
+    pattern: /unbounded|spectral|caveat|literata|newsreader/i,
   },
   {
     name: "raw moss на тексте (мелкий текст — text-moss-ink/charcoal)",

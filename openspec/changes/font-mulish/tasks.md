@@ -14,7 +14,7 @@
 
 ## 3. Чистка и тесты
 
-- [ ] 3.1 Прогнать поиск `literata|newsreader` (без регистра) по `src/` — 0 совпадений; обновить ds-lint-паттерн старых семейств (`unbounded|spectral|caveat|literata|newsreader`)
+- [x] 3.1 Прогнать поиск `literata|newsreader` (без регистра) по `src/` — 0 совпадений; обновить ds-lint-паттерн старых семейств (`unbounded|spectral|caveat|literata|newsreader`)
 - [ ] 3.2 Обновить `globals-tokens.test.ts`: наличие переменных трекинга, запрет нулевого трекинга заголовков
 - [ ] 3.3 `npm run typecheck && npm run test && npm run build` — зелёные
 
