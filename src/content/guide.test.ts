@@ -4,10 +4,13 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  diaryStage,
+  drainageStage,
   guide,
   guideEntry,
   guidePerevalka,
   guidePolnayaZamena,
+  soilLeftoverTip,
 } from "@/content/guide";
 
 /*
@@ -224,13 +227,20 @@ describe("Контент гайда v4.0: вход и два маршрута", 
     expect(guidePolnayaZamena.otherRoute.href).toBe("/guide/perevalka");
   });
 
-  it("«Дренаж», «Дневник» и «Сохрани остаток грунта» совпадают на ветках", () => {
+  /*
+   * Сверка по ссылке (toBe), а не по значению: она падает не только когда тексты
+   * разошлись, но и когда общий кусок скопировали вторым объектом с тем же текстом.
+   */
+  it("«Дренаж», «Дневник» и «Сохрани остаток грунта» — один объект на обе ветки", () => {
     const [drenazhP, gruntP, dnevnikP] = guidePerevalka.stages;
     const [, drenazhZ, gruntZ, dnevnikZ] = guidePolnayaZamena.stages;
-    expect(drenazhZ).toEqual(drenazhP);
-    expect(dnevnikZ).toEqual(dnevnikP);
-    expect(gruntZ.tips).toEqual(gruntP.tips);
-    expect(gruntP.tips[0].summary).toBe("Сохрани остаток грунта");
+    expect(drenazhP).toBe(drainageStage);
+    expect(drenazhZ).toBe(drainageStage);
+    expect(dnevnikP).toBe(diaryStage);
+    expect(dnevnikZ).toBe(diaryStage);
+    expect(gruntP.tips[0]).toBe(soilLeftoverTip);
+    expect(gruntZ.tips[0]).toBe(soilLeftoverTip);
+    expect(soilLeftoverTip.summary).toBe("Сохрани остаток грунта");
   });
 
   it("ссылка про гниль корней — в «Продолжении», внешняя", () => {

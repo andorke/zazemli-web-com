@@ -252,8 +252,9 @@ export const guide: GuideContent = {
  * собираются из неё, снимает её задача 2.1 вместе с перестройкой роутов.
  *
  * Шаги «Дренаж» и «Дневник» и подсказка «Сохрани остаток грунта» посимвольно
- * совпадают на обоих маршрутах — определены здесь один раз и включаются в
- * ветки по ссылке (канон прямо предупреждает: иначе тексты разойдутся).
+ * совпадают на обоих маршрутах — определены здесь один раз, включаются в ветки
+ * по ссылке (канон прямо предупреждает: иначе тексты разойдутся) и экспортируются
+ * наружу, чтобы общие компоненты шагов брали их из того же единственного места.
  */
 
 /* Пункт списка-подсказки; жирный лид отделяется тире (Pre-publish «шёпот») */
@@ -316,7 +317,7 @@ export type GuideRouteContent = {
 };
 
 /* 02 · Дренаж — общий шаг обоих маршрутов */
-const drainageStage: GuideRouteStage = {
+export const drainageStage: GuideRouteStage = {
   id: "step-drenazh",
   num: "02",
   title: "Дренаж",
@@ -328,7 +329,7 @@ const drainageStage: GuideRouteStage = {
 };
 
 /* Подсказка «Сохрани остаток грунта» — общая для «Грунта и посадки» обоих маршрутов */
-const soilLeftoverTip: GuideStageTip = {
+export const soilLeftoverTip: GuideStageTip = {
   summary: "Сохрани остаток грунта",
   kind: "prose",
   body: [
@@ -337,7 +338,7 @@ const soilLeftoverTip: GuideStageTip = {
 };
 
 /* 04 · Дневник — общий шаг обоих маршрутов */
-const diaryStage: GuideRouteStage = {
+export const diaryStage: GuideRouteStage = {
   id: "step-zabota",
   num: "04",
   title: "Дневник",
