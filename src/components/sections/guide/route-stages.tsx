@@ -63,7 +63,7 @@ function RouteStage({
       >
         {stage.num}
       </span>
-      <h2 className="font-voice mt-2 max-w-[24ch] text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] leading-heading font-light">
+      <h2 className="font-voice tracking-h2 mt-2 max-w-[24ch] text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] leading-heading font-light">
         {stage.title}
       </h2>
 

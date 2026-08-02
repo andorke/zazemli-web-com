@@ -30,4 +30,30 @@ describe("reachGoal", () => {
 
     expect(ym).not.toHaveBeenCalled();
   });
+
+  /*
+   * Свойства цели нужны листу ожидания: waitlist_plant_input несёт plant —
+   * единственный источник данных о спросе для следующей партии (FIX-74).
+   */
+  it("передаёт свойства цели четвёртым аргументом ym", () => {
+    vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
+    const ym = vi.fn();
+    vi.stubGlobal("ym", ym);
+
+    reachGoal("waitlist_plant_input", { plant: "калатея" });
+
+    expect(ym).toHaveBeenCalledWith(12345, "reachGoal", "waitlist_plant_input", {
+      plant: "калатея",
+    });
+  });
+
+  it("без свойств — вызывает ym без четвёртого аргумента", () => {
+    vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
+    const ym = vi.fn();
+    vi.stubGlobal("ym", ym);
+
+    reachGoal("waitlist_form_open");
+
+    expect(ym).toHaveBeenCalledWith(12345, "reachGoal", "waitlist_form_open");
+  });
 });

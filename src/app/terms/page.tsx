@@ -100,11 +100,13 @@ export default function TermsPage() {
   return (
     <main className="flex-1">
       <article style={documentStyle}>
-        <h1 style={h1Style}>{terms.title}</h1>
+        <h1 className="tracking-h1" style={h1Style}>
+          {terms.title}
+        </h1>
         <p style={dateStyle}>Редакция от {terms.effectiveDate}</p>
         {terms.sections.map((section, i) => (
           <Fragment key={section.title}>
-            <h2 style={h2Style}>
+            <h2 className="tracking-h2" style={h2Style}>
               {i + 1}. {section.title}
             </h2>
             {section.body.map((block, j) => renderBlock(block, j))}

@@ -2,44 +2,46 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { GuideHero } from "@/components/sections/guide/hero";
-import { guide } from "@/content/guide";
 
 /*
- * Hero-каскад встречи /guide (change qr-welcome 3.1): kicker → h1 → sub → мета
- * идут прямыми детьми .welcome-cascade — лесенка задержек берётся по nth-child.
- * Строки h1 лежат в фиксированных обёртках, чтобы маска вылета работала по
- * строке контента, а не по автопереносу (D4).
+ * Hero /guide параметризован данными страницы (guide-v4: вход + две ветки).
+ * Контейнер несёт .welcome-cascade — entrance-лесенка задержек по nth-child
+ * (change qr-welcome 3.1); масочный вылет строк h1 снят при мерже с guide-v4.
  */
-describe("GuideHero: entrance-каскад первого экрана", () => {
-  it("h1 читается как цельная фраза канона", () => {
-    render(<GuideHero />);
+const hero = {
+  eyebrow: "Гайд",
+  title: "Пересадка за пять шагов",
+  sub: "Спокойный ритуал для любого растения.",
+  meta: "10 минут · 5 шагов",
+};
+
+describe("GuideHero", () => {
+  it("рендерит h1 с заголовком страницы", () => {
+    render(<GuideHero hero={hero} />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      guide.hero.title,
+      hero.title,
     );
   });
 
   it("прямые дети каскада: kicker → h1 → подзаголовок → мета", () => {
-    const { container } = render(<GuideHero />);
+    const { container } = render(<GuideHero hero={hero} />);
     const cascade = container.querySelector(".welcome-cascade");
     expect(cascade).not.toBeNull();
 
     const children = [...cascade!.children];
     expect(children).toHaveLength(4);
-    expect(children[0]).toHaveTextContent(guide.hero.eyebrow);
+    expect(children[0]).toHaveTextContent(hero.eyebrow);
     expect(children[1].tagName).toBe("H1");
-    expect(children[2]).toHaveTextContent(guide.hero.sub);
-    expect(children[3]).toHaveTextContent(guide.hero.meta);
+    expect(children[2]).toHaveTextContent(hero.sub);
+    expect(children[3]).toHaveTextContent(hero.meta);
   });
 
-  it("строки h1 — обёртки .welcome-line со строкой контента внутри", () => {
-    const { container } = render(<GuideHero />);
-    const lines = [
-      ...container.querySelectorAll("h1.welcome-lines > .welcome-line"),
-    ];
-
-    expect(lines).toHaveLength(guide.hero.titleLines.length);
-    lines.forEach((line, index) => {
-      expect(line).toHaveTextContent(guide.hero.titleLines[index]);
-    });
+  it("мета-строка не рендерится без hero.meta", () => {
+    const { container } = render(
+      <GuideHero hero={{ ...hero, meta: undefined }} />,
+    );
+    expect(container.querySelector(".welcome-cascade")!.children).toHaveLength(
+      3,
+    );
   });
 });

@@ -14,10 +14,20 @@ export type MetrikaGoal =
   | "lab-to-collectio"
   | "guide-to-collectio"
   | "sku-open"
-  | "diary_signup_submit";
+  | "diary_signup_submit"
+  /* лист ожидания N°08 — ровно четыре цели воронки (PATCH-1 §3.4, FIX-74) */
+  | "waitlist_plant_input"
+  | "waitlist_form_open"
+  | "waitlist_submit"
+  | "waitlist_error";
 
-export function reachGoal(goal: MetrikaGoal): void {
+/* params — свойства цели (waitlist_plant_input несёт plant: какие растения просят) */
+export function reachGoal(
+  goal: MetrikaGoal,
+  params?: Record<string, unknown>,
+): void {
   const id = process.env.NEXT_PUBLIC_METRIKA_ID;
   if (typeof window === "undefined" || !window.ym || !id) return;
-  window.ym(Number(id), "reachGoal", goal);
+  if (params) window.ym(Number(id), "reachGoal", goal, params);
+  else window.ym(Number(id), "reachGoal", goal);
 }
