@@ -11,23 +11,28 @@ import {
   guidePerevalka,
   guidePolnayaZamena,
   soilLeftoverTip,
+  type GuideRouteContent,
+  type GuideRouteStage,
+  type GuideStageTip,
 } from "@/content/guide";
 
 /*
- * Контент /guide. Канон Маркетинг/Каналы/Сайт/guide.md v3.0 = прототип guide.html
- * дословно (source_of_truth). Перенос сверяется diff-ом против эталона текстовых
- * узлов src/content/__fixtures__/guide.prototype.txt (задача 1.1). Эталон
- * дедуплицирован и склеивает inline-узлы — поэтому сверка идёт через вхождение
- * подстроки в любую строку эталона, а не построчным равенством.
+ * Эталоны текстовых узлов прототипов гайда v4.0 (вход + два маршрута) —
+ * src/content/__fixtures__/*.prototype.txt, генерирует
+ * scripts/extract-prototype-text.mjs. Эталон дедуплицирован и склеивает
+ * inline-узлы, поэтому сверка идёт через вхождение подстроки в любую строку
+ * эталона, а не построчным равенством.
  */
-const prototype = readFileSync(
-  resolve(process.cwd(), "src/content/__fixtures__", "guide.prototype.txt"),
-  "utf8",
-)
-  .split("\n")
-  .filter((line) => line.length > 0);
+const loadPrototype = (name: string) =>
+  readFileSync(
+    resolve(process.cwd(), "src/content/__fixtures__", `${name}.prototype.txt`),
+    "utf8",
+  )
+    .split("\n")
+    .filter((line) => line.length > 0);
 
-const inPrototype = (sub: string) => prototype.some((line) => line.includes(sub));
+const inNodes = (nodes: string[], sub: string) =>
+  nodes.some((line) => line.includes(sub));
 
 describe("Контент /guide (guide.md v3.0 = прототип guide.html)", () => {
   it("hero: eyebrow, H1, sub и мета-строка «5 шагов»", () => {
@@ -155,36 +160,83 @@ describe("Контент /guide (guide.md v3.0 = прототип guide.html)", 
   });
 });
 
-describe("Перенос /guide сверен дословно с эталоном прототипа", () => {
-  it("hero, стадии, инвентарь, шаги, подсказки, «готово» — всё есть в эталоне", () => {
-    expect(inPrototype(guide.hero.title)).toBe(true);
-    expect(inPrototype(guide.hero.sub)).toBe(true);
-    expect(inPrototype(guide.hero.meta)).toBe(true);
-    for (const s of guide.stages) {
-      expect(inPrototype(s.title)).toBe(true);
-      expect(inPrototype(s.done)).toBe(true);
-      for (const k of s.kit) expect(inPrototype(k.text)).toBe(true);
-      for (const step of s.steps) {
-        expect(inPrototype(step.text)).toBe(true);
-        for (const sub of step.subs ?? []) expect(inPrototype(sub)).toBe(true);
-      }
-      if (s.tip) {
-        expect(inPrototype(s.tip.summary)).toBe(true);
-        for (const b of s.tip.body) expect(inPrototype(b)).toBe(true);
-      }
-      if (s.note) {
-        expect(inPrototype(s.note.text)).toBe(true);
-        expect(inPrototype(s.note.link.label)).toBe(true);
-      }
-    }
-    expect(inPrototype(guide.ozon.title)).toBe(true);
+/*
+ * Drift-сверка переноса v4.0 против прототипов: каждая строка контента должна
+ * найтись в эталоне своей страницы. Проверка односторонняя — лишние узлы
+ * прототипа (шапка, футер, cookie-баннер, копипаст-артефакты вроде четвёртого
+ * микрошага «Оцени, нужно ли досыпать грунт» в «Продолжении») её не ломают,
+ * а вот отсебятина или потерянная при переносе правка прототипа — ломают.
+ */
+const tipTexts = (tip: GuideStageTip): string[] => [
+  tip.summary,
+  ...tip.body.map((b) => (typeof b === "string" ? b : b.text)),
+];
+
+const stageTexts = (stage: GuideRouteStage): string[] => [
+  stage.title,
+  ...stage.steps.flatMap((step) => [
+    step.text,
+    ...(step.subs ?? []),
+    ...(step.subLink ? [step.subLink.label] : []),
+    ...(step.subTip ? tipTexts(step.subTip) : []),
+  ]),
+  ...stage.tips.flatMap(tipTexts),
+  ...(stage.outro ? [stage.outro] : []),
+];
+
+describe("Перенос гайда v4.0 сверен дословно с эталонами прототипов", () => {
+  it("вход /guide: hero, флоу, инвентарь, стадии 00–01, развилка", () => {
+    const nodes = loadPrototype("guide");
+    const texts = [
+      guideEntry.hero.eyebrow,
+      guideEntry.hero.title,
+      guideEntry.hero.sub,
+      ...guideEntry.flow.map((f) => f.title),
+      guideEntry.kit.time,
+      ...guideEntry.kit.items.flatMap((k) => [k.text, ...(k.note ? [k.note] : [])]),
+      ...guideEntry.stages.flatMap(stageTexts),
+      guideEntry.fork.title,
+      guideEntry.fork.sub,
+      ...guideEntry.fork.paths.flatMap((p) => [
+        p.title,
+        p.lede,
+        p.whenLabel,
+        ...p.when,
+        p.button.label,
+        p.next,
+      ]),
+      ...tipTexts(guideEntry.fork.tip),
+    ];
+    expect(texts.filter((text) => !inNodes(nodes, text))).toEqual([]);
   });
+
+  const routes: [string, GuideRouteContent][] = [
+    ["guide-perevalka", guidePerevalka],
+    ["guide-polnaya-zamena", guidePolnayaZamena],
+  ];
+
+  it.each(routes)(
+    "маршрут %s: hero, ссылка на соседнюю ветку, флоу и стадии",
+    (name, route) => {
+      const nodes = loadPrototype(name);
+      const texts = [
+        route.hero.eyebrow,
+        route.hero.title,
+        route.hero.sub,
+        route.hero.meta,
+        route.otherRoute.label,
+        ...route.flow.map((f) => f.title),
+        ...route.stages.flatMap(stageTexts),
+      ];
+      expect(texts.filter((text) => !inNodes(nodes, text))).toEqual([]);
+    },
+  );
 });
 
 /*
  * Контент v4.0 — вход + два маршрута (канон guide.md v4.0 = прототипы
- * guide.html · guide-perevalka.html · guide-polnaya-zamena.html). Сверка с
- * эталоном прототипов — задача 1.4, здесь структура и переименования стадий.
+ * guide.html · guide-perevalka.html · guide-polnaya-zamena.html): структура,
+ * переименования стадий и снятые элементы. Дословность — в drift-блоке выше.
  */
 describe("Контент гайда v4.0: вход и два маршрута", () => {
   it("вход: hero, флоу 00–04 и стадии до развилки", () => {
