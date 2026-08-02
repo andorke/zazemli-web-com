@@ -12,8 +12,27 @@ import type { GuideRouteContent } from "@/content/guide";
  * «На главную». Обе ветки собираются одним рендером из своего контента.
  */
 export function GuideRoutePage({ route }: { route: GuideRouteContent }) {
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: route.hero.title,
+    description: route.hero.sub,
+    step: route.stages.map((stage) => ({
+      "@type": "HowToStep",
+      name: stage.title,
+      text: stage.steps.map((step) => step.text).join(" "),
+    })),
+  };
+
   return (
     <main className="flex-1">
+      {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <GuideHero hero={route.hero}>
         <Link
           href={route.otherRoute.href}

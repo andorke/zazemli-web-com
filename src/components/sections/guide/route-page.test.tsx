@@ -54,6 +54,27 @@ describe.each(routes)("%s: страница маршрута", (_url, Page, rout
       "/",
     );
   });
+
+  /* Линейность на ветке восстановлена — HowTo честный (design 3) */
+  it("один HowTo из данных ветки", () => {
+    const { container } = render(<Page />);
+    const scripts = container.querySelectorAll(
+      'script[type="application/ld+json"]',
+    );
+    expect(scripts).toHaveLength(1);
+
+    const jsonLd = JSON.parse(scripts[0].textContent!);
+    expect(jsonLd["@type"]).toBe("HowTo");
+    expect(jsonLd.name).toBe(route.hero.title);
+    expect(jsonLd.description).toBe(route.hero.sub);
+    expect(jsonLd.step).toEqual(
+      route.stages.map((stage) => ({
+        "@type": "HowToStep",
+        name: stage.title,
+        text: stage.steps.map((step) => step.text).join(" "),
+      })),
+    );
+  });
 });
 
 /*
