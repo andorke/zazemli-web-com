@@ -14,7 +14,7 @@ export function Care({ sku }: { sku: Sku }) {
     <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
       <div className="mb-10 flex max-w-[42ch] flex-col gap-4 lg:mb-12">
         <KickerHeader>{productPage.careEyebrow}</KickerHeader>
-        <h2 className="leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+        <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
           {productPage.careTitle}
         </h2>
         <p className="text-charcoal/85 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal">

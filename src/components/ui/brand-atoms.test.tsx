@@ -30,7 +30,7 @@ describe("MaterialDot", () => {
 });
 
 describe("KickerHeader", () => {
-  it("рендерит кикер ui-ролью по прототипу: КАПС, tracking 0.22em, eyebrow-размер", () => {
+  it("рендерит кикер ui-ролью по прототипу: КАПС, tracking 0.2em, eyebrow-размер", () => {
     render(<KickerHeader>II · Разным растениям</KickerHeader>);
     const el = screen.getByText("II · Разным растениям");
     expect(el).toHaveClass("uppercase");

@@ -9,7 +9,7 @@ export function LabSources() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-8 max-w-[54rem]">
           <KickerHeader>{sources.eyebrow}</KickerHeader>
-          <h2 className="leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
+          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
             {sources.title}
           </h2>
           <p className="text-charcoal/85 mt-4 max-w-[42rem] leading-normal">
@@ -53,7 +53,7 @@ export function LabSources() {
         <p className="text-ink-muted text-caption mt-8 max-w-[40rem] leading-normal">
           {sources.note}
         </p>
-        <p className="text-moss-ink mt-8 font-voice text-[clamp(1.6rem,3vw,2.2rem)] font-light tracking-[-0.02em]">
+        <p className="text-moss-ink tracking-take mt-8 font-voice text-[clamp(1.6rem,3vw,2.2rem)] font-light">
           {sources.slogan}
         </p>
       </div>

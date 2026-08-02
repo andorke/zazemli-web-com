@@ -13,7 +13,7 @@ export function LabProblem() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-10 max-w-[54rem]">
           <KickerHeader>{problem.eyebrow}</KickerHeader>
-          <h2 className="leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
+          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
             {problem.title}
           </h2>
           <p className="text-charcoal mt-5 max-w-[42rem] text-[1.05rem] leading-normal">

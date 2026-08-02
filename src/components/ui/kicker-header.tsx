@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/* Кикер (.eyebrow прототипов): ui-роль 500, eyebrow-размер, КАПС, tracking 0.22em, muted */
+/* Кикер (.eyebrow прототипов): ui-роль 500, eyebrow-размер, КАПС, tracking 0.2em, muted */
 export function KickerHeader({
   className,
   ...props

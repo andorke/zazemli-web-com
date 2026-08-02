@@ -26,7 +26,7 @@ export function ProductHero({ sku }: { sku: Sku }) {
             {landingNumber(sku.number)}
           </span>
         </KickerHeader>
-        <h1 className="leading-hero font-voice text-[clamp(2.6rem,5.5vw,4.4rem)] font-light tracking-[-0.02em]">
+        <h1 className="leading-hero tracking-display-product font-voice text-[clamp(2.6rem,5.5vw,4.4rem)] font-light">
           {heroTitle(sku)}
         </h1>
         <p className="text-moss-ink font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] italic">

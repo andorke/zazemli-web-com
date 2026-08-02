@@ -9,7 +9,7 @@ export function OzonCta() {
   return (
     <section className="bg-charcoal text-bone flex flex-col items-center gap-7 px-6 py-24 text-center lg:py-32">
       <KickerHeader className="text-bone/55">{ozonCta.eyebrow}</KickerHeader>
-      <h2 className="max-w-[18ch] font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light leading-tight">
+      <h2 className="tracking-h2 max-w-[18ch] font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light leading-tight">
         {ozonCta.title}
       </h2>
       <OzonButton

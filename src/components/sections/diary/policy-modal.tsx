@@ -61,7 +61,7 @@ export function PolicyModal({
         </button>
         <h2
           id="policyModalTitle"
-          className="text-charcoal pr-8 font-serif text-2xl font-light"
+          className="tracking-h2 text-charcoal pr-8 font-voice text-2xl font-light"
         >
           {policyModal.title}
         </h2>

@@ -21,7 +21,7 @@ export function LabComponentsGrid() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-8 max-w-[54rem]">
           <KickerHeader>{componentsSection.eyebrow}</KickerHeader>
-          <h2 className="leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
+          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
             {componentsSection.title}
           </h2>
           <p className="text-charcoal/85 mt-4 max-w-[42rem] leading-normal">

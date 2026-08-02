@@ -17,7 +17,7 @@ export function DifferentSoil() {
     <section className="bg-chalk text-charcoal flex flex-col px-6 py-20 lg:px-30 lg:py-28">
       <div className="mx-auto mb-14 flex max-w-[38ch] flex-col items-center gap-5 text-center">
         <KickerHeader>{differentSoil.eyebrow}</KickerHeader>
-        <h2 className="leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+        <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
           {differentSoil.title}
         </h2>
         <p className="text-charcoal/70 font-voice text-base leading-relaxed">

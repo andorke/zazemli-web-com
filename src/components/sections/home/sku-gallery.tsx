@@ -21,7 +21,7 @@ export function SkuGallery() {
         <div className="mb-12 grid items-end gap-5 lg:mb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
           <div className="flex flex-col gap-5">
             <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
-            <h2 className="leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
               {skuGallery.title}
             </h2>
           </div>

@@ -90,7 +90,7 @@ export function ComponentModal({
         >
           ×
         </button>
-        <span className="font-ui text-eyebrow tracking-kicker text-text-muted mb-2 block font-medium uppercase">
+        <span className="font-ui text-eyebrow tracking-eyebrow text-text-muted mb-2 block font-medium uppercase">
           {component.group}
         </span>
         <h3 id={TITLE_ID} className="pr-8 font-voice text-[1.5rem] font-normal">

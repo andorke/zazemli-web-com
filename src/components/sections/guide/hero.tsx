@@ -8,7 +8,7 @@ export function GuideHero() {
     <section className="bg-bone text-charcoal pt-24 pb-[clamp(3rem,6vw,5rem)] lg:pt-28">
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
-        <h1 className="mt-5 max-w-[18ch] font-voice text-[clamp(2.4rem,5vw,4rem)] leading-heading font-light tracking-[-0.02em]">
+        <h1 className="mt-5 max-w-[18ch] font-voice text-[clamp(2.4rem,5vw,4rem)] leading-heading tracking-display-page font-light">
           {hero.title}
         </h1>
         <p className="text-charcoal/90 mt-6 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw_+_0.85rem,1.45rem)] leading-normal font-light">

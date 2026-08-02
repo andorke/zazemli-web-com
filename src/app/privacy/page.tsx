@@ -32,6 +32,7 @@ const documentStyle: CSSProperties = {
 const h1Style: CSSProperties = {
   fontSize: "1.5rem",
   lineHeight: 1.25,
+  letterSpacing: "var(--tracking-h1)",
   margin: "0 0 0.25rem",
 };
 
@@ -41,7 +42,11 @@ const dateStyle: CSSProperties = {
   marginBottom: "1.5rem",
 };
 
-const h2Style: CSSProperties = { fontSize: "1.1rem", margin: "1.8rem 0 0.5rem" };
+const h2Style: CSSProperties = {
+  fontSize: "1.1rem",
+  letterSpacing: "var(--tracking-h2)",
+  margin: "1.8rem 0 0.5rem",
+};
 const pStyle: CSSProperties = { margin: "0 0 0.8rem" };
 const listStyle: CSSProperties = { margin: "0 0 0.8rem 1.25rem", padding: 0 };
 const liStyle: CSSProperties = { marginBottom: "0.35rem" };

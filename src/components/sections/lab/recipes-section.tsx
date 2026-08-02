@@ -42,7 +42,7 @@ export function LabRecipesSection() {
     <section id="recs" className="bg-chalk scroll-mt-6 py-[clamp(3.5rem,7vw,6rem)]">
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <KickerHeader>{recipesSection.eyebrow}</KickerHeader>
-        <h2 className="leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
+        <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3rem)] font-light">
           {recipesSection.title}
         </h2>
         <p className="text-charcoal/85 mt-4 max-w-[42rem] leading-normal">

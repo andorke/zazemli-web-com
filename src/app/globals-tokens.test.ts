@@ -75,6 +75,37 @@ describe("шкалы v1.1.0 в теме", () => {
     expect(has(css, "--spacing-tight-gap: 0.5rem")).toBe(true); // 8
   });
 
+  it("трекинг ролей voice (PATCH-1 §1 + прототипы)", () => {
+    expect(has(css, "--tracking-display-hero: -0.035em")).toBe(true);
+    expect(has(css, "--tracking-display-product: -0.032em")).toBe(true);
+    expect(has(css, "--tracking-display-page: -0.03em")).toBe(true);
+    expect(has(css, "--tracking-h1: -0.028em")).toBe(true);
+    expect(has(css, "--tracking-h2: -0.024em")).toBe(true);
+    expect(has(css, "--tracking-take: -0.02em")).toBe(true);
+    expect(has(css, "--tracking-eyebrow: 0.2em")).toBe(true);
+    expect(has(css, "--tracking-body: 0em")).toBe(true);
+    expect(has(css, "--tracking-small: 0em")).toBe(true);
+    expect(has(css, "--tracking-caption: 0em")).toBe(true);
+  });
+
+  it("заголовочные роли не с нулевым трекингом", () => {
+    const headingRoles = [
+      "display-hero",
+      "display-product",
+      "display-page",
+      "h1",
+      "h2",
+      "take",
+    ];
+    for (const role of headingRoles) {
+      const value = new RegExp(`--tracking-${role}:\\s*(-?[\\d.]+)em`).exec(
+        css,
+      )?.[1];
+      expect(value, `--tracking-${role} не объявлен`).toBeDefined();
+      expect(Number(value), `--tracking-${role} = ${value}em`).toBeLessThan(0);
+    }
+  });
+
   it("layout-брейкпоинт прототипов 860px", () => {
     expect(has(css, "--breakpoint-layout: 860px")).toBe(true);
   });
