@@ -273,6 +273,16 @@
   }
 }
 
+/* Прорисовка линии: ширина элемента статична, едет только transform (D5) */
+@keyframes welcome-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html.js-welcome .welcome-rise,
   html.js-welcome .welcome-cascade > * {
@@ -316,6 +326,40 @@
   html.js-welcome .welcome-reveal.in,
   html.js-welcome .welcome-reveal-cascade.in > * {
     animation-play-state: running;
+  }
+
+  /*
+   * Лента стадий 01–05 (D5): линии рисуются слева направо, когда hero-каскад
+   * отыграл. На время встречи границы ленты гасятся, а линии рисуют
+   * псевдоэлементы: scaleX композитится, анимация border/width — нет.
+   * Цвет берётся из currentColor ленты (charcoal), прозрачность — как у границ.
+   */
+  html.js-welcome .welcome-draw {
+    position: relative;
+    border-color: transparent;
+  }
+
+  html.js-welcome .welcome-draw::before,
+  html.js-welcome .welcome-draw::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.15;
+    transform-origin: left;
+    animation: welcome-draw-x var(--welcome-line-duration) var(--welcome-ease)
+      both;
+    animation-delay: calc(var(--welcome-duration) + var(--welcome-stagger) * 3);
+  }
+
+  /* Псевдоэлементы считаются от padding-box — сдвиг на границу ленты */
+  html.js-welcome .welcome-draw::before {
+    top: -1px;
+  }
+
+  html.js-welcome .welcome-draw::after {
+    bottom: -1px;
   }
 
   /*

@@ -139,6 +139,24 @@ describe("motion-токены (tokens.motion)", () => {
     }
   });
 
+  it("линия ленты стадий: scaleX from left после hero-каскада (D5)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(has(bare, "@keyframes welcome-draw-x")).toBe(true);
+    expect(has(bare, "transform: scaleX(0)")).toBe(true);
+
+    const draw = bare.slice(
+      bare.indexOf("html.js-welcome .welcome-draw::before"),
+    );
+    expect(has(draw, "transform-origin: left")).toBe(true);
+    // старт — после последнего элемента hero-каскада, не одновременно с ним
+    expect(
+      has(
+        draw,
+        "animation-delay: calc(var(--welcome-duration) + var(--welcome-stagger) * 3)",
+      ),
+    ).toBe(true);
+  });
+
   it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
     expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
     expect(has(root, "--welcome-stagger: 80ms")).toBe(true);
