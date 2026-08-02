@@ -2,11 +2,16 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { render, screen } from "@testing-library/react";
+import type { Metadata } from "next";
 import { describe, expect, it } from "vitest";
 
 import GuidePage, { metadata } from "@/app/guide/page";
-import GuidePerevalkaPage from "@/app/guide/perevalka/page";
-import GuidePolnayaZamenaPage from "@/app/guide/polnaya-zamena/page";
+import GuidePerevalkaPage, {
+  metadata as perevalkaMetadata,
+} from "@/app/guide/perevalka/page";
+import GuidePolnayaZamenaPage, {
+  metadata as polnayaZamenaMetadata,
+} from "@/app/guide/polnaya-zamena/page";
 import { guideEntry } from "@/content/guide";
 
 /* Вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка → Ozon */
@@ -165,6 +170,43 @@ describe("гайд: карта переходов", () => {
     for (const href of internal) {
       const page = resolve(process.cwd(), "src/app", href.slice(1), "page.tsx");
       expect(existsSync(page), `${url}: нет страницы для ${href}`).toBe(true);
+    }
+  });
+});
+
+/*
+ * Приёмка PATCH-1 §7.2: контракт canonical/noindex целиком, а не по странице.
+ * Смысл контракта — весь вес трёх страниц уходит на один URL /guide, ветки при
+ * этом вне индекса. Пер-страничные тесты держат метаданные каждой страницы,
+ * здесь — что вместе они складываются в это, и canonical резолвится в
+ * абсолютный вид (Next достраивает его metadataBase из layout.tsx).
+ */
+describe("гайд: canonical/noindex-контракт", () => {
+  const site = "https://zazemli.com";
+  const guideMeta: [string, Metadata][] = [
+    ["/guide", metadata],
+    ["/guide/perevalka", perevalkaMetadata],
+    ["/guide/polnaya-zamena", polnayaZamenaMetadata],
+  ];
+
+  it.each(guideMeta)("%s: canonical ведёт на вход гайда", (_url, meta) => {
+    const canonical = meta.alternates?.canonical;
+    expect(canonical).toBeTruthy();
+    expect(new URL(String(canonical), site).href).toBe(`${site}/guide`);
+  });
+
+  it("вне индекса ровно две ветки, вход индексируется", () => {
+    const noindex = guideMeta.filter(
+      ([, meta]) =>
+        typeof meta.robots === "object" && meta.robots?.index === false,
+    );
+    expect(noindex.map(([url]) => url)).toEqual([
+      "/guide/perevalka",
+      "/guide/polnaya-zamena",
+    ]);
+    /* follow — обязательная половина: ссылочный вес веток течёт на вход */
+    for (const [, meta] of noindex) {
+      expect(meta.robots).toMatchObject({ follow: true });
     }
   });
 });
