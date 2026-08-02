@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import GuidePage from "@/app/guide/page";
+import GuidePage, { metadata } from "@/app/guide/page";
 import { guideEntry } from "@/content/guide";
 
 /* Вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка → Ozon */
@@ -57,6 +57,12 @@ describe("/guide: вход", () => {
     expect(
       container.querySelector('script[type="application/ld+json"]'),
     ).not.toBeInTheDocument();
+  });
+
+  /* Вход собирает вес обеих веток: canonical на себя, noindex тут не ставим */
+  it("canonical на себя, без noindex", () => {
+    expect(metadata.alternates?.canonical).toBe("/guide");
+    expect(metadata.robots).toBeUndefined();
   });
 
   it("возврат на главную", () => {
