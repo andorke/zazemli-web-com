@@ -292,6 +292,21 @@
   html.js-welcome .welcome-cascade > *:nth-child(n + 8) {
     animation-delay: calc(var(--welcome-stagger) * 7);
   }
+
+  /*
+   * Секции ниже фолда: та же анимация, но на паузе (fill both держит стартовый
+   * кадр), пока Reveal не поставит класс `in` по IntersectionObserver.
+   * Лесенка задержек берётся из правил .welcome-cascade выше.
+   */
+  html.js-welcome .welcome-reveal,
+  html.js-welcome .welcome-reveal-cascade > * {
+    animation-play-state: paused;
+  }
+
+  html.js-welcome .welcome-reveal.in,
+  html.js-welcome .welcome-reveal-cascade.in > * {
+    animation-play-state: running;
+  }
 }
 
 /* prefers-reduced-motion: reduce — глобально отключает анимацию (бриф §4, обязательное требование) */

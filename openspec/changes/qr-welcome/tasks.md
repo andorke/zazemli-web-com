@@ -6,7 +6,7 @@
 
 ## 2. Reveal-примитив для секций ниже фолда
 
-- [ ] 2.1 Клиентский компонент/хук `Reveal` (IntersectionObserver, threshold ~0.1, `unobserve` после срабатывания, добавление класса `in`) + вариант с лесенкой для детей; unit-тест на добавление класса. Verify: `npm run test`
+- [x] 2.1 Клиентский компонент/хук `Reveal` (IntersectionObserver, threshold ~0.1, `unobserve` после срабатывания, добавление класса `in`) + вариант с лесенкой для детей; unit-тест на добавление класса. Verify: `npm run test`
 
 ## 3. /guide — флагман «Путь пяти шагов»
 
