@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -238,6 +238,19 @@ describe("Перенос гайда v4.0 сверен дословно с эта
  * guide.html · guide-perevalka.html · guide-polnaya-zamena.html): структура,
  * переименования стадий и снятые элементы. Дословность — в drift-блоке выше.
  */
+/* Все href контента, на любой глубине вложенности */
+const collectHrefs = (node: unknown, found: string[] = []): string[] => {
+  if (Array.isArray(node)) {
+    for (const item of node) collectHrefs(item, found);
+  } else if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "href" && typeof value === "string") found.push(value);
+      else collectHrefs(value, found);
+    }
+  }
+  return found;
+};
+
 describe("Контент гайда v4.0: вход и два маршрута", () => {
   it("вход: hero, флоу 00–04 и стадии до развилки", () => {
     expect(guideEntry.hero.title).toBe("Руки в землю — голова свободна");
@@ -293,6 +306,32 @@ describe("Контент гайда v4.0: вход и два маршрута", 
     expect(gruntP.tips[0]).toBe(soilLeftoverTip);
     expect(gruntZ.tips[0]).toBe(soilLeftoverTip);
     expect(soilLeftoverTip.summary).toBe("Сохрани остаток грунта");
+  });
+
+  /*
+   * В прототипах страницы связаны файлами (guide-perevalka.html) — на сайте
+   * такие ссылки ведут в никуда. Сверяем не только форму пути, но и то, что
+   * маршрут развилки и соседней ветки существует в src/app.
+   */
+  it("внутренние ссылки — реальные пути, относительных файлов прототипов нет", () => {
+    const hrefs = collectHrefs([guideEntry, guidePerevalka, guidePolnayaZamena]);
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) {
+      expect(href).toMatch(/^(https:\/\/|\/)/);
+      expect(href).not.toContain(".html");
+    }
+  });
+
+  it("маршруты развилки и соседней ветки существуют в src/app", () => {
+    const routes = [
+      ...guideEntry.fork.paths.map((p) => p.button.href),
+      guidePerevalka.otherRoute.href,
+      guidePolnayaZamena.otherRoute.href,
+    ];
+    for (const route of routes) {
+      const page = resolve(process.cwd(), "src/app", route.slice(1), "page.tsx");
+      expect(existsSync(page), `нет страницы для ${route}`).toBe(true);
+    }
   });
 
   it("ссылка про гниль корней — в «Продолжении», внешняя", () => {
