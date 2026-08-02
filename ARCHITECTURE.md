@@ -30,14 +30,18 @@ C4Context
 | `components/site/` | SiteHeader, SiteFooter, CookieBanner (consent-gate), Metrika |
 | `components/ui/` | shadcn-примитивы + бренд-атомы DS (Fleuron, RitualNote, MaterialDot, KickerHeader, DetailsAccordion, BrandButton…) |
 | `content/` | Контент TS-константами: SKU, тексты секций, навигация, футер-реквизиты |
-| `lib/` | `utm.ts` (Ozon-ссылки), `metrika.ts` (цели 7 точек), `ds-lint.ts` (DS-запреты + контраст-политика) |
+| `lib/` | `utm.ts` (исходящие ссылки бренда: Ozon + соцпрофили), `metadata.ts` (общий OG-блок страниц), `metrika.ts` (цели воронки), `ds-lint.ts` (DS-запреты + контраст-политика), `diary-submit.ts` и `waitlist-submit.ts` (интеграционные точки форм за фича-флагами) |
 | `styles/globals.css` | Дизайн-токены (CSS-переменные из `tokens.json` v1.1.0, vault `Айти/Сайт/`) + Tailwind-тема |
 
 ## 4. Ключевые интерфейсы
 - **UTM-контракт.** Исходящие на Ozon: `utm_source=site`, per-SKU `utm_content=sku00X`. Входящие с печати: `utm_source=qr&utm_medium=print&utm_campaign=partia-0` (зашито в QR, сайт ничего не делает — считает Метрика).
 - **Цели Метрики (7 точек):** QR-заходы на `/collectio`, `/guide`, `/lab` (по UTM); клики `/lab`→`/collectio` и `/guide`→`/collectio`; проваливание в карточку SKU (post-MVP); клик «Купить на Ozon».
 - **`ozonStoreUrl: string | null`** в `content/site.ts` — единственная точка подключения магазина; `null` → кнопки «Скоро на Ozon».
+- **`sizes[].ozonListingUrl`** в `content/sku.ts` — та же точка истины и для разметки: `Product.offers[].availability` выводится из неё (`null` → PreOrder, URL → InStock со ссылкой через `lib/utm.ts`). Открытие магазина не требует правок кода.
+- **Метаданные страницы:** `alternates.canonical` + `openGraph: openGraphFor(<тот же путь>)`. Вызывать `openGraphFor` обязательно: Next заменяет `openGraph` целиком, а не мержит по полям, поэтому страница со своим `og:url` иначе теряет type/locale/siteName и картинку из `opengraph-image.tsx`.
 - **Форма `/diary-signup`** (post-MVP, ждёт копи): клиентский POST во внешний email-сервис; чекбокс 152-ФЗ обязателен.
+- **Контракт листа ожидания N°08** (PATCH-1 §3.4): шаг 1 — `POST {api}/plant {plant, ts}` → `{requestId}`, растение пишется до почты, поэтому брошенный шаг 2 остаётся в счётчике спроса; шаг 2 — `POST {api}/email {requestId, email, consent_pdn, consent_ads, consent_version, ts}`, поле `ip` добавляет сервер. База `{api}` берётся из `NEXT_PUBLIC_WAITLIST_API` (по умолчанию пусто → форма не рендерится). Ответ шага 2 на UI не разбирается: состояния ошибок бэкенда проектируются вместе с ним в change `waitlist-api`.
+- **Цели листа ожидания (+4 к воронке):** `waitlist_plant_input` со свойством `plant` · `waitlist_form_open` · `waitlist_submit` · `waitlist_error`. `reachGoal(goal, params?)` передаёт свойства цели четвёртым аргументом `ym`.
 
 ## 5. Модель данных
 Контентные типы в `src/content/` (TS): `Sku` (номер N°001–007, имя, латынь, sku-цвет, объёмы, ozonUrl?), `NavItem`, `FooterInfo` (реквизиты ИП, дисклеймер, контакты, QR), `HomeContent` (тексты 9 секций). Связей и хранилища нет — плоские константы. При миграции на Sanity типы становятся контрактом схем.
@@ -49,8 +53,10 @@ C4Context
 | Контент | TS-константы в репо, без CMS | Контента мало, релиз важнее; типы готовят миграцию на Sanity; решение пользователя 2026-06-12 |
 | Структура компонентов | По роли (`ui`/`site`/`sections`), не atomic-папки | Меньше церемоний; маппинг на уровни БЗ — таблицей в DEVELOPMENT.md; решение пользователя 2026-06-12 |
 | Аналитика и согласие | Consent-gate: Метрика только после «Принять» в cookie-баннере | Бриф §8: по умолчанию необязательные cookie отклоняются (152-ФЗ) |
-| Изображения | `images.unoptimized` + контейнеры с фикс. пропорциями | Static export без оптимизатора; иллюстрации придут позже — без CLS |
+| Изображения | `next/image` + `images.unoptimized` + контейнеры с фикс. пропорциями | Static export без оптимизатора: srcset/webp не собираются, выгода — lazy, decoding и отсутствие CLS. `sizes` в вызовах лежит заранее и заработает сам, когда оптимизацию включит серверное окружение — без правки компонентов |
 | `/diary-signup` | Вне навигации, `noindex` | Вход только по QR из печатного дневника (бриф §2); индексация не нужна |
+| Форма N°08 «Лист ожидания» | Собрана целиком, но выключена флагом `NEXT_PUBLIC_WAITLIST_API`: без него плитка остаётся статичным приглашением | Static export не умеет POST — API живёт вне сайта (change `waitlist-api`). Сбор email без серверного лога согласий (хранение ≥ 3 лет) юридически незащищён, поэтому показывать форму-превью нельзя: человек оставил бы почту в никуда |
+| Шаг 2 листа ожидания | Нативный `<dialog>` + `showModal()`, не самодельный оверлей | PATCH-1 §3.1 прямо требует; фокус-ловушка и Esc достаются нативно — своего кода меньше, поведение ближе к платформенному |
 
 ## 7. Безопасность
 Сайт не собирает персональные данные (единственная будущая форма — email на `/diary-signup`: согласие 152-ФЗ + ссылка на политику, zod-валидация). Секретов нет: `NEXT_PUBLIC_METRIKA_ID` публичен по природе. Cookie — только после согласия. Атакуемая поверхность статического сайта минимальна.
