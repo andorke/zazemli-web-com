@@ -102,6 +102,28 @@ describe("motion-токены (tokens.motion)", () => {
     );
   });
 
+  it("entrance-утилиты живут только под гейтом и no-preference", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const guarded = bare.slice(
+      bare.indexOf("@media (prefers-reduced-motion: no-preference)"),
+    );
+    const selectors = [...bare.matchAll(/^[^\S\n]*([^@\s}][^{}]*)\{/gm)]
+      .map((m) => m[1].trim())
+      .filter((selector) => selector.includes(".welcome-"));
+
+    expect(selectors.length).toBeGreaterThan(0);
+    for (const selector of selectors) {
+      expect(selector).toContain("html.js-welcome");
+      expect(guarded).toContain(selector);
+    }
+  });
+
+  it("keyframes fade-rise: opacity от 0.1, translateY 10px (D4)", () => {
+    expect(has(css, "@keyframes welcome-fade-rise")).toBe(true);
+    expect(has(css, "opacity: 0.1")).toBe(true);
+    expect(has(css, "transform: translateY(10px)")).toBe(true);
+  });
+
   it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
     expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
     expect(has(root, "--welcome-stagger: 80ms")).toBe(true);

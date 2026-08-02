@@ -244,6 +244,56 @@
   }
 }
 
+/*
+ * Entrance-утилиты встречи QR-входов (change qr-welcome, D1–D3).
+ * Стартовые состояния существуют только под классом show-once гейта и только
+ * при no-preference: без JS и при reduce правила не применяются вовсе —
+ * контент виден сразу, стартовых opacity/transform не появляется.
+ * Начальная прозрачность 0.1, а не 0: элемент с opacity 0 выпадает из
+ * LCP-кандидатов Chrome (D4).
+ */
+@keyframes welcome-fade-rise {
+  from {
+    opacity: 0.1;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-welcome .welcome-rise,
+  html.js-welcome .welcome-cascade > * {
+    animation: welcome-fade-rise var(--welcome-duration) var(--welcome-ease)
+      both;
+  }
+
+  /* Лесенка каскада: шаг --welcome-stagger, порядок — по nth-child (D2) */
+  html.js-welcome .welcome-cascade > *:nth-child(2) {
+    animation-delay: calc(var(--welcome-stagger) * 1);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(3) {
+    animation-delay: calc(var(--welcome-stagger) * 2);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(4) {
+    animation-delay: calc(var(--welcome-stagger) * 3);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(5) {
+    animation-delay: calc(var(--welcome-stagger) * 4);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(6) {
+    animation-delay: calc(var(--welcome-stagger) * 5);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(7) {
+    animation-delay: calc(var(--welcome-stagger) * 6);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(n + 8) {
+    animation-delay: calc(var(--welcome-stagger) * 7);
+  }
+}
+
 /* prefers-reduced-motion: reduce — глобально отключает анимацию (бриф §4, обязательное требование) */
 @media (prefers-reduced-motion: reduce) {
   *,
