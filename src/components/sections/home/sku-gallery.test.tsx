@@ -41,8 +41,8 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
     render(<SkuGallery />);
     // по прототипу: 10 компонентов у монстеры, антуриума и аглаонемы
     expect(screen.getAllByText("10 компонентов")).toHaveLength(3);
-    // «2,2 / 3,5 л · от 2 190 ₽» — монстера и фикус
-    expect(screen.getAllByText("2,2 / 3,5 л · от 2 190 ₽")).toHaveLength(2);
+    // «2,2 / 3,5 л · от 2 290 ₽» — монстера и фикус
+    expect(screen.getAllByText("2,2 / 3,5 л · от 2 290 ₽")).toHaveLength(2);
   });
 
   it("восьмая карточка — приглашение «N° 08 — ?», не ссылка", () => {

@@ -6,7 +6,7 @@
  *
  * Мета карточек (components/volumes/priceFrom) и биотопы колб — из прототипа
  * ../zazemli-vault/Айти/Сайт/prototypes/landing.html (в каноне home.md их нет — вопрос Насте).
- * В ценах — неразрывный пробел (U+00A0), чтобы «1 890» не рвалось на переносе.
+ * В ценах — неразрывный пробел (U+00A0), чтобы «1 990» не рвалось на переносе.
  *
  * Данные страницы товара (vial, composition, care, ritualPhrase, sizes,
  * sourceNote) — из прототипов ../zazemli-vault/Айти/Сайт/prototypes/collectio-*.html
@@ -158,6 +158,20 @@ export function buyCtaLabel(size: Size): string {
 export const ritualLine = "Час с грунтом стоит дня в zoom.";
 
 /*
+ * Три объёма партии 0 и диаметр горшка под каждый — плитки блока «Купить»
+ * (прототип landing.html `.pots3`, решение Насты 30.07 / NEW-03). Живут в
+ * каталоге, а не в копи главной: когда Ozon откроется, плитка станет ссылкой
+ * на листинг объёма одной правкой.
+ */
+export type VolumeTier = { volume: string; pot: string };
+
+export const volumeTiers: VolumeTier[] = [
+  { volume: "1,2 л", pot: "12–13 см" },
+  { volume: "2,2 л", pot: "15–16 см" },
+  { volume: "3,5 л", pot: "18–20 см" },
+];
+
+/*
  * Опись бокса страницы товара — общий модуль @/content/box (тот же, что у главной).
  * Варьируется только позиция 01: растение, число компонентов и якорь рецептуры.
  */
@@ -181,7 +195,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "2,2 / 3,5 л",
-    priceFrom: "от 2 190 ₽",
+    priceFrom: "от 2 290 ₽",
     accusative: "монстеру",
     genitive: "монстеры",
     heroSub:
@@ -218,8 +232,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Она уже лезет из горшка.",
     sizes: [
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",
@@ -240,7 +254,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 9,
     volumes: "2,2 / 3,5 л",
-    priceFrom: "от 2 190 ₽",
+    priceFrom: "от 2 290 ₽",
     biotope: "тропики Юго-Восточной Азии",
     accusative: "фикус",
     genitive: "фикуса",
@@ -277,8 +291,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Он сбросит листья, не обижайся.",
     sizes: [
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему минералы держат структуру",
@@ -299,7 +313,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     biotope: "горные леса Анд",
     accusative: "антуриум",
     genitive: "антуриума",
@@ -337,8 +351,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Ему нужна земля, а не комплименты.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",
@@ -359,7 +373,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "аглаонему",
     genitive: "аглаонемы",
     heroSub:
@@ -396,8 +410,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Красивая и знает об этом.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему важен воздух без застоя",
@@ -418,7 +432,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 11,
     volumes: "1,2 / 2,2 / 3,5 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "спатифиллум",
     genitive: "спатифиллума",
     heroSub:
@@ -455,9 +469,9 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Цветёт, когда ты не смотришь.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему важен баланс влаги и воздуха",
@@ -478,7 +492,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 8,
     volumes: "1,2 / 2,2 / 3,5 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     biotope: "сухая Восточная Африка",
     accusative: "замиокулькас",
     genitive: "замиокулькаса",
@@ -514,9 +528,9 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Он дождётся тебя из отпуска.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему минералы держат структуру",
@@ -537,7 +551,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 9,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "эпипремнум",
     genitive: "эпипремнума",
     heroSub:
@@ -573,8 +587,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Одна лиана и дом — джунгли.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",
