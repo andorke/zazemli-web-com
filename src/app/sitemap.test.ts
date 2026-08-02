@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { metadata } from "@/app/privacy/page";
 import sitemap from "@/app/sitemap";
+import { guideEntry } from "@/content/guide";
 import { skus } from "@/content/sku";
 
 /* Индексируемые страницы: главная, lab, guide, privacy + 7 страниц товара.
@@ -29,6 +30,15 @@ describe("sitemap.xml", () => {
 
   it("не содержит редирект-страницу /collectio", () => {
     expect(urls).not.toContain("https://zazemli.com/collectio");
+  });
+
+  /* Ветки гайда — noindex + canonical на /guide: шаги «Дренаж» и «Дневник»
+     совпадают на них дословно, в выдаче они каннибализировали бы вход.
+     Цели берём из развилки, чтобы новая ветка не проскочила мимо теста. */
+  it("не содержит ветки гайда (noindex, canonical на /guide)", () => {
+    for (const path of guideEntry.fork.paths) {
+      expect(urls).not.toContain(`https://zazemli.com${path.button.href}`);
+    }
   });
 
   it("не содержит /diary-signup (вход только по QR)", () => {
