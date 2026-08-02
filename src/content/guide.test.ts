@@ -6,8 +6,8 @@ import { describe, expect, it } from "vitest";
 import {
   diaryStage,
   drainageStage,
-  guide,
   guideEntry,
+  guideOzon,
   guidePerevalka,
   guidePolnayaZamena,
   soilLeftoverTip,
@@ -34,121 +34,6 @@ const loadPrototype = (name: string) =>
 const inNodes = (nodes: string[], sub: string) =>
   nodes.some((line) => line.includes(sub));
 
-describe("Контент /guide (guide.md v3.0 = прототип guide.html)", () => {
-  it("hero: eyebrow, H1, sub и мета-строка «5 шагов»", () => {
-    expect(guide.hero.eyebrow).toBe("Гайд по пересадке");
-    expect(guide.hero.title).toBe("Руки в землю — голова свободна.");
-    expect(guide.hero.sub).toBe(
-      "Спокойный ритуал наедине с растением. Порядок один для любого: меняется только грунт под него.",
-    );
-    expect(guide.hero.meta).toBe("5 шагов · всё нужное в боксе");
-  });
-
-  it("ровно 5 стадий CJM 00–04 с якорями step-0…step-4 по порядку", () => {
-    expect(guide.stages).toHaveLength(5);
-    expect(guide.stages.map((s) => s.num)).toEqual([
-      "00",
-      "01",
-      "02",
-      "03",
-      "04",
-    ]);
-    expect(guide.stages.map((s) => s.id)).toEqual([
-      "step-0",
-      "step-1",
-      "step-2",
-      "step-3",
-      "step-4",
-    ]);
-    expect(guide.stages.map((s) => s.title)).toEqual([
-      "Подготовка",
-      "Конверт",
-      "Дренаж",
-      "Грунт",
-      "Забота",
-    ]);
-  });
-
-  it("маркировка ●/○: первая позиция «Подготовки» — из бокса, остальное своё", () => {
-    const prep = guide.stages[0];
-    expect(prep.kit[0]).toEqual({ text: "бокс ЗАЗЕМЛИ", source: "box" });
-    expect(prep.kit.slice(1).every((k) => k.source === "own")).toBe(true);
-    // «Конверт»: бокс кладёт конверт и угольную пудру, своё — растение и секатор
-    expect(guide.stages[1].kit.filter((k) => k.source === "box")).toHaveLength(2);
-  });
-
-  it("легенда «в боксе / своё» показывается только у первой стадии", () => {
-    expect(guide.stages.map((s) => s.showKitLegend)).toEqual([
-      true,
-      false,
-      false,
-      false,
-      false,
-    ]);
-  });
-
-  it("каждая стадия несёт непустой инвентарь и шаги", () => {
-    for (const s of guide.stages) {
-      expect(s.kit.length).toBeGreaterThan(0);
-      expect(s.steps.length).toBeGreaterThan(0);
-    }
-  });
-
-  it("под-пункты шагов сохранены (напр. развилка перевалка/замена в «Конверте»)", () => {
-    const decide = guide.stages[1].steps.find((s) =>
-      s.text.startsWith("Реши:"),
-    );
-    expect(decide?.subs).toHaveLength(3);
-    expect(decide?.subs?.[2]).toBe(
-      "первое заземление в нашу землю — обычно полная замена",
-    );
-  });
-
-  it("подсказки: список у «Подготовки», проза у «Конверта»/«Грунта», нет у дренажа и заботы", () => {
-    expect(guide.stages[0].tip).toMatchObject({
-      summary: "Как выбрать горшок",
-      kind: "list",
-    });
-    expect(guide.stages[0].tip?.body).toHaveLength(4);
-    expect(guide.stages[1].tip).toMatchObject({
-      summary: "Уголь и корневин — это одно и то же?",
-      kind: "prose",
-    });
-    expect(guide.stages[3].tip).toMatchObject({
-      summary: "Сохрани остаток грунта",
-      kind: "prose",
-    });
-    expect(guide.stages[2].tip).toBeNull();
-    expect(guide.stages[4].tip).toBeNull();
-  });
-
-  it("подпись про здоровый/гнилой корень — только у «Конверта», со ссылкой", () => {
-    expect(guide.stages.map((s) => Boolean(s.note))).toEqual([
-      false,
-      true,
-      false,
-      false,
-      false,
-    ]);
-    expect(guide.stages[1].note?.link.href).toBe(
-      "https://www.epicgardening.com/root-rot/",
-    );
-    expect(guide.stages[1].note?.link.label).toBe("как отличить ↗");
-  });
-
-  it("Ozon-финал: eyebrow, заголовок и обе CTA", () => {
-    expect(guide.ozon.eyebrow).toBe("Бокс");
-    expect(guide.ozon.title).toBe(
-      "Землю под своё растение и всё для ритуала собираешь одним боксом.",
-    );
-    expect(guide.ozon.ozonLabel).toBe("Выбрать на Ozon →");
-    expect(guide.ozon.collection).toEqual({
-      label: "Посмотреть коллекцию →",
-      href: "/#collectio",
-    });
-  });
-});
-
 /*
  * Drift-сверка переноса v4.0 против прототипов: каждая строка контента должна
  * найтись в эталоне своей страницы. Проверка односторонняя — лишние узлы
@@ -173,8 +58,16 @@ const stageTexts = (stage: GuideRouteStage): string[] => [
   ...(stage.outro ? [stage.outro] : []),
 ];
 
+/* Ozon-финал стоит на всех трёх страницах — сверяем его с каждым эталоном */
+const ozonTexts = [
+  guideOzon.eyebrow,
+  guideOzon.title,
+  guideOzon.ozonLabel,
+  guideOzon.collection.label,
+];
+
 describe("Перенос гайда v4.0 сверен дословно с эталонами прототипов", () => {
-  it("вход /guide: hero, флоу, инвентарь, стадии 00–01, развилка", () => {
+  it("вход /guide: hero, флоу, инвентарь, стадии 00–01, развилка, Ozon", () => {
     const nodes = loadPrototype("guide");
     const texts = [
       guideEntry.hero.eyebrow,
@@ -195,6 +88,7 @@ describe("Перенос гайда v4.0 сверен дословно с эта
         p.next,
       ]),
       ...tipTexts(guideEntry.fork.tip),
+      ...ozonTexts,
     ];
     expect(texts.filter((text) => !inNodes(nodes, text))).toEqual([]);
   });
@@ -205,7 +99,7 @@ describe("Перенос гайда v4.0 сверен дословно с эта
   ];
 
   it.each(routes)(
-    "маршрут %s: hero, ссылка на соседнюю ветку, флоу и стадии",
+    "маршрут %s: hero, ссылка на соседнюю ветку, флоу, стадии и Ozon",
     (name, route) => {
       const nodes = loadPrototype(name);
       const texts = [
@@ -216,6 +110,7 @@ describe("Перенос гайда v4.0 сверен дословно с эта
         route.otherRoute.label,
         ...route.flow.map((f) => f.title),
         ...route.stages.flatMap(stageTexts),
+        ...ozonTexts,
       ];
       expect(texts.filter((text) => !inNodes(nodes, text))).toEqual([]);
     },
@@ -342,7 +237,13 @@ describe("Контент гайда v4.0: вход и два маршрута", 
 
 /* Блэклист BUILD-SPEC + guide.md Pre-publish (NASA-миф про очистку воздуха) */
 describe("Блэклист /guide", () => {
-  const corpus = JSON.stringify(guide).toLowerCase();
+  /* Корпус — ровно то, что отгружается на три страницы */
+  const corpus = JSON.stringify([
+    guideEntry,
+    guidePerevalka,
+    guidePolnayaZamena,
+    guideOzon,
+  ]).toLowerCase();
   const blacklist = [
     "премиум",
     "осознанн",
