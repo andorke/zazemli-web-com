@@ -1,3 +1,5 @@
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { privacy, type PrivacySection } from "@/content/privacy";
@@ -56,5 +58,36 @@ describe("Политика конфиденциальности — операт
 
   it("дата вступления в силу — 13 июля 2026", () => {
     expect(privacy.effectiveDate).toContain("13 июля 2026");
+  });
+});
+
+/* Регресс FIX-01: почтовый адрес ИП не публикуется нигде на сайте. Адрес попал
+   в privacy.ts из устаревшего канона PDN-152FZ-SPEC §4a — скан исходников и
+   собранного out/ не даёт утечке вернуться при следующем переносе текстов.
+   Сам этот файл исключён из скана: маркеры лежат в нём литералами. */
+describe("Адрес ИП нигде не публикуется", () => {
+  const markers = /ковров|строителей/i;
+  const textFile = /\.(ts|tsx|css|svg|html|js|txt|xml|json)$/;
+
+  const collect = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) return collect(full);
+      if (!textFile.test(name)) return [];
+      if (full === join("src", "content", "privacy.test.ts")) return [];
+      return [full];
+    });
+
+  const offendersIn = (root: string): string[] =>
+    collect(root).filter((file) => markers.test(readFileSync(file, "utf8")));
+
+  it("маркеров адреса нет в src/", () => {
+    expect(offendersIn("src")).toEqual([]);
+  });
+
+  /* out/ появляется только после npm run build — без него проверка пропускается,
+     чтобы npm run test оставался зелёным на чистом дереве. */
+  it.skipIf(!existsSync("out"))("маркеров адреса нет в out/", () => {
+    expect(offendersIn("out")).toEqual([]);
   });
 });
