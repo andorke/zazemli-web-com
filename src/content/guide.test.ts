@@ -3,7 +3,12 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { guide } from "@/content/guide";
+import {
+  guide,
+  guideEntry,
+  guidePerevalka,
+  guidePolnayaZamena,
+} from "@/content/guide";
 
 /*
  * Контент /guide. Канон Маркетинг/Каналы/Сайт/guide.md v3.0 = прототип guide.html
@@ -170,6 +175,78 @@ describe("Перенос /guide сверен дословно с эталоно�
       }
     }
     expect(inPrototype(guide.ozon.title)).toBe(true);
+  });
+});
+
+/*
+ * Контент v4.0 — вход + два маршрута (канон guide.md v4.0 = прототипы
+ * guide.html · guide-perevalka.html · guide-polnaya-zamena.html). Сверка с
+ * эталоном прототипов — задача 1.4, здесь структура и переименования стадий.
+ */
+describe("Контент гайда v4.0: вход и два маршрута", () => {
+  it("вход: hero, флоу 00–04 и стадии до развилки", () => {
+    expect(guideEntry.hero.title).toBe("Руки в землю — голова свободна");
+    expect(guideEntry.flow.map((f) => f.title)).toEqual([
+      "Подготовка",
+      "Забота о руках и корнях",
+      "Дренаж",
+      "Грунт и посадка",
+      "Дневник",
+    ]);
+    expect(guideEntry.stages.map((s) => `${s.num} ${s.title}`)).toEqual([
+      "00 Подготовка",
+      "01 Забота о руках и корнях",
+    ]);
+    expect(guideEntry.kit.time).toBe("10–30 минут");
+  });
+
+  it("развилка: два маршрута кнопками на реальные пути", () => {
+    expect(guideEntry.fork.paths.map((p) => p.button.href)).toEqual([
+      "/guide/perevalka",
+      "/guide/polnaya-zamena",
+    ]);
+    expect(guideEntry.fork.paths.map((p) => p.when)).toHaveLength(2);
+  });
+
+  it("маршруты: свои стадии и ссылка на соседнюю ветку", () => {
+    expect(guidePerevalka.stages.map((s) => `${s.num} ${s.title}`)).toEqual([
+      "02 Дренаж",
+      "03 Грунт и посадка",
+      "04 Дневник",
+    ]);
+    expect(guidePolnayaZamena.stages.map((s) => `${s.num} ${s.title}`)).toEqual([
+      "01 Продолжение · забота о корнях",
+      "02 Дренаж",
+      "03 Грунт и посадка",
+      "04 Дневник",
+    ]);
+    expect(guidePerevalka.otherRoute.href).toBe("/guide/polnaya-zamena");
+    expect(guidePolnayaZamena.otherRoute.href).toBe("/guide/perevalka");
+  });
+
+  it("«Дренаж», «Дневник» и «Сохрани остаток грунта» совпадают на ветках", () => {
+    const [drenazhP, gruntP, dnevnikP] = guidePerevalka.stages;
+    const [, drenazhZ, gruntZ, dnevnikZ] = guidePolnayaZamena.stages;
+    expect(drenazhZ).toEqual(drenazhP);
+    expect(dnevnikZ).toEqual(dnevnikP);
+    expect(gruntZ.tips).toEqual(gruntP.tips);
+    expect(gruntP.tips[0].summary).toBe("Сохрани остаток грунта");
+  });
+
+  it("ссылка про гниль корней — в «Продолжении», внешняя", () => {
+    const roots = guidePolnayaZamena.stages[0].steps.find((s) => s.subLink);
+    expect(roots?.subLink?.href).toBe("https://www.epicgardening.com/root-rot/");
+  });
+
+  it("снятые элементы: «Готово, когда» и лид-строк шагов в контенте нет", () => {
+    const corpus = JSON.stringify([
+      guideEntry,
+      guidePerevalka,
+      guidePolnayaZamena,
+    ]);
+    expect(corpus).not.toContain("Готово, когда");
+    expect(corpus).not.toContain("doneLabel");
+    expect(corpus).not.toContain("illustration");
   });
 });
 
