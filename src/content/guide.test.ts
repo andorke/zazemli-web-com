@@ -87,11 +87,10 @@ describe("Контент /guide (guide.md v3.0 = прототип guide.html)", 
     ]);
   });
 
-  it("каждая стадия несёт непустой инвентарь, шаги и «готово, когда»", () => {
+  it("каждая стадия несёт непустой инвентарь и шаги", () => {
     for (const s of guide.stages) {
       expect(s.kit.length).toBeGreaterThan(0);
       expect(s.steps.length).toBeGreaterThan(0);
-      expect(s.done.length).toBeGreaterThan(0);
     }
   });
 
@@ -121,16 +120,6 @@ describe("Контент /guide (guide.md v3.0 = прототип guide.html)", 
     });
     expect(guide.stages[2].tip).toBeNull();
     expect(guide.stages[4].tip).toBeNull();
-  });
-
-  it("завершение: «Готово, когда» у 00–03, «Дальше» — у «Заботы»", () => {
-    expect(guide.stages.slice(0, 4).map((s) => s.doneLabel)).toEqual([
-      "Готово, когда",
-      "Готово, когда",
-      "Готово, когда",
-      "Готово, когда",
-    ]);
-    expect(guide.stages[4].doneLabel).toBe("Дальше");
   });
 
   it("подпись про здоровый/гнилой корень — только у «Конверта», со ссылкой", () => {

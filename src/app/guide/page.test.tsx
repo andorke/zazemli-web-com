@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import GuidePage, { metadata } from "@/app/guide/page";
+import GuidePerevalkaPage from "@/app/guide/perevalka/page";
+import GuidePolnayaZamenaPage from "@/app/guide/polnaya-zamena/page";
 import { guideEntry } from "@/content/guide";
 
 /* Вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка → Ozon */
@@ -71,5 +73,53 @@ describe("/guide: вход", () => {
       "href",
       "/",
     );
+  });
+});
+
+/*
+ * Снятое решениями 30.07 (FIX-62 · FIX-64): блоки «Готово, когда» и лид-строки
+ * под заголовками шагов сняты как описание перед инструкцией; анимации сверх
+ * существующего `.reveal` нет; раскрывашки — нативные, без JS. Держим сразу на
+ * трёх страницах: вернуть их проще всего в общий рендер стадий.
+ */
+const guidePages: [string, () => React.ReactElement][] = [
+  ["/guide", GuidePage],
+  ["/guide/perevalka", GuidePerevalkaPage],
+  ["/guide/polnaya-zamena", GuidePolnayaZamenaPage],
+];
+
+describe.each(guidePages)("%s: снятые элементы", (_url, Page) => {
+  it("блоков «Готово, когда» нет", () => {
+    const { container } = render(<Page />);
+    expect(container.textContent).not.toContain("Готово, когда");
+  });
+
+  it("между заголовком стадии и микрошагами нет лид-строки", () => {
+    const { container } = render(<Page />);
+    const stages = Array.from(container.querySelectorAll("li[id^='step-']"));
+    expect(stages.length).toBeGreaterThan(0);
+    for (const stage of stages) {
+      const heading = stage.querySelector("h2");
+      expect(heading?.nextElementSibling?.firstElementChild?.tagName).toBe("OL");
+    }
+  });
+
+  it("подсказки раскрываются без JS: закрытый details несёт тело в разметке", () => {
+    const { container } = render(<Page />);
+    const tips = Array.from(container.querySelectorAll("details"));
+    expect(tips.length).toBeGreaterThan(0);
+    for (const tip of tips) {
+      const summary = tip.querySelector("summary");
+      expect(summary).not.toBeNull();
+      expect(tip.open).toBe(false);
+      expect(tip.textContent!.length).toBeGreaterThan(
+        summary!.textContent!.length,
+      );
+    }
+  });
+
+  it("анимации сверх `.reveal` нет", () => {
+    const { container } = render(<Page />);
+    expect(container.querySelectorAll("[class*='animate-']")).toHaveLength(0);
   });
 });
