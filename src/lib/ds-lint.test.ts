@@ -2,7 +2,11 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { checkCssViolations, checkDsViolations } from "@/lib/ds-lint";
+import {
+  checkCssViolations,
+  checkDsViolations,
+  checkHeadingTracking,
+} from "@/lib/ds-lint";
 
 describe("checkDsViolations", () => {
   it("находит hex-литерал цвета", () => {
@@ -44,6 +48,21 @@ describe("checkDsViolations", () => {
       checkDsViolations('src: url("../fonts/literata-var.woff2")'),
     ).not.toHaveLength(0);
     expect(checkDsViolations("/* Newsreader italic */")).not.toHaveLength(0);
+  });
+
+  it("находит утилиты чужих семейств (font-serif / font-sans / font-mono)", () => {
+    expect(checkDsViolations('className="font-serif"')).not.toHaveLength(0);
+    expect(checkDsViolations('className="text-lg font-sans"')).not.toHaveLength(
+      0,
+    );
+    expect(checkDsViolations('className="font-mono"')).not.toHaveLength(0);
+  });
+
+  it("пропускает ролевые семейства (font-voice / font-ui)", () => {
+    expect(
+      checkDsViolations('className="font-voice italic"'),
+    ).toHaveLength(0);
+    expect(checkDsViolations('className="font-ui uppercase"')).toHaveLength(0);
   });
 
   it("находит text-moss без метки ds-allow: moss-large", () => {
@@ -94,6 +113,47 @@ describe("checkDsViolations", () => {
   });
 });
 
+describe("checkHeadingTracking", () => {
+  it("находит h1/h2 без применённого токена трекинга", () => {
+    expect(
+      checkHeadingTracking('<h1 className="font-voice text-4xl">Заголовок</h1>'),
+    ).not.toHaveLength(0);
+    expect(
+      checkHeadingTracking('<h2 className="tracking-normal">Заголовок</h2>'),
+    ).not.toHaveLength(0);
+  });
+
+  it("находит нулевой трекинг литералом", () => {
+    expect(
+      checkHeadingTracking('<h1 className="tracking-[0em] font-voice">Т</h1>'),
+    ).not.toHaveLength(0);
+  });
+
+  it("пропускает ролевые токены, в том числе на многострочном теге", () => {
+    expect(
+      checkHeadingTracking('<h2 className="tracking-h2 font-voice">Т</h2>'),
+    ).toHaveLength(0);
+    expect(
+      checkHeadingTracking(
+        '<h1\n  id="x"\n  className="tracking-display-hero font-light"\n>\n  Т\n</h1>',
+      ),
+    ).toHaveLength(0);
+  });
+
+  it("пропускает инлайн-стиль с var(--tracking-*)", () => {
+    expect(
+      checkHeadingTracking(
+        'const h1Style: CSSProperties = {\n  letterSpacing: "var(--tracking-h1)",\n};\n<h1 style={h1Style}>Т</h1>',
+      ),
+    ).toHaveLength(0);
+    expect(
+      checkHeadingTracking(
+        'const h1Style: CSSProperties = {\n  fontSize: "1.5rem",\n};\n<h1 style={h1Style}>Т</h1>',
+      ),
+    ).not.toHaveLength(0);
+  });
+});
+
 describe("checkCssViolations", () => {
   it("находит box-shadow в CSS", () => {
     expect(
@@ -127,6 +187,17 @@ describe("DS-инвариант по src/", () => {
     for (const root of roots) {
       for (const file of collect(root)) {
         const violations = checkDsViolations(readFileSync(file, "utf8"));
+        if (violations.length) offenders[file] = violations;
+      }
+    }
+    expect(offenders).toEqual({});
+  });
+
+  it("каждый h1/h2 набран с ролевым токеном трекинга", () => {
+    const offenders: Record<string, string[]> = {};
+    for (const root of roots) {
+      for (const file of collect(root)) {
+        const violations = checkHeadingTracking(readFileSync(file, "utf8"));
         if (violations.length) offenders[file] = violations;
       }
     }

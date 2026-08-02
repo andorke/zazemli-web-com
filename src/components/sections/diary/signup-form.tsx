@@ -167,7 +167,7 @@ export function SignupForm({
         className="border-charcoal/15 bg-bone mt-10 border p-6 outline-none lg:p-8"
       >
         <Fleuron className="text-xl" />
-        <h2 className="tracking-h2 text-charcoal mt-2 font-serif text-2xl font-light">
+        <h2 className="tracking-h2 text-charcoal mt-2 font-voice text-2xl font-light">
           {confirmation.title}
         </h2>
         {confirmation.body.map((line) => (
@@ -178,7 +178,7 @@ export function SignupForm({
             {line}
           </p>
         ))}
-        <p className="text-charcoal/50 mt-4 font-serif text-sm italic">
+        <p className="text-charcoal/50 mt-4 font-voice text-sm italic">
           {confirmation.signature}
         </p>
       </div>

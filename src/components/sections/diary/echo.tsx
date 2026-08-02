@@ -11,12 +11,12 @@ export function Echo() {
   const { echo } = diary;
   return (
     <section className="border-charcoal/15 mx-auto mt-16 max-w-2xl border-t pt-12 text-center">
-      <h2 className="tracking-h2 leading-heading text-charcoal mx-auto max-w-[20ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
+      <h2 className="tracking-h2 leading-heading text-charcoal mx-auto max-w-[20ch] font-voice text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
         {echo.title}
       </h2>
       <Link
         href={echo.cta.href}
-        className="border-moss-ink text-moss-ink mt-8 inline-flex items-center justify-center border px-8 py-3.5 font-sans text-base font-medium transition-opacity hover:opacity-70"
+        className="border-moss-ink text-moss-ink mt-8 inline-flex items-center justify-center border px-8 py-3.5 font-ui text-base font-medium transition-opacity hover:opacity-70"
       >
         {echo.cta.label}
       </Link>

@@ -33,10 +33,10 @@ export default function DiarySignupPage() {
       <section className="mx-auto flex max-w-2xl flex-col">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
         <p className="text-charcoal/60 mt-4 text-sm">{hero.ack}</p>
-        <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-serif text-[clamp(2.2rem,6vw,3.6rem)] font-light">
+        <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-voice text-[clamp(2.2rem,6vw,3.6rem)] font-light">
           {hero.title}
         </h1>
-        <p className="leading-narrative text-charcoal/90 mt-6 max-w-xl font-serif text-lg font-light">
+        <p className="leading-narrative text-charcoal/90 mt-6 max-w-xl font-voice text-lg font-light">
           {hero.sub}
         </p>
         <p className="border-moss leading-body text-charcoal/70 mt-6 max-w-xl border-l-2 pl-4 text-sm">

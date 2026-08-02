@@ -11,7 +11,7 @@ export function Inside() {
   const lastIndex = inside.letters.length - 1;
   return (
     <section className="border-charcoal/15 mx-auto mt-16 max-w-2xl border-t pt-12">
-      <h2 className="tracking-h2 leading-heading text-charcoal max-w-[26ch] font-serif text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
+      <h2 className="tracking-h2 leading-heading text-charcoal max-w-[26ch] font-voice text-[clamp(1.4rem,2.5vw,1.9rem)] font-light">
         {inside.title}
       </h2>
       <p className="text-charcoal/60 mt-3 max-w-xl text-sm">{inside.lead}</p>
@@ -27,14 +27,14 @@ export function Inside() {
                 className="bg-charcoal/15 absolute top-8 bottom-0 left-3 w-px"
               />
             )}
-            <span className="border-moss text-moss-ink bg-bone relative flex size-6 items-center justify-center rounded-full border font-serif text-sm tabular-nums">
+            <span className="border-moss text-moss-ink bg-bone relative flex size-6 items-center justify-center rounded-full border font-ui text-sm tabular-nums">
               {letter.n}
             </span>
             <div>
-              <span className="tracking-kicker text-charcoal/50 font-sans text-[10px] font-medium uppercase">
+              <span className="tracking-kicker text-charcoal/50 font-ui text-[10px] font-medium uppercase">
                 {letter.when}
               </span>
-              <h3 className="text-charcoal mt-1 font-serif text-base leading-tight">
+              <h3 className="text-charcoal mt-1 font-voice text-base leading-tight">
                 {letter.title}
               </h3>
               <p className="text-charcoal/70 leading-body mt-1 max-w-lg text-sm">
