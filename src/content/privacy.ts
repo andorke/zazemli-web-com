@@ -12,7 +12,6 @@ export type PrivacyOperator = {
   legalName: string;
   ogrnip: string;
   inn: string;
-  address: string;
   email: string;
 };
 
@@ -40,7 +39,6 @@ export const privacy: PrivacyContent = {
     legalName: "Индивидуальный предприниматель Минетто Анастасия Александровна",
     ogrnip: "326330000022761",
     inn: "330576842933",
-    address: "Владимирская обл., г. Ковров, ул. Строителей, д. 43, кв. 169",
     email: "team@zazemli.com",
   },
   sections: [

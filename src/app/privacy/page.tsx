@@ -61,8 +61,6 @@ function OperatorBlock() {
       <br />
       ИНН: {operator.inn}
       <br />
-      Адрес: {operator.address}
-      <br />
       Email для вопросов по обработке ПДн и направления обращений:{" "}
       <a href={`mailto:${operator.email}`} style={linkStyle}>
         {operator.email}

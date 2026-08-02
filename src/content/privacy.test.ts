@@ -40,12 +40,11 @@ describe("Политика конфиденциальности — раздел
 });
 
 describe("Политика конфиденциальности — оператор и дата", () => {
-  it("оператор — ИП Минетто с ОГРНИП, ИНН, адресом и email", () => {
+  it("оператор — ИП Минетто с ОГРНИП, ИНН и email, без адреса", () => {
     const op = privacy.operator;
     expect(op.legalName).toContain("Минетто");
     expect(op.ogrnip).toBe("326330000022761");
     expect(op.inn).toBe("330576842933");
-    expect(op.address).toContain("Ковров");
     expect(op.email).toBe("team@zazemli.com");
   });
 
