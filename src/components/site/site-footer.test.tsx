@@ -25,6 +25,26 @@ describe("SiteFooter (по прототипу)", () => {
     ).toBeInTheDocument();
   });
 
+  it("соцупоминания IG/TG — реальные профили, не ложные ссылки", () => {
+    render(<SiteFooter />);
+    expect(screen.getByRole("link", { name: /Instagram/ })).toHaveAttribute(
+      "href",
+      "https://instagram.com/zazemli_collectio",
+    );
+    expect(screen.getByRole("link", { name: /Telegram/ })).toHaveAttribute(
+      "href",
+      "https://t.me/zazemli_collectio",
+    );
+  });
+
+  it('пустых href и href="#" в футере нет', () => {
+    render(<SiteFooter />);
+    const hrefs = screen
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"));
+    expect(hrefs.filter((href) => !href || href === "#")).toEqual([]);
+  });
+
   it("разделы: три ссылки, Коллекция — на якорь главной", () => {
     render(<SiteFooter />);
     expect(screen.getByRole("link", { name: "Коллекция" })).toHaveAttribute(
