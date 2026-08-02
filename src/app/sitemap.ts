@@ -32,6 +32,7 @@ const pageSources: Record<string, string[]> = {
     "src/components/sections/guide",
   ],
   "/privacy": ["src/app/privacy/page.tsx", "src/content/privacy.ts"],
+  "/terms": ["src/app/terms/page.tsx", "src/content/terms.ts"],
 };
 
 /* Все 7 товарных страниц собираются из одного шаблона и sku.ts — lastmod у них общий. */
@@ -55,7 +56,7 @@ function gitLastModified(sources: string[]): Date | undefined {
   }
 }
 
-/* 11 индексируемых страниц: главная, lab, guide, privacy + 7 страниц товара.
+/* 12 индексируемых страниц: главная, lab, guide, privacy, terms + 7 страниц товара.
    /diary-signup (вход только по QR) и редирект-страница /collectio намеренно отсутствуют. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const productLastMod = gitLastModified(productSources);

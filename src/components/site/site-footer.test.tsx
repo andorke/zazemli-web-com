@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { SiteFooter } from "@/components/site/site-footer";
+import { privacy } from "@/content/privacy";
 
 describe("SiteFooter (по прототипу)", () => {
   it("колонка бренда: wordmark + тэглайн", () => {
@@ -24,6 +25,26 @@ describe("SiteFooter (по прототипу)", () => {
     ).toBeInTheDocument();
   });
 
+  it("соцупоминания IG/TG — реальные профили, не ложные ссылки", () => {
+    render(<SiteFooter />);
+    expect(screen.getByRole("link", { name: /Instagram/ })).toHaveAttribute(
+      "href",
+      "https://instagram.com/zazemli_collectio",
+    );
+    expect(screen.getByRole("link", { name: /Telegram/ })).toHaveAttribute(
+      "href",
+      "https://t.me/zazemli_collectio",
+    );
+  });
+
+  it('пустых href и href="#" в футере нет', () => {
+    render(<SiteFooter />);
+    const hrefs = screen
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"));
+    expect(hrefs.filter((href) => !href || href === "#")).toEqual([]);
+  });
+
   it("разделы: три ссылки, Коллекция — на якорь главной", () => {
     render(<SiteFooter />);
     expect(screen.getByRole("link", { name: "Коллекция" })).toHaveAttribute(
@@ -40,12 +61,21 @@ describe("SiteFooter (по прототипу)", () => {
     );
   });
 
-  it("legal-строка: ИП, УСН, копирайт, «не оферта»", () => {
+  it("legal-строка: реквизиты verbatim, копирайт, «не оферта»", () => {
     render(<SiteFooter />);
     const legal = screen.getByText(/ИП Минетто/);
-    expect(legal).toHaveTextContent("работаем по УСН");
+    expect(legal.textContent).toContain(
+      "ИП Минетто А. А. · ОГРНИП 326330000022761 · работаем по УСН",
+    );
     expect(legal).toHaveTextContent("© 2026 ЗАЗЕМЛИ");
     expect(legal).toHaveTextContent("не является публичной офертой");
+  });
+
+  /* Адрес в футере покрыт общим регресс-сканом src/ и out/ в privacy.test.ts */
+  it("ИНН в футере не публикуется", () => {
+    const { container } = render(<SiteFooter />);
+    expect(container.textContent).not.toContain("ИНН");
+    expect(container.textContent).not.toContain(privacy.operator.inn);
   });
 
   it("ссылка на политику конфиденциальности ведёт на /privacy", () => {
@@ -54,6 +84,14 @@ describe("SiteFooter (по прототипу)", () => {
       name: "Политика конфиденциальности",
     });
     expect(link).toHaveAttribute("href", "/privacy");
+  });
+
+  it("ссылка на условия использования ведёт на /terms", () => {
+    render(<SiteFooter />);
+    const link = screen.getByRole("link", {
+      name: "Условия использования сайта",
+    });
+    expect(link).toHaveAttribute("href", "/terms");
   });
 
   it("QR-кодов (и вообще img) в футере нет", () => {

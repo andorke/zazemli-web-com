@@ -168,7 +168,7 @@ describe("SignupForm — ссылка CB1 → /privacy и попап полит�
 /*
  * Event аналитики (task 3.1). На успешный submit шлём цель diary_signup_submit
  * через lib/metrika. Consent-gate — в самом reachGoal: window.ym определён
- * только когда Метрика загружена, а она грузится лишь при granted-согласии
+ * только когда Метрика загружена, а она грузится лишь при согласии «all»
  * (design Decision 6). При ошибке отправки событие не летит.
  */
 describe("SignupForm — event diary_signup_submit (task 3.1)", () => {

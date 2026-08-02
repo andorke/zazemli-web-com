@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import { Fragment, type CSSProperties } from "react";
 
-import { privacy, type PrivacyBlock } from "@/content/privacy";
+import { terms, type TermsBlock } from "@/content/terms";
 
 /*
- * /privacy — политика обработки ПДн. Индексируемая (в отличие от noindex /diary-signup):
- * канон PDN-152FZ-SPEC §4a требует реальную HTML-страницу. Оформление намеренно
- * typography-first ВНЕ DS (решение Насты 2026-07-06): системный шрифт, max-width ~720px,
- * простой сплошной текст — без брендовой типографики, медиа и SKU-цвета. Оформление —
- * inline-стили по прототипу privacy.html; цвета через токены globals.css (DS-инвариант
- * ds-lint: hex в src/ запрещён). Метаданные — из <head> прототипа.
+ * /terms — условия использования сайта. Индексируемая (PATCH-1 FIX-08: прототип готов,
+ * а роут отдавал 404). Оформление — как на /privacy: typography-first ВНЕ DS, системный
+ * шрифт, max-width ~720px, простой сплошной текст; inline-стили, цвета через токены
+ * globals.css (DS-инвариант ds-lint: hex в src/ запрещён). Метаданные — из <head>
+ * прототипа terms.html. Общий «юр-шаблон» компонентом намеренно не заводим (design.md §2):
+ * страниц две, это преждевременная абстракция.
  */
 export const metadata: Metadata = {
-  title: "Политика конфиденциальности",
+  title: "Условия использования сайта",
   description:
-    "Политика в отношении обработки персональных данных на сайте zazemli.com. Оператор — ИП Минетто А. А.",
-  alternates: { canonical: "/privacy" },
+    "Условия использования сайта zazemli.com: статус документа, интеллектуальная собственность, ограничения, ответственность. ИП Минетто А. А.",
+  alternates: { canonical: "/terms" },
   /* max-image-preview дублируем: свой robots перекрывает layout-версию целиком (shallow merge) */
   robots: { index: true, follow: true, "max-image-preview": "large" },
 };
@@ -46,22 +46,20 @@ const pStyle: CSSProperties = { margin: "0 0 0.8rem" };
 const listStyle: CSSProperties = { margin: "0 0 0.8rem 1.25rem", padding: 0 };
 const liStyle: CSSProperties = { marginBottom: "0.35rem" };
 const linkStyle: CSSProperties = { color: "var(--color-moss-ink)" };
-const operatorStyle: CSSProperties = { margin: "0.8rem 0" };
+const ownerStyle: CSSProperties = { margin: "0.8rem 0" };
 
-const { operator } = privacy;
+const { operator } = terms;
 
-function OperatorBlock() {
+function OwnerBlock() {
   return (
-    <p style={operatorStyle}>
-      <b>Оператор персональных данных:</b>
+    <p style={ownerStyle}>
+      <b>Владелец Сайта:</b>
       <br />
       {operator.legalName}
       <br />
-      ОГРНИП: {operator.ogrnip}
+      ОГРНИП {operator.ogrnip} · ИНН {operator.inn}
       <br />
-      ИНН: {operator.inn}
-      <br />
-      Email для вопросов по обработке ПДн и направления обращений:{" "}
+      Email для обращений:{" "}
       <a href={`mailto:${operator.email}`} style={linkStyle}>
         {operator.email}
       </a>
@@ -69,7 +67,7 @@ function OperatorBlock() {
   );
 }
 
-function renderBlock(block: PrivacyBlock, key: number) {
+function renderBlock(block: TermsBlock, key: number) {
   switch (block.kind) {
     case "paragraph":
       return (
@@ -94,20 +92,17 @@ function renderBlock(block: PrivacyBlock, key: number) {
       );
     }
     case "operator":
-      return <OperatorBlock key={key} />;
+      return <OwnerBlock key={key} />;
   }
 }
 
-export default function PrivacyPage() {
+export default function TermsPage() {
   return (
     <main className="flex-1">
       <article style={documentStyle}>
-        <h1 style={h1Style}>{privacy.title}</h1>
-        <p style={dateStyle}>
-          Дата вступления в силу: {privacy.effectiveDate} · Последнее обновление:{" "}
-          {privacy.lastUpdated}
-        </p>
-        {privacy.sections.map((section, i) => (
+        <h1 style={h1Style}>{terms.title}</h1>
+        <p style={dateStyle}>Редакция от {terms.effectiveDate}</p>
+        {terms.sections.map((section, i) => (
           <Fragment key={section.title}>
             <h2 style={h2Style}>
               {i + 1}. {section.title}

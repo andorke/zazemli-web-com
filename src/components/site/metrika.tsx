@@ -5,13 +5,13 @@ import Script from "next/script";
 import { useConsent } from "@/lib/consent";
 
 /*
- * Яндекс.Метрика грузится ТОЛЬКО при согласии (granted) И заданном счётчике.
+ * Яндекс.Метрика грузится ТОЛЬКО при согласии (all) И заданном счётчике.
  * Без ID (дев-режим) — не подключается. useConsent реагирует на согласие
- * сразу после «Принять» без перезагрузки.
+ * сразу после «Принять все» без перезагрузки.
  */
 export function Metrika() {
   const id = process.env.NEXT_PUBLIC_METRIKA_ID;
-  const granted = useConsent() === "granted";
+  const granted = useConsent() === "all";
 
   if (!id || !granted) return null;
 
