@@ -4,8 +4,11 @@ import { describe, expect, it } from "vitest";
 import GuidePerevalkaPage from "@/app/guide/perevalka/page";
 import GuidePolnayaZamenaPage from "@/app/guide/polnaya-zamena/page";
 import {
+  diaryStage,
+  drainageStage,
   guidePerevalka,
   guidePolnayaZamena,
+  soilLeftoverTip,
   type GuideRouteContent,
 } from "@/content/guide";
 
@@ -49,6 +52,48 @@ describe.each(routes)("%s: страница маршрута", (_url, Page, rout
     expect(screen.getByRole("link", { name: "← На главную" })).toHaveAttribute(
       "href",
       "/",
+    );
+  });
+});
+
+/*
+ * Сверка по ссылке в guide.test.ts держит единственность контента, эта — рендер:
+ * обе ветки собирают общие куски одними компонентами, а не своей разметкой.
+ * Фльерон-разделитель к стадии не относится (он есть только у не-первой) — снимаем.
+ */
+function stageMarkup(container: HTMLElement, id: string) {
+  const stage = container.querySelector(`li[id="${id}"]`);
+  expect(stage).not.toBeNull();
+  const clone = stage!.cloneNode(true) as HTMLElement;
+  for (const el of clone.querySelectorAll("[aria-hidden='true']")) {
+    if (el.textContent === "❦") el.remove();
+  }
+  return clone.innerHTML;
+}
+
+function tipMarkup(container: HTMLElement, summary: string) {
+  const tip = Array.from(container.querySelectorAll("details")).find((el) =>
+    el.querySelector("summary")?.textContent?.startsWith(summary),
+  );
+  expect(tip).toBeDefined();
+  return tip!.outerHTML;
+}
+
+describe("общие куски маршрутов", () => {
+  it.each([
+    [drainageStage.title, drainageStage.id],
+    [diaryStage.title, diaryStage.id],
+  ])("шаг «%s» рендерится на ветках посимвольно одинаково", (_title, id) => {
+    const perevalka = render(<GuidePerevalkaPage />).container;
+    const polnayaZamena = render(<GuidePolnayaZamenaPage />).container;
+    expect(stageMarkup(perevalka, id)).toBe(stageMarkup(polnayaZamena, id));
+  });
+
+  it(`подсказка «${soilLeftoverTip.summary}» рендерится на ветках посимвольно одинаково`, () => {
+    const perevalka = render(<GuidePerevalkaPage />).container;
+    const polnayaZamena = render(<GuidePolnayaZamenaPage />).container;
+    expect(tipMarkup(perevalka, soilLeftoverTip.summary)).toBe(
+      tipMarkup(polnayaZamena, soilLeftoverTip.summary),
     );
   });
 });
