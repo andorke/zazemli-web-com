@@ -3,7 +3,11 @@ import { KickerHeader } from "@/components/ui/kicker-header";
 import { NumberedList } from "@/components/ui/numbered-list";
 import { home } from "@/content/home";
 
-/* «Что в боксе» по прототипу: слева заголовок + опись канона (5 позиций), справа фото-слот 4/5 */
+/*
+ * «Что в боксе» по прототипу (`.boxsec`): слева заголовок и опись из общего
+ * модуля состава (5 позиций), справа фото-слот 4/5 — до съёмки заливка chalk
+ * без текстовой заглушки (FIX-03). Первый смысловой блок под hero (FIX-13).
+ */
 export function WhatsInBox() {
   const { whatsInBox } = home;
   return (
@@ -26,8 +30,7 @@ export function WhatsInBox() {
 
         <ImageSlot
           tone="light"
-          caption={whatsInBox.photoSlot}
-          className="aspect-[4/5] w-full max-lg:order-first"
+          className="bg-chalk aspect-[4/5] w-full max-lg:order-first"
         />
       </div>
     </section>

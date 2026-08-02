@@ -8,10 +8,10 @@ describe("Hero (прототип landing.html)", () => {
     render(<Hero />);
     expect(screen.getByText("Бокс для пересадки растения")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Заземли растение. Заземли себя.",
+      "Заземли растение. Заземли себя",
     );
     expect(
-      screen.getByText(/Субстрат, повторяющий природную почву/),
+      screen.getByText(/Грунт, собранный под то, как твоё растение живёт в природе/),
     ).toBeInTheDocument();
   });
 
@@ -24,14 +24,13 @@ describe("Hero (прототип landing.html)", () => {
   it("прайс-строка прототипа рядом с CTA", () => {
     render(<Hero />);
     expect(
-      screen.getByText("семь растений · три объёма · от 1 890 ₽"),
+      screen.getByText("семь растений · три объёма · от 1 990 ₽"),
     ).toBeInTheDocument();
   });
 
-  it("фото-фон-слот подписан (плейсхолдер без CLS)", () => {
-    render(<Hero />);
-    expect(
-      screen.getByText(/атмосферное фото · мох · камень · вода/),
-    ).toBeInTheDocument();
+  it("фото-фон — заливка без текстовой заглушки (FIX-03)", () => {
+    const { container } = render(<Hero />);
+    expect(container.textContent).not.toMatch(/\[\s*атмосферное/);
+    expect(container.textContent).not.toContain("мох · камень · вода");
   });
 });

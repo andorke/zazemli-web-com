@@ -1,9 +1,7 @@
 import { About } from "@/components/sections/home/about";
-import { DifferentSoil } from "@/components/sections/home/different-soil";
+import { Buy } from "@/components/sections/home/buy";
 import { Hero } from "@/components/sections/home/hero";
 import { HowItWorks } from "@/components/sections/home/how-it-works";
-import { Manifesto } from "@/components/sections/home/manifesto";
-import { OzonCta } from "@/components/sections/home/ozon-cta";
 import { PhotoBand } from "@/components/sections/home/photo-band";
 import { SkuGallery } from "@/components/sections/home/sku-gallery";
 import { Teasers } from "@/components/sections/home/teasers";
@@ -33,7 +31,12 @@ const webSiteJsonLd = {
   url: "https://zazemli.com",
 };
 
-/* Главная — одиннадцать блоков в порядке прототипа landing.html (spec landing-redesign) */
+/*
+ * Главная — девять блоков в порядке канона home.md v2.5 / прототипа landing.html
+ * (spec home-restructure). Порядок не переставлять: «Что в боксе» — первый
+ * смысловой блок под hero (FIX-13). Секции-манифеста и блока колб здесь нет:
+ * лид манифеста живёт в «Как это работает», трио колб — на входе /lab (FIX-78).
+ */
 export default function Home() {
   return (
     <main className="flex-1">
@@ -51,16 +54,14 @@ export default function Home() {
         }}
       />
       <Hero />
-      <Manifesto />
-      <HowItWorks />
-      <SkuGallery />
-      <DifferentSoil />
       <WhatsInBox />
+      <SkuGallery />
+      <HowItWorks />
       <PhotoBand />
       <WhatSoilGives />
       <About />
       <Teasers />
-      <OzonCta />
+      <Buy />
     </main>
   );
 }

@@ -9,6 +9,11 @@ import { landingNumber, skus } from "@/content/sku";
  * (gap-1px по подложке), 7 кликабельных карточек (фото-слот · N° 01 · имя · фраза · мета)
  * + карточка-приглашение N° 08 + CTA. Карточки ведут на страницы товара /collectio/[slug]
  * (change product-pages); SKU-цвета на главной запрещены (spec).
+ *
+ * NEW-01: карточные стили висят на самой карточке, а не на «всех ссылках секции».
+ * В прототипе широкий селектор `.coll a` протекал на служебные ссылки формы N°08
+ * (ссылка в чекбоксе получала flex и padding карточки) — селектор-потомок здесь
+ * не заводить: механику плитки N°08 достраивает change waitlist-form.
  */
 export function SkuGallery() {
   const { skuGallery } = home;
@@ -37,11 +42,8 @@ export function SkuGallery() {
                 href={`/collectio/${sku.slug}`}
                 className="bg-bone group flex flex-col no-underline"
               >
-                <span className="bg-chalk relative block aspect-[3/4]">
-                  <span className="text-charcoal/40 font-voice absolute top-1/2 left-1/2 -translate-1/2 text-sm italic">
-                    фото
-                  </span>
-                </span>
+                {/* слот фото карточки: до съёмки — заливка chalk без заглушки (FIX-03) */}
+                <span className="bg-chalk block aspect-[3/4]" />
                 <span className="flex flex-col gap-1.5 px-6 pt-5 pb-7">
                   <span className="tracking-kicker text-charcoal/50 font-ui text-[10px]">
                     {landingNumber(sku.number)}

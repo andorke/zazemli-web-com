@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 import { WhatsInBox } from "@/components/sections/home/whats-in-box";
 
 describe("WhatsInBox (опись канона, компоновка прототипа)", () => {
-  it("заголовок канона «Всё на одну пересадку.»", () => {
+  it("заголовок «Всё на одну пересадку» — без точки (FIX-26)", () => {
     render(<WhatsInBox />);
-    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Всё на одну пересадку.",
-    );
+    const h2 = screen.getByRole("heading", { level: 2 });
+    expect(h2).toHaveTextContent("Всё на одну пересадку");
+    expect(h2.textContent?.endsWith(".")).toBe(false);
   });
 
   it("опись — 5 позиций прототипа, у 03 четыре подпункта заботы", () => {
@@ -30,13 +30,11 @@ describe("WhatsInBox (опись канона, компоновка протот
     ).toHaveAttribute("href", "/lab");
   });
 
-  it("завершающая строка и фото-слот прототипа", () => {
-    render(<WhatsInBox />);
+  it("завершающая строка прототипа, фото-слот — заливка без текста (FIX-03)", () => {
+    const { container } = render(<WhatsInBox />);
     expect(
       screen.getByText("Ничего не докупать и не хранить потом в шкафу."),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/раскладка бокса · фото top-down/),
-    ).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/раскладка бокса|\[\s*фото/);
   });
 });

@@ -1,7 +1,11 @@
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
-/* «Как это работает» по прототипу: chead (eyebrow + H2 слева, лид справа) + 3 шага */
+/*
+ * «Как это работает» по прототипу: chead (eyebrow + лид-строка + H2 слева, лид
+ * справа) + 3 шага. Лид-строка `.lead-line` — перенесённая строка снятого
+ * манифеста (тейк Т6), набрана курсивом в moss-ink.
+ */
 export function HowItWorks() {
   const { howItWorks } = home;
   return (
@@ -10,6 +14,9 @@ export function HowItWorks() {
         <div className="grid items-end gap-5 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
           <div className="flex flex-col gap-5">
             <KickerHeader>{howItWorks.eyebrow}</KickerHeader>
+            <p className="text-moss-ink font-voice max-w-[26ch] text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-snug italic">
+              {howItWorks.leadLine}
+            </p>
             <h2 className="leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
               {howItWorks.title}
             </h2>
@@ -35,6 +42,12 @@ export function HowItWorks() {
               <p className="text-charcoal/70 font-voice text-base leading-relaxed">
                 {step.text}
               </p>
+              {/* тейк Т3 закрывает шаг 03: отделён линейкой, moss-ink (NEW-04) */}
+              {step.take ? (
+                <span className="border-charcoal/15 text-moss-ink font-voice mt-2 block border-t pt-2 text-[17px] leading-snug tracking-[-0.015em]">
+                  {step.take}
+                </span>
+              ) : null}
             </div>
           ))}
         </div>
