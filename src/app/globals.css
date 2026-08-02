@@ -397,6 +397,25 @@
   }
 }
 
+/*
+ * Полоски долей рецептуры /lab (D5): ширина сегмента статична (доля в %),
+ * едет только transform — scaleX композитится, анимация width запрещена.
+ * Прорисовка — постоянное поведение карточки, а не встреча, поэтому гейта
+ * js-welcome здесь нет; при reduce её гасит блок ниже.
+ * Полоска внутри карточки появляется вместе с раскрытием — рисуется на каждом
+ * open. Полоска в шапке видна всегда — её запускает Reveal классом `in`,
+ * когда карточка доехала до вьюпорта; без JS полоска просто видна целиком.
+ */
+.shares-bar > * {
+  transform-origin: left;
+}
+
+details[open] > .shares-bar > *,
+summary .shares-bar.in > * {
+  animation: welcome-draw-x var(--welcome-line-duration) var(--welcome-ease)
+    both;
+}
+
 /* prefers-reduced-motion: reduce — глобально отключает анимацию (бриф §4, обязательное требование) */
 @media (prefers-reduced-motion: reduce) {
   *,

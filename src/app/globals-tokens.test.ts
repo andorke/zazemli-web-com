@@ -157,6 +157,17 @@ describe("motion-токены (tokens.motion)", () => {
     ).toBe(true);
   });
 
+  it("полоски долей /lab: scaleX from left, раскрытие и первое появление (D5)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const bar = bare.slice(bare.indexOf(".shares-bar > *"));
+
+    expect(has(bar, "transform-origin: left")).toBe(true);
+    expect(has(bar, "animation: welcome-draw-x")).toBe(true);
+    // раскрытие карточки — постоянное поведение, гейта встречи здесь нет
+    expect(has(bar, "details[open] > .shares-bar > *")).toBe(true);
+    expect(has(bar, ".shares-bar.in > *")).toBe(true);
+  });
+
   it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
     expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
     expect(has(root, "--welcome-stagger: 80ms")).toBe(true);
