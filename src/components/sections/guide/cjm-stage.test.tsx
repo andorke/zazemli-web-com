@@ -106,4 +106,17 @@ describe("CjmStage: паттерн «Что понадобится → Шаги 
     );
     expect(screen.getByText(prep.illustration)).toBeInTheDocument();
   });
+
+  it("разметка готова к подсветке текущей стадии (qr-welcome 3.3)", () => {
+    const { container } = render(
+      <ul>
+        <CjmStage stage={prep} />
+      </ul>,
+    );
+    // Класс `is-current` наблюдатель ставит на <li>, линейка ловит его через group
+    expect(container.querySelector("li.group")).not.toBeNull();
+    expect(
+      screen.getByRole("heading", { level: 2, name: prep.title }).parentElement,
+    ).toHaveClass("group-[.is-current]:border-moss/40", "border-transparent");
+  });
 });

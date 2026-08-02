@@ -50,10 +50,12 @@ export function CjmStage({
   return (
     <li
       id={stage.id}
-      className="grid scroll-mt-8 items-start gap-8 lg:grid-cols-2 lg:gap-16"
+      className="group grid scroll-mt-8 items-start gap-8 lg:grid-cols-2 lg:gap-16"
     >
       <div className={cn(flip && "lg:order-2")}>
-        <div className="mb-5 flex items-baseline gap-4">
+        {/* Линейка под заголовком проявляется у текущей стадии (qr-welcome 3.3);
+            pb-2 + mb-3 = прежний mb-5 — макет не двигается */}
+        <div className="group-[.is-current]:border-moss/40 mb-3 flex items-baseline gap-4 border-b border-transparent pb-2 transition-colors">
           <span
             className={
               "text-moss font-voice text-[clamp(2rem,3vw,2.6rem)] leading-none tabular-nums" // ds-allow: moss-large — номер стадии 32–42px (≥18pt)
