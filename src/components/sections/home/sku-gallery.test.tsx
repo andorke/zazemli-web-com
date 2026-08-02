@@ -12,7 +12,9 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
 
   it("eyebrow партии и заголовок «семь рецептур земли» (FIX-27)", () => {
     render(<SkuGallery />);
-    expect(screen.getByText("Collectio Zazemli · Партия 0")).toBeInTheDocument();
+    expect(
+      screen.getByText("Collectio Zazemli · Партия 0"),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
       "Семь растений — семь рецептур земли",
     );
@@ -52,7 +54,9 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
     const invite = number.closest("div");
     expect(invite).not.toBeNull();
     expect(
-      within(invite as HTMLElement).getByText("Твоего растения нет в коллекции?"),
+      within(invite as HTMLElement).getByText(
+        "Твоего растения нет в коллекции?",
+      ),
     ).toBeInTheDocument();
     expect(number.closest("a")).toBeNull();
   });
@@ -66,7 +70,9 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
   it("фото-слоты карточек — заливка chalk без текстовой заглушки (FIX-03)", () => {
     const { container } = render(<SkuGallery />);
     expect(container.textContent).not.toContain("фото");
-    const slots = container.querySelectorAll("span.bg-chalk.aspect-\\[3\\/4\\]");
+    const slots = container.querySelectorAll(
+      "span.bg-chalk.aspect-\\[3\\/4\\]",
+    );
     expect(slots).toHaveLength(7);
   });
 

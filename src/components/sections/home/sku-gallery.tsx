@@ -20,10 +20,10 @@ export function SkuGallery() {
   return (
     <section
       id="collectio"
-      className="bg-bone text-charcoal flex flex-col px-6 py-20 lg:px-30 lg:py-28"
+      className="bg-bone text-charcoal flex flex-col py-20 lg:py-28"
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col">
-        <div className="mb-12 grid items-end gap-5 lg:mb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col px-[clamp(1.5rem,5vw,4rem)]">
+        <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
             <h2 className="leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">

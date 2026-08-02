@@ -40,7 +40,9 @@ describe("Buy (блок «Купить» — только размеры, NEW-03
 
   it("кнопка в состоянии «Скоро на Ozon» (ozonStoreUrl = null)", () => {
     render(<Buy />);
-    expect(screen.getByRole("button", { name: "Скоро на Ozon" })).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Скоро на Ozon" }),
+    ).toBeDisabled();
   });
 
   it("risk-reversal с mailto на team@zazemli.com (FIX-35)", () => {

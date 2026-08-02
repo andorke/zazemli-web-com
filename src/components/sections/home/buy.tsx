@@ -17,50 +17,52 @@ import { volumeTiers } from "@/content/sku";
 export function Buy() {
   const { buy } = home;
   return (
-    <section className="bg-charcoal text-bone flex flex-col items-center gap-7 px-6 py-24 text-center lg:py-32">
-      <KickerHeader className="text-bone/55">{buy.eyebrow}</KickerHeader>
-      <h2 className="font-voice max-w-[18ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] leading-tight font-light">
-        {buy.title}
-      </h2>
+    <section className="bg-charcoal text-bone py-24 lg:py-32">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col items-center gap-7 px-[clamp(1.5rem,5vw,4rem)] text-center">
+        <KickerHeader className="text-bone/55">{buy.eyebrow}</KickerHeader>
+        <h2 className="font-voice max-w-[18ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] leading-tight font-light">
+          {buy.title}
+        </h2>
 
-      <ul className="grid w-full max-w-[44rem] list-none grid-cols-3 gap-2.5">
-        {volumeTiers.map((tier) => (
-          <li
-            key={tier.volume}
-            className="border-bone/40 border px-3 py-4 text-center"
+        <ul className="grid w-full max-w-[44rem] list-none grid-cols-3 gap-2.5">
+          {volumeTiers.map((tier) => (
+            <li
+              key={tier.volume}
+              className="border-bone/40 border px-3 py-4 text-center"
+            >
+              <span className="font-voice text-bone block text-[clamp(1.5rem,2.4vw,1.95rem)] leading-tight font-light tracking-[-0.03em] tabular-nums">
+                {tier.volume}
+              </span>
+              <span className="font-ui text-bone/60 mt-1.5 block text-[13px] leading-snug">
+                {buy.potLabel}
+                <br />
+                {tier.pot}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="text-bone/50 font-ui text-[13px]">{buy.note}</p>
+
+        <OzonButton
+          href={ozonStoreUrl}
+          className="bg-moss text-bone hover:bg-moss/90 px-10 py-6"
+        />
+
+        <p className="text-bone/70 font-voice max-w-[38rem] text-[15px] leading-relaxed">
+          {buy.riskReversal}{" "}
+          <a
+            href={`mailto:${footer.email}`}
+            className="text-bone underline underline-offset-2"
           >
-            <span className="font-voice text-bone block text-[clamp(1.5rem,2.4vw,1.95rem)] leading-tight font-light tracking-[-0.03em] tabular-nums">
-              {tier.volume}
-            </span>
-            <span className="font-ui text-bone/60 mt-1.5 block text-[13px] leading-snug">
-              {buy.potLabel}
-              <br />
-              {tier.pot}
-            </span>
-          </li>
-        ))}
-      </ul>
+            {footer.email}
+          </a>
+        </p>
 
-      <p className="text-bone/50 font-ui text-[13px]">{buy.note}</p>
-
-      <OzonButton
-        href={ozonStoreUrl}
-        className="bg-moss text-bone hover:bg-moss/90 px-10 py-6"
-      />
-
-      <p className="text-bone/70 font-voice max-w-[38rem] text-[15px] leading-relaxed">
-        {buy.riskReversal}{" "}
-        <a
-          href={`mailto:${footer.email}`}
-          className="text-bone underline underline-offset-2"
-        >
-          {footer.email}
-        </a>
-      </p>
-
-      <p className="text-bone/50 font-voice max-w-[38rem] text-[13px] leading-relaxed">
-        {buy.caption}
-      </p>
+        <p className="text-bone/50 font-voice max-w-[38rem] text-[13px] leading-relaxed">
+          {buy.caption}
+        </p>
+      </div>
     </section>
   );
 }

@@ -9,10 +9,9 @@ describe("Teasers ×3 (Лаборатория · Гайд · Дневник)", (
     expect(
       screen.getByRole("link", { name: "В лабораторию →" }),
     ).toHaveAttribute("href", "/lab");
-    expect(screen.getByRole("link", { name: "Открыть гайд →" })).toHaveAttribute(
-      "href",
-      "/guide",
-    );
+    expect(
+      screen.getByRole("link", { name: "Открыть гайд →" }),
+    ).toHaveAttribute("href", "/guide");
     expect(
       screen.getByRole("heading", {
         level: 3,

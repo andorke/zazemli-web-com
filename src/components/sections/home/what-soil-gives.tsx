@@ -9,9 +9,9 @@ import { home } from "@/content/home";
 export function WhatSoilGives() {
   const { whatSoilGives } = home;
   return (
-    <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
-      <div className="mx-auto flex w-full max-w-7xl flex-col">
-        <div className="mb-12 grid items-end gap-5 lg:mb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+    <section className="bg-bone text-charcoal py-20 lg:py-28">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col px-[clamp(1.5rem,5vw,4rem)]">
+        <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{whatSoilGives.eyebrow}</KickerHeader>
             <h2 className="leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
@@ -23,7 +23,7 @@ export function WhatSoilGives() {
           </p>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div className="layout:grid-cols-[1fr_1fr] layout:gap-20 grid gap-10">
           {whatSoilGives.columns.map((col) => (
             <div key={col.label} className="flex flex-col gap-3">
               <h3

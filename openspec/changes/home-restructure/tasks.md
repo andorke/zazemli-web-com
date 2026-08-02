@@ -23,7 +23,7 @@
 
 ## 4. Сетка (FIX-14)
 
-- [ ] 4.1 Воспроизвести в Tailwind grid прототипа: `.wrap` (max-width, auto-margin, `padding-inline: clamp(1.5rem,5vw,4rem)`), split `1fr 1fr`, boxsec `.9fr 1.1fr`, gives `1fr 1fr`, teasers `repeat(3,1fr)`, брейкпоинт 860
+- [x] 4.1 Воспроизвести в Tailwind grid прототипа: `.wrap` (max-width, auto-margin, `padding-inline: clamp(1.5rem,5vw,4rem)`), split `1fr 1fr`, boxsec `.9fr 1.1fr`, gives `1fr 1fr`, teasers `repeat(3,1fr)`, брейкпоинт 860
 - [ ] 4.2 Проверка симметрии: разница левого/правого полей ≤ 15% на 1440 и 1920; без горизонтального скролла на 360
 
 ## 5. Приёмка

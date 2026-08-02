@@ -11,8 +11,8 @@ import { home } from "@/content/home";
 export function WhatsInBox() {
   const { whatsInBox } = home;
   return (
-    <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-20">
+    <section className="bg-bone text-charcoal py-20 lg:py-28">
+      <div className="layout:grid-cols-[0.9fr_1.1fr] layout:items-center layout:gap-20 mx-auto grid w-full max-w-[1240px] gap-12 px-[clamp(1.5rem,5vw,4rem)]">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-5">
             <KickerHeader>{whatsInBox.eyebrow}</KickerHeader>
@@ -30,7 +30,7 @@ export function WhatsInBox() {
 
         <ImageSlot
           tone="light"
-          className="bg-chalk aspect-[4/5] w-full max-lg:order-first"
+          className="bg-chalk max-layout:order-first aspect-[4/5] w-full"
         />
       </div>
     </section>

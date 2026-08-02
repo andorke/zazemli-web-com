@@ -12,8 +12,8 @@ import { home } from "@/content/home";
 export function Hero() {
   const { hero } = home;
   return (
-    <section className="bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden px-6 pt-24 pb-14 lg:px-30 lg:pb-24">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-7">
+    <section className="bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-14 lg:pb-24">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-7 px-[clamp(1.5rem,5vw,4rem)]">
         <KickerHeader className="text-bone/60">{hero.eyebrow}</KickerHeader>
         <h1 className="leading-hero font-voice text-[clamp(2.9rem,6.5vw,5.5rem)] font-light tracking-[-0.025em]">
           {hero.title[0]}{" "}

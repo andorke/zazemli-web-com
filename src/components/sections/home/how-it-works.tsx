@@ -9,9 +9,9 @@ import { home } from "@/content/home";
 export function HowItWorks() {
   const { howItWorks } = home;
   return (
-    <section className="bg-bone text-charcoal flex flex-col gap-12 px-6 py-20 lg:px-30 lg:py-28">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12">
-        <div className="grid items-end gap-5 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+    <section className="bg-bone text-charcoal flex flex-col gap-12 py-20 lg:py-28">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-12 px-[clamp(1.5rem,5vw,4rem)]">
+        <div className="layout:grid-cols-[1.15fr_1fr] layout:gap-24 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{howItWorks.eyebrow}</KickerHeader>
             <p className="text-moss-ink font-voice max-w-[26ch] text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-snug italic">
@@ -26,7 +26,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-3 lg:gap-16">
+        <div className="layout:grid-cols-3 layout:gap-16 grid gap-10">
           {howItWorks.steps.map((step) => (
             <div key={step.n} className="flex flex-col gap-2">
               <span
