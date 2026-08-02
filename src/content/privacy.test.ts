@@ -15,6 +15,19 @@ function sectionText(section: PrivacySection): string {
     .join(" ");
 }
 
+/* Пункты всех списков раздела — когда важно, что формулировки лежат в разных пунктах. */
+function sectionListItems(section: PrivacySection): string[] {
+  return section.body.flatMap((block) =>
+    block.kind === "list" ? block.items : [],
+  );
+}
+
+function sectionByTitle(title: string): PrivacySection {
+  const section = privacy.sections.find((s) => s.title === title);
+  expect(section, `раздел «${title}»`).toBeDefined();
+  return section!;
+}
+
 describe("Политика конфиденциальности — разделы", () => {
   it("ровно 13 разделов дословно и по порядку из прототипа", () => {
     expect(privacy.sections.map((s) => s.title)).toEqual([
@@ -34,12 +47,34 @@ describe("Политика конфиденциальности — раздел
     ]);
   });
 
-  it("раздел «Правовые основания» ссылается на 152-ФЗ и 38-ФЗ", () => {
-    const legal = privacy.sections.find((s) => s.title === "Правовые основания");
-    expect(legal).toBeDefined();
-    const text = sectionText(legal!);
-    expect(text).toContain("152-ФЗ");
-    expect(text).toContain("38-ФЗ");
+  /* Два согласия — разные основания и разные пункты: ПДн по 152-ФЗ и реклама
+     по ст. 18 38-ФЗ, второе запрашивается отдельно от первого. */
+  it("раздел «Правовые основания» разделяет согласие на ПДн и на рассылку", () => {
+    const items = sectionListItems(sectionByTitle("Правовые основания"));
+    const pdn = items.filter((i) => i.includes("152-ФЗ"));
+    const ads = items.filter((i) => i.includes("38-ФЗ"));
+    expect(pdn).toHaveLength(1);
+    expect(ads).toHaveLength(1);
+    expect(ads[0]).not.toBe(pdn[0]);
+    expect(ads[0]).toContain("отдельно");
+  });
+
+  /* Уведомление «Листа ожидания» рассылкой не является. Явной фразы в редакции
+     прототипа нет — разделение выражено структурно: рассылка и лист ожидания
+     это разные цели, а обработка по каждой цели идёт отдельно. Тест держит
+     именно это разделение: описание листа ожидания не должно съехать в рассылку. */
+  it("«Лист ожидания» — отдельная цель, а не email-рассылка", () => {
+    const goals = sectionByTitle("Цели обработки");
+    const items = sectionListItems(goals);
+    const mailing = items.filter((i) => /рассылк/i.test(i));
+    const waitlist = items.filter((i) => /лист ожидания/i.test(i));
+    expect(mailing).toHaveLength(1);
+    expect(waitlist).toHaveLength(1);
+    expect(waitlist[0]).not.toBe(mailing[0]);
+    expect(waitlist[0]).not.toMatch(/рассылк/i);
+    expect(sectionText(goals)).toContain(
+      "Обработка для каждой цели осуществляется отдельно",
+    );
   });
 });
 
