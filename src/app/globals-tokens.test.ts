@@ -83,3 +83,31 @@ describe("шкалы v1.1.0 в теме", () => {
     expect(css).toContain("tokens.json v1.1.0");
   });
 });
+
+describe("motion-токены (tokens.motion)", () => {
+  it("duration-шкала 150/200/300/400/600ms", () => {
+    expect(has(root, "--duration-fast: 150ms")).toBe(true);
+    expect(has(root, "--duration-base: 200ms")).toBe(true);
+    expect(has(root, "--duration-medium: 300ms")).toBe(true);
+    expect(has(root, "--duration-slow: 400ms")).toBe(true);
+    expect(has(root, "--duration-page: 600ms")).toBe(true);
+  });
+
+  it("easing-токены", () => {
+    expect(has(root, "--ease-standard: cubic-bezier(0.4, 0, 0.2, 1)")).toBe(
+      true,
+    );
+    expect(has(root, "--ease-emphasized: cubic-bezier(0.2, 0, 0, 1)")).toBe(
+      true,
+    );
+  });
+
+  it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
+    expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
+    expect(has(root, "--welcome-stagger: 80ms")).toBe(true);
+    expect(has(root, "--welcome-ease: var(--ease-emphasized)")).toBe(true);
+    expect(has(root, "--welcome-line-duration: var(--duration-page)")).toBe(
+      true,
+    );
+  });
+});

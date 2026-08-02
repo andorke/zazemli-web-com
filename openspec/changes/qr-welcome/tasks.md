@@ -1,6 +1,6 @@
 ## 1. Motion-фундамент
 
-- [ ] 1.1 Портировать duration-токены в `globals.css` (`--duration-fast/base/medium/slow/page` = 150/200/300/400/600ms рядом с `--ease-*`) и завести блок entrance-переменных `--welcome-*` (длительность элемента, шаг лесенки, easing) с дефолтами из design D3; дополнить `globals-tokens.test.ts` проверкой наличия. Verify: `npm run test`, `npm run ds-lint`
+- [x] 1.1 Портировать duration-токены в `globals.css` (`--duration-fast/base/medium/slow/page` = 150/200/300/400/600ms рядом с `--ease-*`) и завести блок entrance-переменных `--welcome-*` (длительность элемента, шаг лесенки, easing) с дефолтами из design D3; дополнить `globals-tokens.test.ts` проверкой наличия. Verify: `npm run test`, `npm run ds-lint`
 - [ ] 1.2 Инлайн show-once скрипт в `layout.tsx` (`<head>`, raw script): try/catch sessionStorage, класс `js-welcome` на `<html>` до первой отрисовки; unit-тест логики (первый заход / повторный / storage недоступен). Verify: `npm run test`, в браузере класс присутствует на первом заходе и отсутствует после навигации
 - [ ] 1.3 Базовые entrance-утилиты в `globals.css`: keyframes fade-rise (opacity от 0.1, translateY ≤10px), классы каскада с лесенкой задержек, всё под `html.js-welcome` и `@media (prefers-reduced-motion: no-preference)`. Verify: `npm run build`, при reduced-motion и без JS контент полностью видим
 
