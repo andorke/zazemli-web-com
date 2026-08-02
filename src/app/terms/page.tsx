@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fragment, type CSSProperties } from "react";
 
 import { terms, type TermsBlock } from "@/content/terms";
+import { openGraphFor } from "@/lib/metadata";
 
 /*
  * /terms — условия использования сайта. Индексируемая (PATCH-1 FIX-08: прототип готов,
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Условия использования сайта zazemli.com: статус документа, интеллектуальная собственность, ограничения, ответственность. ИП Минетто А. А.",
   alternates: { canonical: "/terms" },
+  openGraph: openGraphFor("/terms"),
   /* max-image-preview дублируем: свой robots перекрывает layout-версию целиком (shallow merge) */
   robots: { index: true, follow: true, "max-image-preview": "large" },
 };

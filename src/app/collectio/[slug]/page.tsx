@@ -9,7 +9,10 @@ import { ProductHero } from "@/components/sections/product/hero";
 import { Ritual } from "@/components/sections/product/ritual";
 import { WhatsInBox } from "@/components/sections/product/whats-in-box";
 import { WhySoil } from "@/components/sections/product/why-soil";
+import { JsonLd } from "@/components/site/json-ld";
 import { skus } from "@/content/sku";
+import { openGraphFor } from "@/lib/metadata";
+import { buildOzonUrl } from "@/lib/utm";
 
 /* Static export: 7 товарных страниц из skus; неизвестный slug → 404 (design-решение 1) */
 export const dynamicParams = false;
@@ -38,6 +41,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: { absolute: `${cap(sku.nameRu)} · грунт под пересадку · ЗАЗЕМЛИ` },
     description: `${cap(sku.nameRu)} (${sku.latin}) — ${sku.tagline}. Объёмы ${sku.volumes}, ${sku.priceFrom}.`,
     alternates: { canonical: `/collectio/${sku.slug}` },
+    openGraph: openGraphFor(`/collectio/${sku.slug}`),
   };
 }
 
@@ -54,22 +58,29 @@ export default async function ProductPage({ params }: Params) {
   /*
    * Product + BreadcrumbList JSON-LD (seo-research.md: «товары и цены» — поддержанный
    * Яндексом тип, Product-сниппет — Google; BreadcrumbList понимают оба).
-   * availability PreOrder, пока Ozon-ссылок нет (sizes[].ozonListingUrl === null);
-   * при появлении магазина сменить на InStock.
+   * Доступность выводим из данных, а не хардкодим: пока ozonListingUrl пуст —
+   * PreOrder со ссылкой на карточку, появится листинг — InStock с UTM-ссылкой
+   * на Ozon (та же точка истины, что у кнопки покупки).
    */
+  const pageUrl = `https://zazemli.com/collectio/${sku.slug}`;
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: `${cap(sku.nameRu)} · бокс на одну пересадку`,
+    name: `${cap(sku.nameRu)} (${sku.latin}) · бокс на одну пересадку`,
     description: sku.heroSub,
     image: `https://zazemli.com${sku.doodle}`,
     brand: { "@type": "Brand", name: "ЗАЗЕМЛИ" },
     offers: sku.sizes.map((size) => ({
       "@type": "Offer",
+      name: size.volume,
       price: priceNumber(size.price),
       priceCurrency: "RUB",
-      availability: "https://schema.org/PreOrder",
-      url: `https://zazemli.com/collectio/${sku.slug}`,
+      availability: size.ozonListingUrl
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
+      url: size.ozonListingUrl
+        ? buildOzonUrl(size.ozonListingUrl, { skuNumber: sku.number })
+        : pageUrl,
     })),
   };
 
@@ -99,19 +110,8 @@ export default async function ProductPage({ params }: Params) {
   /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (
     <main className="flex flex-1 flex-col" style={skuStyle}>
-      {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={productJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <ProductHero sku={sku} />
       <WhySoil sku={sku} />
       <Composition sku={sku} />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { openGraphFor } from "@/lib/metadata";
 
 /*
  * Редирект-страница, а не заглушка: страницы-индекса коллекции нет (живёт секцией
@@ -12,6 +13,7 @@ const TARGET = "/#collectio";
 export const metadata: Metadata = {
   title: "Коллекция",
   alternates: { canonical: "/" },
+  openGraph: openGraphFor("/"),
   robots: { index: false, follow: false },
 };
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { footer, mainNav } from "@/content/site";
+import { buildSocialUrl } from "@/lib/utm";
 import { FooterDisclaimer } from "./footer-disclaimer";
 
 /*
@@ -28,8 +29,9 @@ export function SiteFooter() {
 
           <div>
             <h4 className={columnHeading}>Связь</h4>
+            {/* UTM — чтобы переход из футера не терялся в прямых заходах (FIX-29) */}
             <a
-              href={footer.instagramUrl}
+              href={buildSocialUrl(footer.instagramUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className={`${columnLink} mb-2`}
@@ -37,7 +39,7 @@ export function SiteFooter() {
               Instagram · {footer.socialHandle}
             </a>
             <a
-              href={footer.telegramUrl}
+              href={buildSocialUrl(footer.telegramUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className={`${columnLink} mb-2`}

@@ -25,16 +25,26 @@ describe("SiteFooter (по прототипу)", () => {
     ).toBeInTheDocument();
   });
 
+  /* Профили реальные, но с UTM-меткой перехода (seo-meta): сверяем адрес без query */
   it("соцупоминания IG/TG — реальные профили, не ложные ссылки", () => {
     render(<SiteFooter />);
-    expect(screen.getByRole("link", { name: /Instagram/ })).toHaveAttribute(
-      "href",
+    const profileUrl = (name: RegExp) =>
+      new URL(screen.getByRole("link", { name }).getAttribute("href") ?? "");
+
+    expect(profileUrl(/Instagram/).origin + profileUrl(/Instagram/).pathname).toBe(
       "https://instagram.com/zazemli_collectio",
     );
-    expect(screen.getByRole("link", { name: /Telegram/ })).toHaveAttribute(
-      "href",
+    expect(profileUrl(/Telegram/).origin + profileUrl(/Telegram/).pathname).toBe(
       "https://t.me/zazemli_collectio",
     );
+  });
+
+  it("соцупоминания IG/TG помечены utm_source=site", () => {
+    render(<SiteFooter />);
+    for (const name of [/Instagram/, /Telegram/]) {
+      const href = screen.getByRole("link", { name }).getAttribute("href") ?? "";
+      expect(new URL(href).searchParams.get("utm_source")).toBe("site");
+    }
   });
 
   it('пустых href и href="#" в футере нет', () => {

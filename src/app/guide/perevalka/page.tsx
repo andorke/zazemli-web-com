@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { GuideRoutePage } from "@/components/sections/guide/route-page";
 import { guidePerevalka } from "@/content/guide";
+import { openGraphFor } from "@/lib/metadata";
 
 /* Meta-content — прототип guide-perevalka.html <title>/<meta>.
    Ветка вне индекса, canonical на вход: шаги «Дренаж» и «Дневник» дословно
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Перевалка комнатного растения: ком не разбираем, обновляем землю вокруг и сверху. Маршрут гайда ЗАЗЕМЛИ.",
   alternates: { canonical: "/guide" },
+  openGraph: openGraphFor("/guide"),
   robots: { index: false, follow: true },
 };
 

@@ -9,23 +9,13 @@ import { SkuGallery } from "@/components/sections/home/sku-gallery";
 import { Teasers } from "@/components/sections/home/teasers";
 import { WhatsInBox } from "@/components/sections/home/whats-in-box";
 import { WhatSoilGives } from "@/components/sections/home/what-soil-gives";
-import { footer } from "@/content/site";
+import { JsonLd } from "@/components/site/json-ld";
 
 /*
- * Organization + WebSite JSON-LD — сигналы «кто за сайтом» и site name в выдаче
- * (seo-research.md ч.1 §3: обе схемы Google размещает на главной, одной страницы
- * достаточно; SearchAction не добавляем — deprecated с 11.2024). logo ≥112×112.
+ * WebSite JSON-LD — site name в выдаче (seo-research.md ч.1 §3: схему Google
+ * читает с главной, одной страницы достаточно; SearchAction не добавляем —
+ * deprecated с 11.2024). Organization живёт в layout: он про сайт целиком.
  */
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "ЗАЗЕМЛИ",
-  url: "https://zazemli.com",
-  logo: "https://zazemli.com/apple-icon.png",
-  email: footer.email,
-  sameAs: [footer.instagramUrl, footer.telegramUrl],
-};
-
 const webSiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -37,19 +27,7 @@ const webSiteJsonLd = {
 export default function Home() {
   return (
     <main className="flex-1">
-      {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webSiteJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={webSiteJsonLd} />
       <Hero />
       <Manifesto />
       <HowItWorks />

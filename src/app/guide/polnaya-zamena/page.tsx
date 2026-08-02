@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { GuideRoutePage } from "@/components/sections/guide/route-page";
 import { guidePolnayaZamena } from "@/content/guide";
+import { openGraphFor } from "@/lib/metadata";
 
 /* Meta-content — прототип guide-polnaya-zamena.html <title>/<meta>.
    Ветка вне индекса, canonical на вход: шаги «Дренаж» и «Дневник» дословно
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Полная замена грунта у комнатного растения: разбор кома, осмотр и обработка корней, посадка в свежую землю. Маршрут гайда ЗАЗЕМЛИ.",
   alternates: { canonical: "/guide" },
+  openGraph: openGraphFor("/guide"),
   robots: { index: false, follow: true },
 };
 

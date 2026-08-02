@@ -7,6 +7,7 @@ import { LabOzonCta } from "@/components/sections/lab/ozon-cta";
 import { LabProblem } from "@/components/sections/lab/problem";
 import { LabRecipesSection } from "@/components/sections/lab/recipes-section";
 import { LabSources } from "@/components/sections/lab/sources";
+import { openGraphFor } from "@/lib/metadata";
 
 /* Meta-content — прототип lab.html <title>/<meta> (пересборка 2026-07-05) */
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Из чего собрана земля под каждое растение: 7 рецептур под биотоп и 11 компонентов, зачем каждый и на какие исследования это опирается.",
   alternates: { canonical: "/lab" },
+  openGraph: openGraphFor("/lab"),
 };
 
 /*

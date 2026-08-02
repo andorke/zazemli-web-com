@@ -8,6 +8,7 @@ import { GuideKit } from "@/components/sections/guide/kit";
 import { GuideOzonCta } from "@/components/sections/guide/ozon-cta";
 import { GuideRouteStages } from "@/components/sections/guide/route-stages";
 import { guideEntry } from "@/content/guide";
+import { openGraphFor } from "@/lib/metadata";
 
 /* Meta-content — канон guide.md v4.0 §Meta (= прототип guide.html <title>/<meta>) */
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   description:
     "Как пересадить комнатное растение: подготовка, корни, дренаж, грунт, дневник. Универсальный ритуал для любого растения с боксом ЗАЗЕМЛИ.",
   alternates: { canonical: "/guide" },
+  openGraph: openGraphFor("/guide"),
 };
 
 /*

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildOzonUrl } from "@/lib/utm";
+import { buildOzonUrl, buildSocialUrl } from "@/lib/utm";
 
 describe("buildOzonUrl", () => {
   it("добавляет utm_source=site к чистому URL", () => {
@@ -21,5 +21,18 @@ describe("buildOzonUrl", () => {
       buildOzonUrl("https://www.ozon.ru/product/x", { skuNumber: "N°003" }),
     );
     expect(url.searchParams.get("utm_content")).toBe("sku003");
+  });
+});
+
+describe("buildSocialUrl", () => {
+  it("помечает соцпрофиль тем же источником, что и Ozon-ссылки", () => {
+    const url = new URL(buildSocialUrl("https://t.me/zazemli_collectio"));
+    expect(url.searchParams.get("utm_source")).toBe("site");
+  });
+
+  it("сохраняет путь профиля", () => {
+    expect(buildSocialUrl("https://instagram.com/zazemli_collectio")).toContain(
+      "/zazemli_collectio",
+    );
   });
 });

@@ -6,6 +6,7 @@ import { SignupForm } from "@/components/sections/diary/signup-form";
 import { Why } from "@/components/sections/diary/why";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { diary } from "@/content/diary";
+import { openGraphFor } from "@/lib/metadata";
 
 /*
  * Вход только по QR со страницы III печатного дневника (бриф §2):
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   description:
     "Земля и забота — всё, что нужно растению. Дневник — мост. 7 писем за год от Day 0 до Day +365.",
   alternates: { canonical: "/diary-signup" },
+  openGraph: openGraphFor("/diary-signup"),
   robots: { index: false, follow: false },
 };
 

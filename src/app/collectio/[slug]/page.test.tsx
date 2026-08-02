@@ -61,3 +61,56 @@ describe("Роут /collectio/[slug]", () => {
     }
   });
 });
+
+/*
+ * Разметка не должна расходиться с видимым контентом (spec product-page).
+ * Цены в sku.ts набраны с неразрывным пробелом («2 190 ₽»), а в разметке лежат
+ * числом — сверка нормализует оба вида пробела, иначе тест разъезжается на
+ * ровном месте при копипасте цены обычным пробелом.
+ */
+describe("Product JSON-LD синхронен видимым ценам", () => {
+  const productJsonLd = (container: HTMLElement) => {
+    const scripts = [
+      ...container.querySelectorAll('script[type="application/ld+json"]'),
+    ].map((node) => JSON.parse(node.textContent ?? "{}"));
+    return scripts.find((node) => node["@type"] === "Product");
+  };
+
+  /* «2 190 ₽» и «2 190 ₽» → 2190 */
+  const priceDigits = (text: string): string =>
+    text.replace(/[\s ]/g, "").replace(/\D/g, "");
+
+  it.each(skus.map((sku) => sku.slug))(
+    "%s: offers повторяют объёмы и цены из sku.ts",
+    async (slug) => {
+      const sku = skus.find((s) => s.slug === slug)!;
+      const { container } = render(
+        await ProductPage({ params: Promise.resolve({ slug }) }),
+      );
+      const offers = productJsonLd(container).offers;
+
+      expect(offers.map((offer: { name: string }) => offer.name)).toEqual(
+        sku.sizes.map((size) => size.volume),
+      );
+      expect(offers.map((offer: { price: number }) => String(offer.price))).toEqual(
+        sku.sizes.map((size) => priceDigits(size.price)),
+      );
+    },
+  );
+
+  it.each(skus.map((sku) => sku.slug))(
+    "%s: цена в buybar совпадает с ценой из offers",
+    async (slug) => {
+      const { container } = render(
+        await ProductPage({ params: Promise.resolve({ slug }) }),
+      );
+      const offers = productJsonLd(container).offers;
+      /* buybar — клиентский селектор: в разметке видна цена первого объёма */
+      const visible = [...container.querySelectorAll("#buy p")]
+        .map((node) => priceDigits(node.textContent ?? ""))
+        .filter(Boolean);
+
+      expect(visible).toContain(String(offers[0].price));
+    },
+  );
+});

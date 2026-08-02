@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
 /*
@@ -93,12 +95,20 @@ export function SoilVial({
         ))}
       </div>
 
-      {/* eslint-disable-next-line @next/next/no-img-element -- статичный экспорт без next/image */}
-      <img
+      {/*
+        Стекло поверх слоёв. fill — площадь уже держит aspect-ratio контейнера,
+        поэтому подстановка не двигает вёрстку. Колба живёт ниже первого экрана
+        (лендинг — 5-я секция, товарная — 2-я), lazy здесь выигрывает: 266 КБ
+        не конкурируют за канал с LCP. sizes — по фактической ширине слота
+        (clamp 96–168px); srcset соберётся сам, когда включим оптимизацию.
+      */}
+      <Image
         src="/soil-vial.png"
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full object-contain"
+        fill
+        sizes="(min-width: 640px) 168px, 128px"
+        className="object-contain"
         style={{ mixBlendMode: "multiply" }}
       />
 
