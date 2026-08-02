@@ -28,6 +28,6 @@
 
 ## 5. Приёмка
 
-- [ ] 5.1 Обновить `page.test.tsx`, e2e главной/lab/product; `npm run typecheck && npm run test && npm run build` — зелёные
-- [ ] 5.2 Прогон применимых регулярок `verify-prototypes.py` по собранной главной (цены, лексика, порядок блоков)
-- [ ] 5.3 Записать в `CONTEXT.md`: канон главной = home.md v2.5; ссылки на v2.3 и ранее — устарели
+- [x] 5.1 Обновить `page.test.tsx`, e2e главной/lab/product; `npm run typecheck && npm run test && npm run build` — зелёные
+- [x] 5.2 Прогон применимых регулярок `verify-prototypes.py` по собранной главной (цены, лексика, порядок блоков)
+- [x] 5.3 Записать в `CONTEXT.md`: канон главной = home.md v2.5; ссылки на v2.3 и ранее — устарели
