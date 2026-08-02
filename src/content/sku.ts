@@ -8,7 +8,7 @@
  * ../zazemli-vault/Айти/Сайт/prototypes/landing.html (в каноне home.md их нет — вопрос Насте).
  * В ценах — неразрывный пробел (U+00A0), чтобы «1 890» не рвалось на переносе.
  *
- * Данные страницы товара (vial, composition, boxContents, care, ritualPhrase, sizes,
+ * Данные страницы товара (vial, composition, care, ritualPhrase, sizes,
  * sourceNote) — из прототипов ../zazemli-vault/Айти/Сайт/prototypes/collectio-*.html
  * (эталон шаблона) + product-description.md v1.1.1 (§Биотопы; hero — вариант A).
  * Типы vial/material переиспользуют DS-атомы SoilVial и MaterialDot: мох сфагнум красится
@@ -16,11 +16,12 @@
  * Расхождения канон↔прототип — в вопросы Насте (см. PROGRESS/CONTEXT):
  *   — hero A/B: таблица product-description даёт A = базовый Lvl 2, приложение путает метки; берём A = «Заземли {растение}.»;
  *   — ритуал-приписка: прототипы дают характерную фразу листовки (канон-вариант B), не пасхалку A;
- *   — «что в боксе»: прототип collectio даёт 6 позиций (+угольная пудра, +листовка), канон блок 3 — 4–5; страница товара идёт по прототипу.
+ *   — «что в боксе» живёт в общем модуле @/content/box (один источник с главной, PATCH-1 §2).
  */
 
 import type { MaterialName } from "@/components/ui/material-dot";
 import type { VialSegments } from "@/components/ui/soil-vial";
+import { boxContents, type BoxItem } from "@/content/box";
 
 export type SkuColor =
   | "moss"
@@ -91,7 +92,6 @@ export type Sku = {
   whyProse: string;
   vial: VialSegments;
   composition: CompositionItem[];
-  boxContents: string[];
   care: Care;
   /* характерная фраза-приписка ритуала (варьируется по SKU; постоянная строка — ritualLine) */
   ritualPhrase: string;
@@ -157,14 +157,16 @@ export function buyCtaLabel(size: Size): string {
 /* Ритуал-строка одна на все SKU (прототипы collectio); варьируется только приписка ritualPhrase. */
 export const ritualLine = "Час с грунтом стоит дня в zoom.";
 
-/* Постоянная часть бокса — физический бокс одинаков для всех SKU; варьируется только почвосмесь (позиция 01). */
-const boxCommon: string[] = [
-  "Керамзитовый дренаж",
-  "Конвертик «Забота о корнях и твоих руках»: перчатки, корневин, 2 апельсиновые палочки",
-  "Мини-бутылочка угольной пудры для срезов",
-  "Дневник растения на год",
-  "Листовка с гайдом по пересадке",
-];
+/*
+ * Опись бокса страницы товара — общий модуль @/content/box (тот же, что у главной).
+ * Варьируется только позиция 01: растение, число компонентов и якорь рецептуры.
+ */
+export function skuBoxContents(sku: Sku): BoxItem[] {
+  return boxContents({
+    text: `Грунт, собранный под ${sku.accusative} · ${sku.components} компонентов`,
+    href: labHref(sku),
+  });
+}
 
 export const skus: Sku[] = [
   {
@@ -199,7 +201,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под монстеру · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно монстеру. Вот главное.",
       items: [
@@ -259,7 +260,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под фикус · 9 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно фикус. Вот главное.",
       items: [
@@ -320,7 +320,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под антуриум · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно антуриум. Вот главное.",
       items: [
@@ -380,7 +379,6 @@ export const skus: Sku[] = [
       { name: "Пеностекло", material: "pumice", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под аглаонему · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно аглаонему. Вот главное.",
       items: [
@@ -441,7 +439,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под спатифиллум · 11 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно спатифиллум. Вот главное.",
       items: [
@@ -500,7 +497,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 10 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под замиокулькас · 8 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно замиокулькас. Вот главное.",
       items: [
@@ -560,7 +556,6 @@ export const skus: Sku[] = [
       { name: "Пеностекло", material: "pumice", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под эпипремнум · 9 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно эпипремнум. Вот главное.",
       items: [

@@ -15,15 +15,26 @@ describe("WhatsInBox (что в боксе, страница товара)", () 
     );
   });
 
-  it("нумерованная опись всех позиций бокса", () => {
+  it("опись из общего модуля состава: 5 позиций и мост в лабораторию", () => {
     render(<WhatsInBox sku={monstera} />);
     expect(
-      screen.getByText("Почвосмесь под монстеру · 10 компонентов"),
+      screen.getByText(/Грунт, собранный под монстеру · 10 компонентов/),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Листовка с гайдом по пересадке"),
     ).toBeInTheDocument();
     expect(screen.getByText("01")).toBeInTheDocument();
-    expect(screen.getByText("06")).toBeInTheDocument();
+    expect(screen.getByText("05")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "подробнее в лаборатории грунта →" }),
+    ).toHaveAttribute("href", "/lab#rec-monstera");
+  });
+
+  it("четыре подпункта заботы, включая баночку угольной пудры", () => {
+    render(<WhatsInBox sku={monstera} />);
+    expect(
+      screen.getByText(/баночка угольной пудры, чтобы подсушить свежий срез/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/корневин, чтобы на свежем срезе/)).toBeInTheDocument();
   });
 });

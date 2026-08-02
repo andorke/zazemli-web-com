@@ -7,6 +7,7 @@
  */
 
 import type { VialSegments } from "@/components/ui/soil-vial";
+import { boxContents, type BoxItem } from "@/content/box";
 
 export type HomeContent = {
   hero: {
@@ -46,7 +47,7 @@ export type HomeContent = {
   whatsInBox: {
     eyebrow: string;
     title: string;
-    items: { n: string; text: string }[];
+    items: BoxItem[];
     after: string;
     photoSlot: string;
   };
@@ -159,17 +160,11 @@ export const home: HomeContent = {
   whatsInBox: {
     eyebrow: "Что в боксе",
     title: "Всё на одну пересадку.",
-    // опись — канон блок 4 дословно (5 позиций; прототип даёт 6 — вопрос Насте)
-    items: [
-      { n: "01", text: "Грунт, собранный под твоё растение" },
-      { n: "02", text: "Керамзитовый дренаж, 10–20 мм" },
-      {
-        n: "03",
-        text: "Конвертик «Забота о корнях и твоих руках»: перчатки, корневин, 2 апельсиновые палочки",
-      },
-      { n: "04", text: "Дневник растения на год" },
-      { n: "05", text: "Листовка с гайдом по пересадке" },
-    ],
+    /* опись — общий модуль @/content/box (один источник с 7 карточками, PATCH-1 §2) */
+    items: boxContents({
+      text: "Грунт, собранный под твоё растение",
+      href: "/lab",
+    }),
     after: "Ничего не докупать и не хранить потом в шкафу.",
     photoSlot: "раскладка бокса · фото top-down",
   },

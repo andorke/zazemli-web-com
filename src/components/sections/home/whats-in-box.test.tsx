@@ -11,12 +11,23 @@ describe("WhatsInBox (опись канона, компоновка протот
     );
   });
 
-  it("опись — 5 позиций канона, включая конвертик с палочками", () => {
+  it("опись — 5 позиций прототипа, у 03 четыре подпункта заботы", () => {
     render(<WhatsInBox />);
     const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(5);
+    // 5 позиций описи + 4 подпункта «Забота о корнях и твоих руках»
+    expect(items).toHaveLength(9);
     expect(items[0]).toHaveTextContent("Грунт, собранный под твоё растение");
-    expect(items[2]).toHaveTextContent("Забота о корнях и твоих руках");
+    expect(items[2]).toHaveTextContent("«Забота о корнях и твоих руках»");
+    expect(
+      screen.getByText(/баночка угольной пудры, чтобы подсушить свежий срез/),
+    ).toBeInTheDocument();
+  });
+
+  it("позиция 01 ведёт в лабораторию грунта", () => {
+    render(<WhatsInBox />);
+    expect(
+      screen.getByRole("link", { name: "подробнее в лаборатории грунта →" }),
+    ).toHaveAttribute("href", "/lab");
   });
 
   it("завершающая строка и фото-слот прототипа", () => {
