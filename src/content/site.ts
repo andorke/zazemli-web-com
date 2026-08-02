@@ -15,11 +15,16 @@ export const mainNav: NavItem[] = [
 ];
 
 export type FooterInfo = {
-  /* Реквизиты ИП — точные значения пришлёт Настя (Реквизиты_ИП_Минетто.pdf в БЗ) */
+  /*
+   * Строка реквизитов legal-блока, verbatim по landing.html .legal:
+   * «{legalName} · ОГРНИП {ogrnip} · {legalTail}». ИНН и адрес в футере
+   * не публикуются — полные реквизиты только во врезках /privacy и /terms.
+   */
   legalName: string;
-  ogrnip: string | null;
-  /* Хвост legal-строки после реквизитов (прототип landing.html .legal) */
+  ogrnip: string;
   legalTail: string;
+  /* Последняя строка legal-блока (прототип landing.html .legal) */
+  copyright: string;
   tagline: string;
   /*
    * Глобально дисклеймер не рендерится (решение ds-migration): остаётся
@@ -33,10 +38,11 @@ export type FooterInfo = {
 };
 
 export const footer: FooterInfo = {
-  legalName: "ИП Минетто",
-  ogrnip: null,
-  legalTail:
-    "работаем по УСН. © 2026 ЗАЗЕМЛИ. Информация на сайте не является публичной офертой.",
+  legalName: "ИП Минетто А. А.",
+  ogrnip: "326330000022761",
+  legalTail: "работаем по УСН",
+  copyright:
+    "© 2026 ЗАЗЕМЛИ. Информация на сайте не является публичной офертой.",
   tagline: "Земля и забота — всё, что нужно.",
   disclaimer:
     "Растения — не лекарство. Мы опираемся на исследования о связи контакта с природой и самочувствия, но не обещаем терапевтического эффекта.",

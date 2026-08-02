@@ -22,10 +22,16 @@ describe("Футер", () => {
     expect(footer.tagline).toBe("Земля и забота — всё, что нужно.");
   });
 
-  it("legal-строка: УСН, копирайт, «не оферта»", () => {
-    expect(footer.legalTail).toContain("работаем по УСН");
-    expect(footer.legalTail).toContain("© 2026 ЗАЗЕМЛИ");
-    expect(footer.legalTail).toContain("не является публичной офертой");
+  it("строка реквизитов — verbatim по прототипу", () => {
+    expect(
+      `${footer.legalName} · ОГРНИП ${footer.ogrnip} · ${footer.legalTail}`,
+    ).toBe("ИП Минетто А. А. · ОГРНИП 326330000022761 · работаем по УСН");
+  });
+
+  it("копирайт и «не оферта» — отдельной строкой", () => {
+    expect(footer.copyright).toBe(
+      "© 2026 ЗАЗЕМЛИ. Информация на сайте не является публичной офертой.",
+    );
   });
 
   it("дисклеймер сохранён для /lab (глобально не рендерится)", () => {

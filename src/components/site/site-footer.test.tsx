@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { SiteFooter } from "@/components/site/site-footer";
+import { privacy } from "@/content/privacy";
 
 describe("SiteFooter (по прототипу)", () => {
   it("колонка бренда: wordmark + тэглайн", () => {
@@ -40,12 +41,21 @@ describe("SiteFooter (по прототипу)", () => {
     );
   });
 
-  it("legal-строка: ИП, УСН, копирайт, «не оферта»", () => {
+  it("legal-строка: реквизиты verbatim, копирайт, «не оферта»", () => {
     render(<SiteFooter />);
     const legal = screen.getByText(/ИП Минетто/);
-    expect(legal).toHaveTextContent("работаем по УСН");
+    expect(legal.textContent).toContain(
+      "ИП Минетто А. А. · ОГРНИП 326330000022761 · работаем по УСН",
+    );
     expect(legal).toHaveTextContent("© 2026 ЗАЗЕМЛИ");
     expect(legal).toHaveTextContent("не является публичной офертой");
+  });
+
+  /* Адрес в футере покрыт общим регресс-сканом src/ и out/ в privacy.test.ts */
+  it("ИНН в футере не публикуется", () => {
+    const { container } = render(<SiteFooter />);
+    expect(container.textContent).not.toContain("ИНН");
+    expect(container.textContent).not.toContain(privacy.operator.inn);
   });
 
   it("ссылка на политику конфиденциальности ведёт на /privacy", () => {
