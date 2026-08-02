@@ -18,26 +18,26 @@ describe("CookieBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("«Только необходимые» сохраняет denied и скрывает баннер", async () => {
+  it("«Только необходимые» сохраняет necessary и скрывает баннер", async () => {
     render(<CookieBanner />);
     await userEvent.click(
       await screen.findByRole("button", { name: "Только необходимые" }),
     );
-    expect(getConsent()).toBe("denied");
+    expect(getConsent()).toBe("necessary");
     expect(
       screen.queryByRole("button", { name: "Принять" }),
     ).not.toBeInTheDocument();
   });
 
-  it("«Принять» сохраняет granted", async () => {
+  it("«Принять» сохраняет all", async () => {
     render(<CookieBanner />);
     await userEvent.click(
       await screen.findByRole("button", { name: "Принять" }),
     );
-    expect(getConsent()).toBe("granted");
+    expect(getConsent()).toBe("all");
   });
 
-  it("при ранее сохранённом выборе не показывается", () => {
+  it("при ранее сохранённом выборе (в т. ч. легаси) не показывается", () => {
     localStorage.setItem("zazemli-consent", "granted");
     render(<CookieBanner />);
     expect(

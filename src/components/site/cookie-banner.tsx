@@ -38,10 +38,10 @@ export function CookieBanner() {
           .
         </p>
         <div className="flex shrink-0 items-center gap-3">
-          <Button variant="ghost" onClick={() => decide("denied")}>
+          <Button variant="ghost" onClick={() => decide("necessary")}>
             Только необходимые
           </Button>
-          <Button onClick={() => decide("granted")}>Принять</Button>
+          <Button onClick={() => decide("all")}>Принять</Button>
         </div>
       </div>
     </div>
