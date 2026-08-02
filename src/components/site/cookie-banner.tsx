@@ -26,9 +26,9 @@ export function CookieBanner() {
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <p className="text-charcoal/70 leading-body max-w-2xl font-voice text-sm">
-          Мы используем cookie для аналитики — чтобы понимать, как улучшить
-          сайт. Необязательные cookie включаются только с твоего согласия.
-          Подробнее — в{" "}
+          Мы используем файлы cookie. Обязательные — чтобы сайт работал;
+          аналитические (Яндекс.Метрика) — только с твоего согласия. Подробнее —
+          в{" "}
           <Link
             href="/privacy"
             className="text-moss-ink underline underline-offset-2"
@@ -41,7 +41,7 @@ export function CookieBanner() {
           <Button variant="ghost" onClick={() => decide("necessary")}>
             Только необходимые
           </Button>
-          <Button onClick={() => decide("all")}>Принять</Button>
+          <Button onClick={() => decide("all")}>Принять все</Button>
         </div>
       </div>
     </div>
