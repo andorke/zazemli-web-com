@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -121,5 +124,47 @@ describe.each(guidePages)("%s: снятые элементы", (_url, Page) => {
   it("анимации сверх `.reveal` нет", () => {
     const { container } = render(<Page />);
     expect(container.querySelectorAll("[class*='animate-']")).toHaveLength(0);
+  });
+});
+
+/*
+ * Приёмка PATCH-1 §7.2: три URL гайда открываются и связаны между собой —
+ * вход ведёт на обе ветки, каждая ветка на соседнюю (обратной ссылки ветка →
+ * вход канон не требует). src/content/guide.test.ts держит те же пути на
+ * уровне данных, здесь — что рендер их действительно выводит.
+ */
+describe("гайд: карта переходов", () => {
+  const pageByUrl = new Map(guidePages);
+
+  const linksOf = (Page: () => React.ReactElement) => {
+    const { container } = render(<Page />);
+    return Array.from(container.querySelectorAll("a[href]")).map(
+      (a) => a.getAttribute("href")!,
+    );
+  };
+
+  const expectedTargets: Record<string, string[]> = {
+    "/guide": ["/guide/perevalka", "/guide/polnaya-zamena"],
+    "/guide/perevalka": ["/guide/polnaya-zamena"],
+    "/guide/polnaya-zamena": ["/guide/perevalka"],
+  };
+
+  it.each(guidePages)("%s ведёт на свои страницы гайда", (url, Page) => {
+    const targets = linksOf(Page).filter(
+      (href) => pageByUrl.has(href) && href !== url,
+    );
+    expect([...new Set(targets)].sort()).toEqual(expectedTargets[url]);
+  });
+
+  it.each(guidePages)("%s: внутренние ссылки ведут на маршруты", (url, Page) => {
+    /* Ozon-блок ведёт на якорь главной (`/#collectio`) — сверяем путь без хеша */
+    const internal = linksOf(Page)
+      .filter((href) => href.startsWith("/"))
+      .map((href) => href.split("#")[0]);
+    expect(internal.length).toBeGreaterThan(0);
+    for (const href of internal) {
+      const page = resolve(process.cwd(), "src/app", href.slice(1), "page.tsx");
+      expect(existsSync(page), `${url}: нет страницы для ${href}`).toBe(true);
+    }
   });
 });
