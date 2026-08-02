@@ -27,5 +27,11 @@ export default defineConfig({
     command: "npm run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    /*
+     * Лист ожидания N°08 живёт за фича-флагом и в прод-сборке выключен (форма
+     * в плитке не рендерится). Для e2e включаем — сами запросы к /api/waitlist/*
+     * перехватываются в waitlist.spec.ts, бэкенда нет.
+     */
+    env: { NEXT_PUBLIC_WAITLIST_API: "/api/waitlist" },
   },
 });

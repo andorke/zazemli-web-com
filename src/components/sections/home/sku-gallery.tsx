@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { WaitlistForm } from "@/components/sections/home/waitlist-form";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 import { landingNumber, skus } from "@/content/sku";
@@ -66,7 +67,7 @@ export function SkuGallery() {
             </li>
           ))}
           <li className="contents">
-            <div className="bg-chalk flex flex-col gap-3 px-6 py-8">
+            <div className="bg-chalk flex min-w-0 flex-col gap-3 px-6 py-8">
               <span className="tracking-kicker text-charcoal/50 font-ui text-[10px]">
                 {skuGallery.invite.number}
               </span>
@@ -76,6 +77,8 @@ export function SkuGallery() {
               <span className="text-charcoal/55 font-voice text-sm">
                 {skuGallery.invite.note}
               </span>
+              {/* шаг 1 листа ожидания; шаг 2 — попап (change waitlist-form) */}
+              <WaitlistForm />
             </div>
           </li>
         </ul>

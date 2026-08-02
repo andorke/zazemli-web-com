@@ -13,7 +13,9 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-function setup(props: Partial<React.ComponentProps<typeof WaitlistModal>> = {}) {
+function setup(
+  props: Partial<React.ComponentProps<typeof WaitlistModal>> = {},
+) {
   const onClose = vi.fn();
   const onSubmit = vi.fn().mockResolvedValue(undefined);
   const view = render(
@@ -135,7 +137,9 @@ describe("WaitlistModal — пять состояний (task 3.3)", () => {
     expect(screen.getByText(states.email)).toBeInTheDocument();
     expect(screen.getByText(states.consent)).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(document.activeElement).toBe(screen.getByLabelText(modal.emailLabel));
+    expect(document.activeElement).toBe(
+      screen.getByLabelText(modal.emailLabel),
+    );
   });
 
   it("кривой email: ошибка почты, отправки нет", async () => {

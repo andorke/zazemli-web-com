@@ -1,8 +1,13 @@
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { SkuGallery } from "@/components/sections/home/sku-gallery";
 import { skus } from "@/content/sku";
+import { waitlist } from "@/content/waitlist";
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe("SkuGallery (галерея #collectio по прототипу)", () => {
   it("секция несёт якорь id=collectio", () => {
@@ -55,6 +60,25 @@ describe("SkuGallery (галерея #collectio по прототипу)", () =>
       within(invite as HTMLElement).getByText("Твоего растения нет в коллекции?"),
     ).toBeInTheDocument();
     expect(number.closest("a")).toBeNull();
+  });
+
+  it("шаг 1 листа ожидания живёт внутри плитки N° 08 (флаг включён)", () => {
+    vi.stubEnv("NEXT_PUBLIC_WAITLIST_API", "/api/waitlist");
+    render(<SkuGallery />);
+    const invite = screen.getByText("N° 08 — ?").closest("div") as HTMLElement;
+    expect(
+      within(invite).getByLabelText(waitlist.step1.label),
+    ).toBeInTheDocument();
+    expect(
+      within(invite).getByRole("button", { name: waitlist.step1.submit }),
+    ).toBeInTheDocument();
+  });
+
+  it("без API плитка N° 08 остаётся приглашением без формы", () => {
+    vi.stubEnv("NEXT_PUBLIC_WAITLIST_API", "");
+    render(<SkuGallery />);
+    expect(screen.getByText("N° 08 — ?")).toBeInTheDocument();
+    expect(screen.queryByLabelText(waitlist.step1.label)).toBeNull();
   });
 
   it("CTA «Вся коллекция →» ведёт на /collectio", () => {

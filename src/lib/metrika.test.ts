@@ -42,9 +42,14 @@ describe("reachGoal", () => {
 
     reachGoal("waitlist_plant_input", { plant: "калатея" });
 
-    expect(ym).toHaveBeenCalledWith(12345, "reachGoal", "waitlist_plant_input", {
-      plant: "калатея",
-    });
+    expect(ym).toHaveBeenCalledWith(
+      12345,
+      "reachGoal",
+      "waitlist_plant_input",
+      {
+        plant: "калатея",
+      },
+    );
   });
 
   it("без свойств — вызывает ym без четвёртого аргумента", () => {
