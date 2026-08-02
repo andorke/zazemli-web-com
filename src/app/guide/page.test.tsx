@@ -1,77 +1,212 @@
-import { render, screen, within } from "@testing-library/react";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { render, screen } from "@testing-library/react";
+import type { Metadata } from "next";
 import { describe, expect, it } from "vitest";
 
-import GuidePage from "@/app/guide/page";
-import { guide } from "@/content/guide";
+import GuidePage, { metadata } from "@/app/guide/page";
+import GuidePerevalkaPage, {
+  metadata as perevalkaMetadata,
+} from "@/app/guide/perevalka/page";
+import GuidePolnayaZamenaPage, {
+  metadata as polnayaZamenaMetadata,
+} from "@/app/guide/polnaya-zamena/page";
+import { guideEntry } from "@/content/guide";
 
-/* Сборка /guide по прототипу guide.html: hero → тиры → 5 стадий → Ozon → «На главную» */
-describe("/guide: сборка страницы", () => {
+/* Вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка → Ozon */
+describe("/guide: вход", () => {
   it("один h1 канона", () => {
     render(<GuidePage />);
     const h1 = screen.getAllByRole("heading", { level: 1 });
     expect(h1).toHaveLength(1);
-    expect(h1[0]).toHaveTextContent(guide.hero.title);
+    expect(h1[0]).toHaveTextContent(guideEntry.hero.title);
   });
 
-  it("5 стадий: заголовки h2 и порядок в DOM", () => {
+  it("стадии 00 и 01, шагов маршрутов на входе нет", () => {
     const { container } = render(<GuidePage />);
-    for (const stage of guide.stages) {
+    const ids = Array.from(container.querySelectorAll("li[id^='step-']")).map(
+      (el) => el.id,
+    );
+    expect(ids).toEqual(["step-0", "step-1"]);
+    for (const title of ["Дренаж", "Грунт и посадка", "Дневник"]) {
       expect(
-        screen.getByRole("heading", { level: 2, name: stage.title }),
-      ).toBeInTheDocument();
-    }
-    const ids = Array.from(
-      container.querySelectorAll("li[id^='step-']"),
-    ).map((el) => el.id);
-    expect(ids).toEqual(["step-0", "step-1", "step-2", "step-3", "step-4"]);
-  });
-
-  it("тир-2: лента-оглавление ведёт на якоря стадий", () => {
-    render(<GuidePage />);
-    const nav = screen.getByRole("navigation", { name: "Шаги пересадки" });
-    for (const stage of guide.stages) {
-      const link = within(nav).getByRole("link", {
-        name: new RegExp(stage.title),
-      });
-      expect(link).toHaveAttribute("href", `#${stage.id}`);
+        screen.queryByRole("heading", { level: 2, name: title }),
+      ).not.toBeInTheDocument();
     }
   });
 
-  it("Ozon-блок и возврат на главную", () => {
+  it("инвентарь: все пункты и легенда ● в боксе / ○ своё", () => {
     render(<GuidePage />);
-    expect(screen.getByText(guide.ozon.title)).toBeInTheDocument();
-    const back = screen.getByRole("link", { name: "← На главную" });
-    expect(back).toHaveAttribute("href", "/");
+    for (const item of guideEntry.kit.items) {
+      expect(screen.getByText(item.text, { exact: false })).toBeInTheDocument();
+    }
+    expect(screen.getByText(guideEntry.kit.time)).toBeInTheDocument();
+    expect(screen.getByText("в боксе")).toBeInTheDocument();
+    expect(screen.getByText("своё")).toBeInTheDocument();
+  });
+
+  it("развилка стоит после осмотра кома и ведёт на оба маршрута", () => {
+    const { container } = render(<GuidePage />);
+    const fork = container.querySelector("#fork");
+    expect(fork).toBeInTheDocument();
+    expect(
+      container.querySelector("#step-1")!.compareDocumentPosition(fork!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    for (const path of guideEntry.fork.paths) {
+      expect(
+        screen.getByRole("link", { name: new RegExp(path.button.label) }),
+      ).toHaveAttribute("href", path.button.href);
+    }
+  });
+
+  it("HowTo на входе нет (design 3)", () => {
+    const { container } = render(<GuidePage />);
+    expect(
+      container.querySelector('script[type="application/ld+json"]'),
+    ).not.toBeInTheDocument();
+  });
+
+  /* Вход собирает вес обеих веток: canonical на себя, noindex тут не ставим */
+  it("canonical на себя, без noindex", () => {
+    expect(metadata.alternates?.canonical).toBe("/guide");
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it("возврат на главную", () => {
+    render(<GuidePage />);
+    expect(screen.getByRole("link", { name: "← На главную" })).toHaveAttribute(
+      "href",
+      "/",
+    );
   });
 });
 
-/* Schema.org HowTo: 5 HowToStep = 5 стадий по порядку, text — из шагов стадии */
-describe("/guide: JSON-LD HowTo", () => {
-  it("HowTo с 5 HowToStep = заголовки стадий по порядку", () => {
-    const { container } = render(<GuidePage />);
-    const script = container.querySelector(
-      'script[type="application/ld+json"]',
-    );
-    expect(script).toBeInTheDocument();
+/*
+ * Снятое решениями 30.07 (FIX-62 · FIX-64): блоки «Готово, когда» и лид-строки
+ * под заголовками шагов сняты как описание перед инструкцией; анимации сверх
+ * существующего `.reveal` нет; раскрывашки — нативные, без JS. Держим сразу на
+ * трёх страницах: вернуть их проще всего в общий рендер стадий.
+ */
+const guidePages: [string, () => React.ReactElement][] = [
+  ["/guide", GuidePage],
+  ["/guide/perevalka", GuidePerevalkaPage],
+  ["/guide/polnaya-zamena", GuidePolnayaZamenaPage],
+];
 
-    const data = JSON.parse(script!.textContent ?? "{}");
-    expect(data["@context"]).toBe("https://schema.org");
-    expect(data["@type"]).toBe("HowTo");
-    expect(data.step).toHaveLength(guide.stages.length);
-    expect(data.step.map((s: { name: string }) => s.name)).toEqual(
-      guide.stages.map((stage) => stage.title),
-    );
+describe.each(guidePages)("%s: снятые элементы", (_url, Page) => {
+  it("блоков «Готово, когда» нет", () => {
+    const { container } = render(<Page />);
+    expect(container.textContent).not.toContain("Готово, когда");
   });
 
-  it("каждый HowToStep несёт текст своих шагов", () => {
-    const { container } = render(<GuidePage />);
-    const data = JSON.parse(
-      container.querySelector('script[type="application/ld+json"]')
-        ?.textContent ?? "{}",
+  it("между заголовком стадии и микрошагами нет лид-строки", () => {
+    const { container } = render(<Page />);
+    const stages = Array.from(container.querySelectorAll("li[id^='step-']"));
+    expect(stages.length).toBeGreaterThan(0);
+    for (const stage of stages) {
+      const heading = stage.querySelector("h2");
+      expect(heading?.nextElementSibling?.firstElementChild?.tagName).toBe("OL");
+    }
+  });
+
+  it("подсказки раскрываются без JS: закрытый details несёт тело в разметке", () => {
+    const { container } = render(<Page />);
+    const tips = Array.from(container.querySelectorAll("details"));
+    expect(tips.length).toBeGreaterThan(0);
+    for (const tip of tips) {
+      const summary = tip.querySelector("summary");
+      expect(summary).not.toBeNull();
+      expect(tip.open).toBe(false);
+      expect(tip.textContent!.length).toBeGreaterThan(
+        summary!.textContent!.length,
+      );
+    }
+  });
+
+  it("анимации сверх `.reveal` нет", () => {
+    const { container } = render(<Page />);
+    expect(container.querySelectorAll("[class*='animate-']")).toHaveLength(0);
+  });
+});
+
+/*
+ * Приёмка PATCH-1 §7.2: три URL гайда открываются и связаны между собой —
+ * вход ведёт на обе ветки, каждая ветка на соседнюю (обратной ссылки ветка →
+ * вход канон не требует). src/content/guide.test.ts держит те же пути на
+ * уровне данных, здесь — что рендер их действительно выводит.
+ */
+describe("гайд: карта переходов", () => {
+  const pageByUrl = new Map(guidePages);
+
+  const linksOf = (Page: () => React.ReactElement) => {
+    const { container } = render(<Page />);
+    return Array.from(container.querySelectorAll("a[href]")).map(
+      (a) => a.getAttribute("href")!,
     );
-    guide.stages.forEach((stage, i) => {
-      expect(data.step[i]["@type"]).toBe("HowToStep");
-      expect(data.step[i].text).toContain(stage.steps[0].text);
-    });
+  };
+
+  const expectedTargets: Record<string, string[]> = {
+    "/guide": ["/guide/perevalka", "/guide/polnaya-zamena"],
+    "/guide/perevalka": ["/guide/polnaya-zamena"],
+    "/guide/polnaya-zamena": ["/guide/perevalka"],
+  };
+
+  it.each(guidePages)("%s ведёт на свои страницы гайда", (url, Page) => {
+    const targets = linksOf(Page).filter(
+      (href) => pageByUrl.has(href) && href !== url,
+    );
+    expect([...new Set(targets)].sort()).toEqual(expectedTargets[url]);
+  });
+
+  it.each(guidePages)("%s: внутренние ссылки ведут на маршруты", (url, Page) => {
+    /* Ozon-блок ведёт на якорь главной (`/#collectio`) — сверяем путь без хеша */
+    const internal = linksOf(Page)
+      .filter((href) => href.startsWith("/"))
+      .map((href) => href.split("#")[0]);
+    expect(internal.length).toBeGreaterThan(0);
+    for (const href of internal) {
+      const page = resolve(process.cwd(), "src/app", href.slice(1), "page.tsx");
+      expect(existsSync(page), `${url}: нет страницы для ${href}`).toBe(true);
+    }
+  });
+});
+
+/*
+ * Приёмка PATCH-1 §7.2: контракт canonical/noindex целиком, а не по странице.
+ * Смысл контракта — весь вес трёх страниц уходит на один URL /guide, ветки при
+ * этом вне индекса. Пер-страничные тесты держат метаданные каждой страницы,
+ * здесь — что вместе они складываются в это, и canonical резолвится в
+ * абсолютный вид (Next достраивает его metadataBase из layout.tsx).
+ */
+describe("гайд: canonical/noindex-контракт", () => {
+  const site = "https://zazemli.com";
+  const guideMeta: [string, Metadata][] = [
+    ["/guide", metadata],
+    ["/guide/perevalka", perevalkaMetadata],
+    ["/guide/polnaya-zamena", polnayaZamenaMetadata],
+  ];
+
+  it.each(guideMeta)("%s: canonical ведёт на вход гайда", (_url, meta) => {
+    const canonical = meta.alternates?.canonical;
+    expect(canonical).toBeTruthy();
+    expect(new URL(String(canonical), site).href).toBe(`${site}/guide`);
+  });
+
+  it("вне индекса ровно две ветки, вход индексируется", () => {
+    const noindex = guideMeta.filter(
+      ([, meta]) =>
+        typeof meta.robots === "object" && meta.robots?.index === false,
+    );
+    expect(noindex.map(([url]) => url)).toEqual([
+      "/guide/perevalka",
+      "/guide/polnaya-zamena",
+    ]);
+    /* follow — обязательная половина: ссылочный вес веток течёт на вход */
+    for (const [, meta] of noindex) {
+      expect(meta.robots).toMatchObject({ follow: true });
+    }
   });
 });
