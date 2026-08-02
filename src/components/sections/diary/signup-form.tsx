@@ -147,7 +147,7 @@ export function SignupForm({
         consents: { pdn, ads },
       });
       if (result.ok) {
-        // consent-gate — в самом reachGoal: ym есть только при granted (task 3.1)
+        // consent-gate — в самом reachGoal: ym есть только при «all» (task 3.1)
         reachGoal("diary_signup_submit");
         setPhase("sent");
       } else setSubmitError(result.state);

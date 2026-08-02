@@ -26,7 +26,7 @@
 
 - [x] 5.1 `src/lib/consent.ts`: тип `'necessary' | 'all'`, чтение легаси `granted→all` / `denied→necessary`, запись только новых значений
 - [x] 5.2 Кнопки и текст баннера: «Только необходимые» / «Принять все», нотис verbatim из PATCH-1 §4б со ссылкой на `/privacy`
-- [ ] 5.3 Обновить потребителей (`Metrika`, баннер) и тесты (`cookie-banner.test.tsx`, consent-тесты); баннер присутствует на `/privacy` и `/terms`
+- [x] 5.3 Обновить потребителей (`Metrika`, баннер) и тесты (`cookie-banner.test.tsx`, consent-тесты); баннер присутствует на `/privacy` и `/terms`
 
 ## 6. Приёмка
 

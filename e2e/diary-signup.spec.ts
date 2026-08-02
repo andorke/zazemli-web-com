@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
  * покрыты в routes.spec.ts — не дублируем.
  *
  * Event diary_signup_submit в e2e не наблюдаем: NEXT_PUBLIC_METRIKA_ID инлайнится
- * на сборке (на dev пуст), Метрика грузится только при granted-согласии + внешний
+ * на сборке (на dev пуст), Метрика грузится только при согласии «all» + внешний
  * скрипт Яндекса (см. consent.spec.ts). reachGoal вызывается в той же ветке
  * handleSubmit, что и подмена формы на confirmation, поэтому happy-path →
  * confirmation проверяет тот же code path. Сама отправка цели — unit
@@ -21,9 +21,9 @@ const POLICY_LINK = "политики конфиденциальности";
 test.beforeEach(async ({ page }) => {
   // снимаем cookie-баннер (fixed bottom, z-50), чтобы не перехватывал клики по
   // нижним полям формы на 360px; сам баннер покрыт consent.spec.ts.
-  // ключ — CONSENT_KEY из src/lib/consent.tsx
+  // ключ — CONSENT_KEY из src/lib/consent.ts
   await page.addInitScript(() =>
-    localStorage.setItem("zazemli-consent", "denied"),
+    localStorage.setItem("zazemli-consent", "necessary"),
   );
 });
 
