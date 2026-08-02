@@ -9,7 +9,7 @@
 
 ## 2. Роуты и мета
 
-- [ ] 2.1 Создать `src/app/guide/perevalka/page.tsx` и `src/app/guide/polnaya-zamena/page.tsx`; перестроить вход `/guide` (стадии 00–01 + развилка, без шагов 02–04)
+- [x] 2.1 Создать `src/app/guide/perevalka/page.tsx` и `src/app/guide/polnaya-zamena/page.tsx`; перестроить вход `/guide` (стадии 00–01 + развилка, без шагов 02–04)
 - [ ] 2.2 `generateMetadata`: ветки — `noindex, follow` + canonical `https://zazemli.com/guide`; вход — canonical на себя, без noindex
 - [ ] 2.3 Ссылки: развилка → маршруты, «Это не мой случай» → соседняя ветка; относительных путей прототипов нет
 - [ ] 2.4 Sitemap не расширять (ветки noindex); проверить наличие HTML веток в `out/` после build

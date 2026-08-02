@@ -1,77 +1,69 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import GuidePage from "@/app/guide/page";
-import { guide } from "@/content/guide";
+import { guideEntry } from "@/content/guide";
 
-/* Сборка /guide по прототипу guide.html: hero → тиры → 5 стадий → Ozon → «На главную» */
-describe("/guide: сборка страницы", () => {
+/* Вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка → Ozon */
+describe("/guide: вход", () => {
   it("один h1 канона", () => {
     render(<GuidePage />);
     const h1 = screen.getAllByRole("heading", { level: 1 });
     expect(h1).toHaveLength(1);
-    expect(h1[0]).toHaveTextContent(guide.hero.title);
+    expect(h1[0]).toHaveTextContent(guideEntry.hero.title);
   });
 
-  it("5 стадий: заголовки h2 и порядок в DOM", () => {
+  it("стадии 00 и 01, шагов маршрутов на входе нет", () => {
     const { container } = render(<GuidePage />);
-    for (const stage of guide.stages) {
+    const ids = Array.from(container.querySelectorAll("li[id^='step-']")).map(
+      (el) => el.id,
+    );
+    expect(ids).toEqual(["step-0", "step-1"]);
+    for (const title of ["Дренаж", "Грунт и посадка", "Дневник"]) {
       expect(
-        screen.getByRole("heading", { level: 2, name: stage.title }),
-      ).toBeInTheDocument();
-    }
-    const ids = Array.from(
-      container.querySelectorAll("li[id^='step-']"),
-    ).map((el) => el.id);
-    expect(ids).toEqual(["step-0", "step-1", "step-2", "step-3", "step-4"]);
-  });
-
-  it("тир-2: лента-оглавление ведёт на якоря стадий", () => {
-    render(<GuidePage />);
-    const nav = screen.getByRole("navigation", { name: "Шаги пересадки" });
-    for (const stage of guide.stages) {
-      const link = within(nav).getByRole("link", {
-        name: new RegExp(stage.title),
-      });
-      expect(link).toHaveAttribute("href", `#${stage.id}`);
+        screen.queryByRole("heading", { level: 2, name: title }),
+      ).not.toBeInTheDocument();
     }
   });
 
-  it("Ozon-блок и возврат на главную", () => {
+  it("инвентарь: все пункты и легенда ● в боксе / ○ своё", () => {
     render(<GuidePage />);
-    expect(screen.getByText(guide.ozon.title)).toBeInTheDocument();
-    const back = screen.getByRole("link", { name: "← На главную" });
-    expect(back).toHaveAttribute("href", "/");
-  });
-});
-
-/* Schema.org HowTo: 5 HowToStep = 5 стадий по порядку, text — из шагов стадии */
-describe("/guide: JSON-LD HowTo", () => {
-  it("HowTo с 5 HowToStep = заголовки стадий по порядку", () => {
-    const { container } = render(<GuidePage />);
-    const script = container.querySelector(
-      'script[type="application/ld+json"]',
-    );
-    expect(script).toBeInTheDocument();
-
-    const data = JSON.parse(script!.textContent ?? "{}");
-    expect(data["@context"]).toBe("https://schema.org");
-    expect(data["@type"]).toBe("HowTo");
-    expect(data.step).toHaveLength(guide.stages.length);
-    expect(data.step.map((s: { name: string }) => s.name)).toEqual(
-      guide.stages.map((stage) => stage.title),
-    );
+    for (const item of guideEntry.kit.items) {
+      expect(screen.getByText(item.text, { exact: false })).toBeInTheDocument();
+    }
+    expect(screen.getByText(guideEntry.kit.time)).toBeInTheDocument();
+    expect(screen.getByText("в боксе")).toBeInTheDocument();
+    expect(screen.getByText("своё")).toBeInTheDocument();
   });
 
-  it("каждый HowToStep несёт текст своих шагов", () => {
+  it("развилка стоит после осмотра кома и ведёт на оба маршрута", () => {
     const { container } = render(<GuidePage />);
-    const data = JSON.parse(
-      container.querySelector('script[type="application/ld+json"]')
-        ?.textContent ?? "{}",
+    const fork = container.querySelector("#fork");
+    expect(fork).toBeInTheDocument();
+    expect(
+      container.querySelector("#step-1")!.compareDocumentPosition(fork!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    for (const path of guideEntry.fork.paths) {
+      expect(
+        screen.getByRole("link", { name: new RegExp(path.button.label) }),
+      ).toHaveAttribute("href", path.button.href);
+    }
+  });
+
+  it("HowTo на входе нет (design 3)", () => {
+    const { container } = render(<GuidePage />);
+    expect(
+      container.querySelector('script[type="application/ld+json"]'),
+    ).not.toBeInTheDocument();
+  });
+
+  it("возврат на главную", () => {
+    render(<GuidePage />);
+    expect(screen.getByRole("link", { name: "← На главную" })).toHaveAttribute(
+      "href",
+      "/",
     );
-    guide.stages.forEach((stage, i) => {
-      expect(data.step[i]["@type"]).toBe("HowToStep");
-      expect(data.step[i].text).toContain(stage.steps[0].text);
-    });
   });
 });
