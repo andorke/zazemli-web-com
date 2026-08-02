@@ -12,6 +12,27 @@ test("один h1 = заголовок hero", async ({ page }) => {
   await expect(h1).toHaveText("Лаборатория грунта.");
 });
 
+test("трио колб на входе: блок стоит между hero и якорь-навигацией", async ({
+  page,
+}) => {
+  await page.goto("/lab");
+  await expect(
+    page.getByRole("heading", { name: "Разным растениям — разная земля" }),
+  ).toBeVisible();
+  await expect(page.getByText("антуриум · N° 03")).toBeVisible();
+  await expect(page.getByText("замиокулькас · N° 06")).toBeVisible();
+
+  const trio = await page
+    .getByRole("heading", { name: "Разным растениям — разная земля" })
+    .boundingBox();
+  const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
+  const nav = await page
+    .getByRole("navigation", { name: "Разделы лаборатории" })
+    .boundingBox();
+  expect(h1!.y).toBeLessThan(trio!.y);
+  expect(trio!.y).toBeLessThan(nav!.y);
+});
+
 test("порядок секций: рецептуры (#recs) идут раньше компонентов (#comp)", async ({
   page,
 }) => {
