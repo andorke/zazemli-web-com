@@ -56,6 +56,14 @@ describe("SiteFooter (по прототипу)", () => {
     expect(link).toHaveAttribute("href", "/privacy");
   });
 
+  it("ссылка на условия использования ведёт на /terms", () => {
+    render(<SiteFooter />);
+    const link = screen.getByRole("link", {
+      name: "Условия использования сайта",
+    });
+    expect(link).toHaveAttribute("href", "/terms");
+  });
+
   it("QR-кодов (и вообще img) в футере нет", () => {
     render(<SiteFooter />);
     expect(screen.queryAllByRole("img")).toHaveLength(0);

@@ -69,6 +69,13 @@ export function SiteFooter() {
           {footer.ogrnip ? ` · ОГРНИП ${footer.ogrnip}` : ""} ·{" "}
           {footer.legalTail} ·{" "}
           <Link
+            href="/terms"
+            className="underline underline-offset-2 hover:text-bone/70"
+          >
+            Условия использования сайта
+          </Link>{" "}
+          ·{" "}
+          <Link
             href="/privacy"
             className="underline underline-offset-2 hover:text-bone/70"
           >
