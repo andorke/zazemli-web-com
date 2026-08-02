@@ -14,7 +14,7 @@ export function GuideHero({
 }) {
   return (
     <section className="bg-bone text-charcoal pt-24 pb-[clamp(3rem,6vw,5rem)] lg:pt-28">
-      <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
+      <div className="welcome-cascade mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
         <h1 className="font-voice leading-heading mt-5 max-w-[18ch] text-[clamp(2.4rem,5vw,4rem)] font-light tracking-display-page">
           {hero.title}

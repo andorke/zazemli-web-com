@@ -86,6 +86,23 @@
   --input: rgb(28 28 28 / 0.15);
   --ring: var(--color-moss);
   --radius: 2px;
+
+  /* Motion (tokens.motion): easing + длительности. Значения живут здесь,
+     в теме ниже — только ссылки (inline-переменные темы не доходят до рантайма) */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-medium: 300ms;
+  --duration-slow: 400ms;
+  --duration-page: 600ms;
+
+  /* Entrance-встреча QR-входов (change qr-welcome, D3): дефолты до решения
+     дизайнера по таймингам — правятся здесь, в одном месте */
+  --welcome-duration: var(--duration-slow);
+  --welcome-stagger: 80ms;
+  --welcome-ease: var(--ease-emphasized);
+  --welcome-line-duration: var(--duration-page);
 }
 
 @theme inline {
@@ -217,9 +234,9 @@
   --radius-lg: var(--radius);
   --radius-xl: var(--radius);
 
-  /* Motion (tokens.motion) — на MVP анимации нет, токены заложены */
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  /* Motion (tokens.motion) — значения на :root */
+  --ease-standard: var(--ease-standard);
+  --ease-emphasized: var(--ease-emphasized);
 }
 
 @layer base {
@@ -235,6 +252,178 @@
   h3 {
     @apply font-voice;
   }
+}
+
+/*
+ * Entrance-утилиты встречи QR-входов (change qr-welcome, D1–D3).
+ * Стартовые состояния существуют только под классом show-once гейта и только
+ * при no-preference: без JS и при reduce правила не применяются вовсе —
+ * контент виден сразу, стартовых opacity/transform не появляется.
+ * Начальная прозрачность 0.1, а не 0: элемент с opacity 0 выпадает из
+ * LCP-кандидатов Chrome (D4).
+ */
+@keyframes welcome-fade-rise {
+  from {
+    opacity: 0.1;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Вылет строки заголовка из-под маски: только transform, маска — overflow обёртки */
+@keyframes welcome-line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Прорисовка линии: ширина элемента статична, едет только transform (D5) */
+@keyframes welcome-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-welcome .welcome-rise,
+  html.js-welcome .welcome-cascade > * {
+    animation: welcome-fade-rise var(--welcome-duration) var(--welcome-ease)
+      both;
+  }
+
+  /* Лесенка каскада: шаг --welcome-stagger, порядок — по nth-child (D2) */
+  html.js-welcome .welcome-cascade > *:nth-child(2) {
+    animation-delay: calc(var(--welcome-stagger) * 1);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(3) {
+    animation-delay: calc(var(--welcome-stagger) * 2);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(4) {
+    animation-delay: calc(var(--welcome-stagger) * 3);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(5) {
+    animation-delay: calc(var(--welcome-stagger) * 4);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(6) {
+    animation-delay: calc(var(--welcome-stagger) * 5);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(7) {
+    animation-delay: calc(var(--welcome-stagger) * 6);
+  }
+  html.js-welcome .welcome-cascade > *:nth-child(n + 8) {
+    animation-delay: calc(var(--welcome-stagger) * 7);
+  }
+
+  /*
+   * Секции ниже фолда: та же анимация, но на паузе (fill both держит стартовый
+   * кадр), пока Reveal не поставит класс `in` по IntersectionObserver.
+   * Лесенка задержек берётся из правил .welcome-cascade выше.
+   */
+  html.js-welcome .welcome-reveal,
+  html.js-welcome .welcome-reveal-cascade > * {
+    animation-play-state: paused;
+  }
+
+  html.js-welcome .welcome-reveal.in,
+  html.js-welcome .welcome-reveal-cascade.in > * {
+    animation-play-state: running;
+  }
+
+  /*
+   * Лента стадий 01–05 (D5): линии рисуются слева направо, когда hero-каскад
+   * отыграл. На время встречи границы ленты гасятся, а линии рисуют
+   * псевдоэлементы: scaleX композитится, анимация border/width — нет.
+   * Цвет берётся из currentColor ленты (charcoal), прозрачность — как у границ.
+   */
+  html.js-welcome .welcome-draw {
+    position: relative;
+    border-color: transparent;
+  }
+
+  html.js-welcome .welcome-draw::before,
+  html.js-welcome .welcome-draw::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.15;
+    transform-origin: left;
+    animation: welcome-draw-x var(--welcome-line-duration) var(--welcome-ease)
+      both;
+    animation-delay: calc(var(--welcome-duration) + var(--welcome-stagger) * 3);
+  }
+
+  /* Псевдоэлементы считаются от padding-box — сдвиг на границу ленты */
+  html.js-welcome .welcome-draw::before {
+    top: -1px;
+  }
+
+  html.js-welcome .welcome-draw::after {
+    bottom: -1px;
+  }
+
+  /*
+   * Заголовок-флагман (D4). На мобиле маски нет: h1 едет общим fade-rise
+   * каскада (opacity от 0.1 — LCP-кандидат не выпадает). С lg h1 отдаёт
+   * анимацию строкам, каждая вылетает из-под своей маски со своей задержкой.
+   * Сброс animation у .welcome-lines той же специфичности, что правило
+   * каскада, — работает за счёт порядка: этот блок ниже по файлу.
+   */
+  @media (min-width: 64rem) {
+    html.js-welcome .welcome-lines {
+      animation: none;
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line {
+      overflow: hidden;
+      /* запас под выносные элементы: маска не режет хвосты «у» и «р» */
+      padding-bottom: 0.12em;
+      margin-bottom: -0.12em;
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line > span {
+      animation: welcome-line-rise var(--welcome-line-duration)
+        var(--welcome-ease) both;
+      animation-delay: var(--welcome-stagger);
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line:nth-child(2) > span {
+      animation-delay: calc(var(--welcome-stagger) * 2);
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line:nth-child(3) > span {
+      animation-delay: calc(var(--welcome-stagger) * 3);
+    }
+  }
+}
+
+/*
+ * Полоски долей рецептуры /lab (D5): ширина сегмента статична (доля в %),
+ * едет только transform — scaleX композитится, анимация width запрещена.
+ * Прорисовка — постоянное поведение карточки, а не встреча, поэтому гейта
+ * js-welcome здесь нет; при reduce её гасит блок ниже.
+ * Полоска внутри карточки появляется вместе с раскрытием — рисуется на каждом
+ * open. Полоска в шапке видна всегда — её запускает Reveal классом `in`,
+ * когда карточка доехала до вьюпорта; без JS полоска просто видна целиком.
+ */
+.shares-bar > * {
+  transform-origin: left;
+}
+
+details[open] > .shares-bar > *,
+summary .shares-bar.in > * {
+  animation: welcome-draw-x var(--welcome-line-duration) var(--welcome-ease)
+    both;
 }
 
 /* prefers-reduced-motion: reduce — глобально отключает анимацию (бриф §4, обязательное требование) */

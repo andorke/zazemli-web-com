@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { MaterialDot } from "@/components/ui/material-dot";
+import { Reveal } from "@/components/ui/reveal";
 import { lab, type LabComponent } from "@/content/lab";
 import { ComponentModal } from "./component-modal";
 import { GROUP_MATERIAL } from "./soil-function-colors";
@@ -29,7 +30,10 @@ export function LabComponentsGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <Reveal
+          cascade
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+        >
           {components.map((component) => (
             <button
               key={component.key}
@@ -55,7 +59,7 @@ export function LabComponentsGrid() {
               </span>
             </button>
           ))}
-        </div>
+        </Reveal>
       </div>
 
       <ComponentModal component={active} onClose={() => setActive(null)} />

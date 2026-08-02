@@ -4,6 +4,7 @@ import { CookieBanner } from "@/components/site/cookie-banner";
 import { Metrika } from "@/components/site/metrika";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { welcomeGateScript } from "@/lib/welcome-gate";
 import { ui, voice } from "./fonts";
 import "./globals.css";
 
@@ -50,6 +51,10 @@ export default function RootLayout({
       lang="ru"
       className={`${voice.variable} ${ui.variable} h-full font-ui antialiased`}
     >
+      <head>
+        {/* Show-once гейт встречи: класс на <html> до первой отрисовки (D1) */}
+        <script dangerouslySetInnerHTML={{ __html: welcomeGateScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <SiteHeader />
         {children}

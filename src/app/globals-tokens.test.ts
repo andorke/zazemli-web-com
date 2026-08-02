@@ -114,3 +114,97 @@ describe("шкалы v1.1.0 в теме", () => {
     expect(css).toContain("tokens.json v1.1.0");
   });
 });
+
+describe("motion-токены (tokens.motion)", () => {
+  it("duration-шкала 150/200/300/400/600ms", () => {
+    expect(has(root, "--duration-fast: 150ms")).toBe(true);
+    expect(has(root, "--duration-base: 200ms")).toBe(true);
+    expect(has(root, "--duration-medium: 300ms")).toBe(true);
+    expect(has(root, "--duration-slow: 400ms")).toBe(true);
+    expect(has(root, "--duration-page: 600ms")).toBe(true);
+  });
+
+  it("easing-токены", () => {
+    expect(has(root, "--ease-standard: cubic-bezier(0.4, 0, 0.2, 1)")).toBe(
+      true,
+    );
+    expect(has(root, "--ease-emphasized: cubic-bezier(0.2, 0, 0, 1)")).toBe(
+      true,
+    );
+  });
+
+  it("entrance-утилиты живут только под гейтом и no-preference", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const guarded = bare.slice(
+      bare.indexOf("@media (prefers-reduced-motion: no-preference)"),
+    );
+    const selectors = [...bare.matchAll(/^[^\S\n]*([^@\s}][^{}]*)\{/gm)]
+      .map((m) => m[1].trim())
+      .filter((selector) => selector.includes(".welcome-"));
+
+    expect(selectors.length).toBeGreaterThan(0);
+    for (const selector of selectors) {
+      expect(selector).toContain("html.js-welcome");
+      expect(guarded).toContain(selector);
+    }
+  });
+
+  it("keyframes fade-rise: opacity от 0.1, translateY 10px (D4)", () => {
+    expect(has(css, "@keyframes welcome-fade-rise")).toBe(true);
+    expect(has(css, "opacity: 0.1")).toBe(true);
+    expect(has(css, "transform: translateY(10px)")).toBe(true);
+  });
+
+  it("маска строк h1 — вылет 110% и только с брейкпоинта lg (D4)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(has(bare, "@keyframes welcome-line-rise")).toBe(true);
+    expect(has(bare, "transform: translateY(110%)")).toBe(true);
+
+    // Правила строк живут только внутри lg-медиа: на мобиле маски нет (LCP)
+    const lg = bare.slice(bare.indexOf("@media (min-width: 64rem)"));
+    expect(bare).toContain("@media (min-width: 64rem)");
+    for (const [, selector] of bare.matchAll(
+      /^[^\S\n]*([^@\s}][^{}]*\.welcome-line[^{}]*)\{/gm,
+    )) {
+      expect(lg).toContain(selector.trim());
+    }
+  });
+
+  it("линия ленты стадий: scaleX from left после hero-каскада (D5)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(has(bare, "@keyframes welcome-draw-x")).toBe(true);
+    expect(has(bare, "transform: scaleX(0)")).toBe(true);
+
+    const draw = bare.slice(
+      bare.indexOf("html.js-welcome .welcome-draw::before"),
+    );
+    expect(has(draw, "transform-origin: left")).toBe(true);
+    // старт — после последнего элемента hero-каскада, не одновременно с ним
+    expect(
+      has(
+        draw,
+        "animation-delay: calc(var(--welcome-duration) + var(--welcome-stagger) * 3)",
+      ),
+    ).toBe(true);
+  });
+
+  it("полоски долей /lab: scaleX from left, раскрытие и первое появление (D5)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const bar = bare.slice(bare.indexOf(".shares-bar > *"));
+
+    expect(has(bar, "transform-origin: left")).toBe(true);
+    expect(has(bar, "animation: welcome-draw-x")).toBe(true);
+    // раскрытие карточки — постоянное поведение, гейта встречи здесь нет
+    expect(has(bar, "details[open] > .shares-bar > *")).toBe(true);
+    expect(has(bar, ".shares-bar.in > *")).toBe(true);
+  });
+
+  it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
+    expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
+    expect(has(root, "--welcome-stagger: 80ms")).toBe(true);
+    expect(has(root, "--welcome-ease: var(--ease-emphasized)")).toBe(true);
+    expect(has(root, "--welcome-line-duration: var(--duration-page)")).toBe(
+      true,
+    );
+  });
+});
