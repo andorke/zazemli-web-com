@@ -31,6 +31,10 @@ describe("Контент /guide (guide.md v3.0 = прототип guide.html)", 
     expect(guide.hero.meta).toBe("5 шагов · всё нужное в боксе");
   });
 
+  it("строки h1 склеиваются в канонический заголовок", () => {
+    expect(guide.hero.titleLines.join(" ")).toBe(guide.hero.title);
+  });
+
   it("ровно 5 стадий CJM 00–04 с якорями step-0…step-4 по порядку", () => {
     expect(guide.stages).toHaveLength(5);
     expect(guide.stages.map((s) => s.num)).toEqual([

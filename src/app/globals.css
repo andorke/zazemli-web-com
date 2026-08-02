@@ -263,6 +263,16 @@
   }
 }
 
+/* Вылет строки заголовка из-под маски: только transform, маска — overflow обёртки */
+@keyframes welcome-line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html.js-welcome .welcome-rise,
   html.js-welcome .welcome-cascade > * {
@@ -306,6 +316,40 @@
   html.js-welcome .welcome-reveal.in,
   html.js-welcome .welcome-reveal-cascade.in > * {
     animation-play-state: running;
+  }
+
+  /*
+   * Заголовок-флагман (D4). На мобиле маски нет: h1 едет общим fade-rise
+   * каскада (opacity от 0.1 — LCP-кандидат не выпадает). С lg h1 отдаёт
+   * анимацию строкам, каждая вылетает из-под своей маски со своей задержкой.
+   * Сброс animation у .welcome-lines той же специфичности, что правило
+   * каскада, — работает за счёт порядка: этот блок ниже по файлу.
+   */
+  @media (min-width: 64rem) {
+    html.js-welcome .welcome-lines {
+      animation: none;
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line {
+      overflow: hidden;
+      /* запас под выносные элементы: маска не режет хвосты «у» и «р» */
+      padding-bottom: 0.12em;
+      margin-bottom: -0.12em;
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line > span {
+      animation: welcome-line-rise var(--welcome-line-duration)
+        var(--welcome-ease) both;
+      animation-delay: var(--welcome-stagger);
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line:nth-child(2) > span {
+      animation-delay: calc(var(--welcome-stagger) * 2);
+    }
+
+    html.js-welcome .welcome-lines > .welcome-line:nth-child(3) > span {
+      animation-delay: calc(var(--welcome-stagger) * 3);
+    }
   }
 }
 

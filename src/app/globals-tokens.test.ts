@@ -124,6 +124,21 @@ describe("motion-токены (tokens.motion)", () => {
     expect(has(css, "transform: translateY(10px)")).toBe(true);
   });
 
+  it("маска строк h1 — вылет 110% и только с брейкпоинта lg (D4)", () => {
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(has(bare, "@keyframes welcome-line-rise")).toBe(true);
+    expect(has(bare, "transform: translateY(110%)")).toBe(true);
+
+    // Правила строк живут только внутри lg-медиа: на мобиле маски нет (LCP)
+    const lg = bare.slice(bare.indexOf("@media (min-width: 64rem)"));
+    expect(bare).toContain("@media (min-width: 64rem)");
+    for (const [, selector] of bare.matchAll(
+      /^[^\S\n]*([^@\s}][^{}]*\.welcome-line[^{}]*)\{/gm,
+    )) {
+      expect(lg).toContain(selector.trim());
+    }
+  });
+
   it("entrance-переменные --welcome-* (qr-welcome D3)", () => {
     expect(has(root, "--welcome-duration: var(--duration-slow)")).toBe(true);
     expect(has(root, "--welcome-stagger: 80ms")).toBe(true);

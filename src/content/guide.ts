@@ -38,7 +38,14 @@ export type GuideStage = {
 };
 
 export type GuideContent = {
-  hero: { eyebrow: string; title: string; sub: string; meta: string };
+  /* titleLines — тот же title, разбитый на строки: переносы h1 фиксирует контент, не автоперенос */
+  hero: {
+    eyebrow: string;
+    title: string;
+    titleLines: string[];
+    sub: string;
+    meta: string;
+  };
   stages: GuideStage[];
   ozon: {
     eyebrow: string;
@@ -52,6 +59,7 @@ export const guide: GuideContent = {
   hero: {
     eyebrow: "Гайд по пересадке",
     title: "Руки в землю — голова свободна.",
+    titleLines: ["Руки в землю —", "голова свободна."],
     sub: "Спокойный ритуал наедине с растением. Порядок один для любого: меняется только грунт под него.",
     meta: "5 шагов · всё нужное в боксе",
   },
