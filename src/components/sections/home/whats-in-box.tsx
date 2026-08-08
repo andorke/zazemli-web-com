@@ -12,11 +12,11 @@ export function WhatsInBox() {
   const { whatsInBox } = home;
   return (
     <section className="bg-bone text-charcoal py-20 lg:py-28">
-      <div className="layout:grid-cols-[0.9fr_1.1fr] layout:items-center layout:gap-20 mx-auto grid w-full max-w-[1240px] gap-12 px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="layout:grid-cols-[0.9fr_1.1fr] layout:items-center layout:gap-20 wrap grid gap-12">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-5">
             <KickerHeader>{whatsInBox.eyebrow}</KickerHeader>
-            <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
               {whatsInBox.title}
             </h2>
           </div>

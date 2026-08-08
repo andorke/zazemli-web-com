@@ -10,7 +10,7 @@ export function About() {
   const { about } = home;
   return (
     <section className="bg-chalk text-charcoal py-20 lg:py-28">
-      <div className="mx-auto w-full max-w-[1240px] px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="wrap">
         <div className="mx-auto flex max-w-[42rem] flex-col items-center gap-6 text-center">
           <KickerHeader>{about.eyebrow}</KickerHeader>
           {about.paragraphs.map((paragraph) => (

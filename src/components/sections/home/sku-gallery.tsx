@@ -23,11 +23,11 @@ export function SkuGallery() {
       id="collectio"
       className="bg-bone text-charcoal flex flex-col py-20 lg:py-28"
     >
-      <div className="mx-auto flex w-full max-w-[1240px] flex-col px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="wrap flex flex-col">
         <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
-            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
               {skuGallery.title}
             </h2>
           </div>

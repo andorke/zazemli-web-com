@@ -6,19 +6,13 @@ import Home from "@/app/page";
 /*
  * FIX-14: на проде был взят контейнер, но не grid внутри секций — контент
  * прижимался к левому краю широких вьюпортов. Спека — классы прототипа:
- *   .wrap    max-width:1240px · margin-inline:auto · padding-inline:clamp(1.5rem,5vw,4rem)
+ *   .wrap    утилита globals.css: margin-inline auto, ширина растёт до 1600 на 2xl
  *   .boxsec  .9fr 1.1fr   .gives 1fr 1fr   .teasers repeat(3,1fr)   .steps repeat(3,1fr)
  *   .chead   1.15fr 1fr,  всё схлопывается на брейкпоинте 860 (layout: в токенах)
  * Симметрия полей на 1440/1920 меряется в e2e (e2e/home.spec.ts).
  */
-const WRAP = "mx-auto w-full max-w-[1240px] px-[clamp(1.5rem,5vw,4rem)]";
-
 function wraps(container: HTMLElement): HTMLElement[] {
-  return Array.from(
-    container.querySelectorAll<HTMLElement>(
-      ".max-w-\\[1240px\\].px-\\[clamp\\(1\\.5rem\\,5vw\\,4rem\\)\\]",
-    ),
-  );
+  return Array.from(container.querySelectorAll<HTMLElement>(".wrap"));
 }
 
 describe("Сетка главной по прототипу (FIX-14)", () => {
@@ -34,10 +28,6 @@ describe("Сетка главной по прототипу (FIX-14)", () => {
       const wrap = wraps(section)[0];
       expect(wrap, `нет .wrap в секции «${section.textContent?.slice(0, 24)}»`)
         .toBeTruthy();
-      for (const cls of WRAP.split(" ")) {
-        expect(wrap.className, `секция «${section.textContent?.slice(0, 24)}»`)
-          .toContain(cls);
-      }
     }
   });
 

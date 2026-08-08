@@ -239,6 +239,168 @@
   --ease-emphasized: var(--ease-emphasized);
 }
 
+/*
+ * Полоса контента — `.wrap` прототипа. Литерал
+ * `max-w-[1240px] px-[clamp(1.5rem,5vw,4rem)]` был скопирован в восемь секций
+ * главной и два теста: сменить ширину значило найти десять мест, а забытое
+ * возвращало ту самую асимметрию полей, против которой писался FIX-14.
+ *
+ * На широких экранах полоса растёт. До ~1476px это прежние 1240px, дальше
+ * 84vw с потолком 1600 — иначе на мониторе 2560 сайт остаётся колонкой шириной
+ * с ноутбук, а половина экрана уходит в пустые поля.
+ */
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: clamp(1240px, 84vw, 1600px);
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+}
+
+/*
+ * Узкая полоса для текстовых страниц (/lab, /guide, /collectio): там ширина
+ * работает на читаемость строки, поэтому растёт скромнее, чем на главной.
+ */
+@utility wrap-narrow {
+  margin-inline: auto;
+  width: 100%;
+  max-width: clamp(1080px, 72vw, 1320px);
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
+}
+
+/*
+ * Параллакс hero. Глубина берётся не из картинки, а из разницы скоростей:
+ * фон отстаёт от прокрутки и наплывает, текст уходит вверх быстрее и гаснет,
+ * вуаль густеет. Три слоя — media → veil → copy.
+ *
+ * Анимируются только transform и opacity: они живут на compositor-потоке,
+ * а свойства, которые триггерят layout, съели бы плавность.
+ *
+ * Два гейта. `@supports` — потому что без scroll-таймлайнов (Safari до 18,
+ * старый Firefox) нужен обычный статичный фон, а не полифилл на главном
+ * потоке. `prefers-reduced-motion` — потому что параллакс это прямой триггер
+ * вестибулярных расстройств и первый кандидат на нарушение WCAG 2.3.3.
+ */
+.hero-scene {
+  isolation: isolate;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* picture по умолчанию инлайновый и своей высоты не имеет — без этого
+   height:100% у картинки резолвится в ноль и фон не виден вовсе */
+.hero-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* фокус правее центра: там корневая зона, слева должно остаться темно */
+  object-position: 72% center;
+}
+
+/*
+ * Вуаль: диагональ гасит левую половину под заголовок, вертикаль сажает низ
+ * кадра на фон секции, чтобы стык с «Что в боксе» не читался линией.
+ */
+.hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      96deg,
+      var(--color-charcoal) 6%,
+      color-mix(in srgb, var(--color-charcoal) 76%, transparent) 38%,
+      transparent 68%
+    ),
+    linear-gradient(to top, var(--color-charcoal) 1%, transparent 32%);
+}
+
+/*
+ * На узком экране диагональ бесполезна: кадр вертикальный, свободной левой
+ * половины нет и текст ложится прямо на корни. Поэтому там вуаль вертикальная
+ * и заметно плотнее — контраст важнее вида картинки.
+ */
+@media (max-width: 859px) {
+  .hero-veil {
+    background: linear-gradient(
+      to top,
+      var(--color-charcoal) 16%,
+      color-mix(in srgb, var(--color-charcoal) 78%, transparent) 58%,
+      color-mix(in srgb, var(--color-charcoal) 34%, transparent) 100%
+    );
+  }
+
+  .hero-media img {
+    /* правее: на вертикальном кропе иначе видно только пустую землю */
+    object-position: 62% center;
+  }
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .hero-media {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+
+    .hero-copy {
+      animation: hero-lift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 90vh;
+    }
+
+    .hero-veil {
+      animation: hero-deepen linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+@keyframes hero-drift {
+  from {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(0, 7%, 0);
+  }
+}
+
+@keyframes hero-lift {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(0, -18%, 0);
+    opacity: 0.15;
+  }
+}
+
+@keyframes hero-deepen {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.78;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

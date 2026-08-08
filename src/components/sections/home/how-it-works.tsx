@@ -10,14 +10,14 @@ export function HowItWorks() {
   const { howItWorks } = home;
   return (
     <section className="bg-bone text-charcoal flex flex-col gap-12 py-20 lg:py-28">
-      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-12 px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="wrap flex flex-col gap-12">
         <div className="layout:grid-cols-[1.15fr_1fr] layout:gap-24 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{howItWorks.eyebrow}</KickerHeader>
             <p className="text-moss-ink font-voice max-w-[26ch] text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-snug italic">
               {howItWorks.leadLine}
             </p>
-            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
               {howItWorks.title}
             </h2>
           </div>

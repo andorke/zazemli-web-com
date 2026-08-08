@@ -10,7 +10,7 @@ import { home } from "@/content/home";
 export function Teasers() {
   return (
     <section className="bg-bone text-charcoal py-20 lg:py-28">
-      <div className="layout:grid-cols-3 layout:gap-16 mx-auto grid w-full max-w-[1240px] gap-12 px-[clamp(1.5rem,5vw,4rem)]">
+      <div className="layout:grid-cols-3 layout:gap-16 wrap grid gap-12">
         {home.teasers.map((teaser) => (
           <article
             key={teaser.eyebrow}

@@ -18,9 +18,9 @@ export function Buy() {
   const { buy } = home;
   return (
     <section className="bg-charcoal text-bone py-24 lg:py-32">
-      <div className="mx-auto flex w-full max-w-[1240px] flex-col items-center gap-7 px-[clamp(1.5rem,5vw,4rem)] text-center">
+      <div className="wrap flex flex-col items-center gap-7 text-center">
         <KickerHeader className="text-bone/55">{buy.eyebrow}</KickerHeader>
-        <h2 className="tracking-h2 font-voice max-w-[18ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] leading-tight font-light">
+        <h2 className="tracking-h2 font-voice max-w-[18ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] leading-tight font-light">
           {buy.title}
         </h2>
 

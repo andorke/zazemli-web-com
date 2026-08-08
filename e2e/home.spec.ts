@@ -134,17 +134,46 @@ for (const width of [1440, 1920]) {
   }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    const wrap = page
-      .locator("main > section .max-w-\\[1240px\\]")
-      .first();
-    const box = await wrap.boundingBox();
-    expect(box).not.toBeNull();
-    const left = box!.x;
-    const right = width - (box!.x + box!.width);
-    const diff = Math.abs(left - right) / Math.max(left, right);
-    expect(
-      diff,
-      `слева ${left}px, справа ${right}px на ${width}`,
-    ).toBeLessThanOrEqual(0.15);
+
+    /*
+     * Меряем каждую секцию, а не .first(): у hero контейнер центрирован
+     * mx-auto и симметричен по построению, поэтому проверка на одном нём
+     * зелёная при любой кривизне остальных — ровно тот дефект, против
+     * которого писался FIX-14.
+     */
+    const wraps = page.locator("main > section .wrap");
+    const count = await wraps.count();
+    expect(count).toBeGreaterThan(5);
+
+    for (let i = 0; i < count; i++) {
+      const box = await wraps.nth(i).boundingBox();
+      expect(box).not.toBeNull();
+      const left = box!.x;
+      const right = width - (box!.x + box!.width);
+      const diff = Math.abs(left - right) / Math.max(left, right);
+      expect(
+        diff,
+        `секция ${i}: слева ${left}px, справа ${right}px на ${width}`,
+      ).toBeLessThanOrEqual(0.15);
+    }
   });
 }
+
+/*
+ * Десктопная адаптивность: до этого потолок вёрстки был 1240px и на широком
+ * мониторе половина экрана уходила в поля. Полоса обязана расти.
+ */
+test("полоса контента растёт на широких экранах", async ({ page }) => {
+  await page.goto("/");
+  const wrap = page.locator("main > section .wrap").first();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const narrow = (await wrap.boundingBox())!.width;
+
+  await page.setViewportSize({ width: 2560, height: 1440 });
+  const wide = (await wrap.boundingBox())!.width;
+
+  expect(wide, `на 1440 полоса ${narrow}px, на 2560 — ${wide}px`).toBeGreaterThan(
+    narrow + 200,
+  );
+});
