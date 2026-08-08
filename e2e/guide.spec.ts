@@ -93,19 +93,26 @@ test("общие шаги «Дренаж» и «Дневник» есть на �
   expect(seen[1]).toEqual(seen[0]);
 });
 
+/*
+ * Считаем именно HowTo, а не все узлы JSON-LD: после seo-meta layout кладёт
+ * Organization на каждую страницу, поэтому «сколько всего скриптов» больше
+ * ничего не говорит про разметку гайда.
+ */
+const howTo = async (page: import("@playwright/test").Page) => {
+  const blocks = page.locator('script[type="application/ld+json"]');
+  const nodes = await blocks.allInnerTexts();
+  return nodes.map((raw) => JSON.parse(raw)).filter((d) => d["@type"] === "HowTo");
+};
+
 test("HowTo: по одному на ветку, на входе нет", async ({ page }) => {
   await page.goto("/guide");
-  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(
-    0,
-  );
+  expect(await howTo(page)).toHaveLength(0);
 
   for (const path of ["/guide/perevalka", "/guide/polnaya-zamena"]) {
     await page.goto(path);
-    const blocks = page.locator('script[type="application/ld+json"]');
-    await expect(blocks).toHaveCount(1);
-    const data = JSON.parse(await blocks.innerText());
-    expect(data["@type"]).toBe("HowTo");
-    expect(data.step.length).toBeGreaterThan(0);
+    const found = await howTo(page);
+    expect(found).toHaveLength(1);
+    expect(found[0].step.length).toBeGreaterThan(0);
   }
 });
 
