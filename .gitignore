@@ -32,3 +32,6 @@ npm-debug.log*
 
 # night-shift runtime (queue, state, logs) — не коммитится
 .night/
+
+# Артефакт сборки: генерится scripts/optimize-images.mjs из assets/
+/public/img/

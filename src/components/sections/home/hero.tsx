@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { KickerHeader } from "@/components/ui/kicker-header";
@@ -19,17 +18,47 @@ export function Hero() {
   return (
     <section className="hero-scene bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-14 lg:pb-24">
       <div className="hero-media" aria-hidden="true">
-        {/* priority: это LCP-элемент страницы, ленивая загрузка тут вредна.
-            Формат — JPEG: AVIF от sips собирается grid-тайлами с irot, и такой
-            файл браузер не рисует вовсе (проверено на сборке). */}
-        <Image
-          src="/hero-roots.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        {/*
+         * Не next/image: в static export он не отдаёт ни srcset, ни выбор
+         * формата (images.unoptimized), а арт-дирекшн не умеет в принципе.
+         * На узком экране нужен другой кадр, а не тот же в меньшем размере:
+         * 16:9 на телефоне растягивается примерно вдвое и мылит.
+         *
+         * fetchPriority ставим руками: в Next 16 priority его больше не
+         * выставляет, только добавляет preload — а preload картинки без
+         * приоритета встаёт в общую очередь за шрифтами.
+         */}
+        <picture>
+          <source
+            media="(max-width: 859px)"
+            type="image/avif"
+            srcSet="/img/hero-roots-portrait-900.avif"
+          />
+          <source
+            media="(max-width: 859px)"
+            type="image/webp"
+            srcSet="/img/hero-roots-portrait-900.webp"
+          />
+          <source media="(max-width: 859px)" srcSet="/img/hero-roots-portrait-900.jpg" />
+          <source
+            type="image/avif"
+            srcSet="/img/hero-roots-800.avif 800w, /img/hero-roots-1200.avif 1200w, /img/hero-roots-1600.avif 1600w, /img/hero-roots-2200.avif 2200w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet="/img/hero-roots-800.webp 800w, /img/hero-roots-1200.webp 1200w, /img/hero-roots-1600.webp 1600w, /img/hero-roots-2200.webp 2200w"
+            sizes="100vw"
+          />
+          <img
+            src="/img/hero-roots-1600.jpg"
+            srcSet="/img/hero-roots-800.jpg 800w, /img/hero-roots-1200.jpg 1200w, /img/hero-roots-1600.jpg 1600w, /img/hero-roots-2200.jpg 2200w"
+            sizes="100vw"
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
       </div>
       <div className="hero-veil" aria-hidden="true" />
 
