@@ -10,7 +10,8 @@ export function ImageSlot({
   className,
   tone = "dark",
 }: {
-  caption: string;
+  /* подпись слота; на главной не используется — плейсхолдеров в скобках нет (FIX-03) */
+  caption?: string;
   className?: string;
   tone?: "dark" | "light";
 }) {
@@ -24,9 +25,11 @@ export function ImageSlot({
         className,
       )}
     >
-      <span className="px-4 text-center font-voice text-sm italic">
-        {caption}
-      </span>
+      {caption ? (
+        <span className="font-voice px-4 text-center text-sm italic">
+          {caption}
+        </span>
+      ) : null}
     </div>
   );
 }

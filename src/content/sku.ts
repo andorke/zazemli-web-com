@@ -6,9 +6,9 @@
  *
  * Мета карточек (components/volumes/priceFrom) и биотопы колб — из прототипа
  * ../zazemli-vault/Айти/Сайт/prototypes/landing.html (в каноне home.md их нет — вопрос Насте).
- * В ценах — неразрывный пробел (U+00A0), чтобы «1 890» не рвалось на переносе.
+ * В ценах — неразрывный пробел (U+00A0), чтобы «1 990» не рвалось на переносе.
  *
- * Данные страницы товара (vial, composition, boxContents, care, ritualPhrase, sizes,
+ * Данные страницы товара (vial, composition, care, ritualPhrase, sizes,
  * sourceNote) — из прототипов ../zazemli-vault/Айти/Сайт/prototypes/collectio-*.html
  * (эталон шаблона) + product-description.md v1.1.1 (§Биотопы; hero — вариант A).
  * Типы vial/material переиспользуют DS-атомы SoilVial и MaterialDot: мох сфагнум красится
@@ -16,11 +16,12 @@
  * Расхождения канон↔прототип — в вопросы Насте (см. PROGRESS/CONTEXT):
  *   — hero A/B: таблица product-description даёт A = базовый Lvl 2, приложение путает метки; берём A = «Заземли {растение}.»;
  *   — ритуал-приписка: прототипы дают характерную фразу листовки (канон-вариант B), не пасхалку A;
- *   — «что в боксе»: прототип collectio даёт 6 позиций (+угольная пудра, +листовка), канон блок 3 — 4–5; страница товара идёт по прототипу.
+ *   — «что в боксе» живёт в общем модуле @/content/box (один источник с главной, PATCH-1 §2).
  */
 
 import type { MaterialName } from "@/components/ui/material-dot";
 import type { VialSegments } from "@/components/ui/soil-vial";
+import { boxContents, type BoxItem } from "@/content/box";
 
 export type SkuColor =
   | "moss"
@@ -91,7 +92,6 @@ export type Sku = {
   whyProse: string;
   vial: VialSegments;
   composition: CompositionItem[];
-  boxContents: string[];
   care: Care;
   /* характерная фраза-приписка ритуала (варьируется по SKU; постоянная строка — ritualLine) */
   ritualPhrase: string;
@@ -157,14 +157,30 @@ export function buyCtaLabel(size: Size): string {
 /* Ритуал-строка одна на все SKU (прототипы collectio); варьируется только приписка ritualPhrase. */
 export const ritualLine = "Час с грунтом стоит дня в zoom.";
 
-/* Постоянная часть бокса — физический бокс одинаков для всех SKU; варьируется только почвосмесь (позиция 01). */
-const boxCommon: string[] = [
-  "Керамзитовый дренаж",
-  "Конвертик «Забота о корнях и твоих руках»: перчатки, корневин, 2 апельсиновые палочки",
-  "Мини-бутылочка угольной пудры для срезов",
-  "Дневник растения на год",
-  "Листовка с гайдом по пересадке",
+/*
+ * Три объёма партии 0 и диаметр горшка под каждый — плитки блока «Купить»
+ * (прототип landing.html `.pots3`, решение Насты 30.07 / NEW-03). Живут в
+ * каталоге, а не в копи главной: когда Ozon откроется, плитка станет ссылкой
+ * на листинг объёма одной правкой.
+ */
+export type VolumeTier = { volume: string; pot: string };
+
+export const volumeTiers: VolumeTier[] = [
+  { volume: "1,2 л", pot: "12–13 см" },
+  { volume: "2,2 л", pot: "15–16 см" },
+  { volume: "3,5 л", pot: "18–20 см" },
 ];
+
+/*
+ * Опись бокса страницы товара — общий модуль @/content/box (тот же, что у главной).
+ * Варьируется только позиция 01: растение, число компонентов и якорь рецептуры.
+ */
+export function skuBoxContents(sku: Sku): BoxItem[] {
+  return boxContents({
+    text: `Грунт, собранный под ${sku.accusative} · ${sku.components} компонентов`,
+    href: labHref(sku),
+  });
+}
 
 export const skus: Sku[] = [
   {
@@ -179,7 +195,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "2,2 / 3,5 л",
-    priceFrom: "от 2 190 ₽",
+    priceFrom: "от 2 290 ₽",
     accusative: "монстеру",
     genitive: "монстеры",
     heroSub:
@@ -199,7 +215,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под монстеру · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно монстеру. Вот главное.",
       items: [
@@ -217,8 +232,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Она уже лезет из горшка.",
     sizes: [
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",
@@ -239,7 +254,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 9,
     volumes: "2,2 / 3,5 л",
-    priceFrom: "от 2 190 ₽",
+    priceFrom: "от 2 290 ₽",
     biotope: "тропики Юго-Восточной Азии",
     accusative: "фикус",
     genitive: "фикуса",
@@ -259,7 +274,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под фикус · 9 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно фикус. Вот главное.",
       items: [
@@ -277,8 +291,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Он сбросит листья, не обижайся.",
     sizes: [
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему минералы держат структуру",
@@ -299,7 +313,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     biotope: "горные леса Анд",
     accusative: "антуриум",
     genitive: "антуриума",
@@ -320,7 +334,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под антуриум · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно антуриум. Вот главное.",
       items: [
@@ -338,8 +351,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Ему нужна земля, а не комплименты.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",
@@ -360,7 +373,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 10,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "аглаонему",
     genitive: "аглаонемы",
     heroSub:
@@ -380,7 +393,6 @@ export const skus: Sku[] = [
       { name: "Пеностекло", material: "pumice", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под аглаонему · 10 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно аглаонему. Вот главное.",
       items: [
@@ -398,8 +410,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Красивая и знает об этом.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему важен воздух без застоя",
@@ -420,7 +432,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 11,
     volumes: "1,2 / 2,2 / 3,5 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "спатифиллум",
     genitive: "спатифиллума",
     heroSub:
@@ -441,7 +453,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под спатифиллум · 11 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно спатифиллум. Вот главное.",
       items: [
@@ -458,9 +469,9 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Цветёт, когда ты не смотришь.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему важен баланс влаги и воздуха",
@@ -481,7 +492,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 8,
     volumes: "1,2 / 2,2 / 3,5 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     biotope: "сухая Восточная Африка",
     accusative: "замиокулькас",
     genitive: "замиокулькаса",
@@ -500,7 +511,6 @@ export const skus: Sku[] = [
       { name: "Кварцевый песок", material: "sand", pct: 10 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под замиокулькас · 8 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно замиокулькас. Вот главное.",
       items: [
@@ -518,9 +528,9 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Он дождётся тебя из отпуска.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
-      { volume: "3,5 л", price: "2 590 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
+      { volume: "3,5 л", price: "2 690 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему минералы держат структуру",
@@ -541,7 +551,7 @@ export const skus: Sku[] = [
     ozonUrl: null,
     components: 9,
     volumes: "1,2 / 2,2 л",
-    priceFrom: "от 1 890 ₽",
+    priceFrom: "от 1 990 ₽",
     accusative: "эпипремнум",
     genitive: "эпипремнума",
     heroSub:
@@ -560,7 +570,6 @@ export const skus: Sku[] = [
       { name: "Пеностекло", material: "pumice", pct: 5 },
       { name: "Биогумус", material: "soil", pct: 5 },
     ],
-    boxContents: ["Почвосмесь под эпипремнум · 9 компонентов", ...boxCommon],
     care: {
       lead: "Уход у каждого растения свой, и мы изучили именно эпипремнум. Вот главное.",
       items: [
@@ -578,8 +587,8 @@ export const skus: Sku[] = [
     },
     ritualPhrase: "Одна лиана и дом — джунгли.",
     sizes: [
-      { volume: "1,2 л", price: "1 890 ₽", ozonListingUrl: null },
-      { volume: "2,2 л", price: "2 190 ₽", ozonListingUrl: null },
+      { volume: "1,2 л", price: "1 990 ₽", ozonListingUrl: null },
+      { volume: "2,2 л", price: "2 290 ₽", ozonListingUrl: null },
     ],
     sourceNote: {
       summary: "почему воздух решает",

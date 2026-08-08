@@ -2,10 +2,14 @@ import Link from "next/link";
 
 import { lab } from "@/content/lab";
 
-/* Оглавление /lab (прототип .glance): 3 якоря — Рецептуры · Компоненты · Источники */
+/*
+ * Оглавление /lab (прототип .glance): 3 якоря — Рецептуры · Компоненты · Источники.
+ * pt появился вместе с трио колб выше: без него верхняя линия nav ложится ровно
+ * на стык chalk→bone. Под hero секция шла впритык осознанно.
+ */
 export function LabGlance() {
   return (
-    <section className="bg-bone text-charcoal pb-[clamp(2rem,4vw,3rem)]">
+    <section className="bg-bone text-charcoal pt-[clamp(2rem,4vw,3rem)] pb-[clamp(2rem,4vw,3rem)]">
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <nav
           aria-label="Разделы лаборатории"

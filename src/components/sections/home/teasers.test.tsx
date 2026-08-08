@@ -9,14 +9,13 @@ describe("Teasers ×3 (Лаборатория · Гайд · Дневник)", (
     expect(
       screen.getByRole("link", { name: "В лабораторию →" }),
     ).toHaveAttribute("href", "/lab");
-    expect(screen.getByRole("link", { name: "Открыть гайд →" })).toHaveAttribute(
-      "href",
-      "/guide",
-    );
+    expect(
+      screen.getByRole("link", { name: "Открыть гайд →" }),
+    ).toHaveAttribute("href", "/guide");
     expect(
       screen.getByRole("heading", {
         level: 3,
-        name: "Руки в землю — голова свободна.",
+        name: "Руки в землю — голова свободна",
       }),
     ).toBeInTheDocument();
   });
@@ -25,7 +24,7 @@ describe("Teasers ×3 (Лаборатория · Гайд · Дневник)", (
     render(<Teasers />);
     const diaryHeading = screen.getByRole("heading", {
       level: 3,
-      name: "Забота продолжается после пересадки.",
+      name: "Забота продолжается после пересадки",
     });
     const diary = diaryHeading.closest("article");
     expect(diary).not.toBeNull();

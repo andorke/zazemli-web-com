@@ -9,8 +9,8 @@ import { home } from "@/content/home";
  */
 export function Teasers() {
   return (
-    <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-3 lg:gap-16">
+    <section className="bg-bone text-charcoal py-20 lg:py-28">
+      <div className="layout:grid-cols-3 layout:gap-16 mx-auto grid w-full max-w-[1240px] gap-12 px-[clamp(1.5rem,5vw,4rem)]">
         {home.teasers.map((teaser) => (
           <article
             key={teaser.eyebrow}

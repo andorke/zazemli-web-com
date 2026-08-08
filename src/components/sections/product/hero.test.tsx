@@ -40,6 +40,6 @@ describe("ProductHero (страница товара)", () => {
 
   it("строка объёмов и цены рядом с CTA", () => {
     render(<ProductHero sku={monstera} />);
-    expect(screen.getByText("2,2 / 3,5 л · от 2 190 ₽")).toBeInTheDocument();
+    expect(screen.getByText("2,2 / 3,5 л · от 2 290 ₽")).toBeInTheDocument();
   });
 });

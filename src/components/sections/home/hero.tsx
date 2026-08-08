@@ -4,22 +4,16 @@ import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 
 /*
- * Hero по прототипу landing.html: full-bleed фото-фон (пока слот-плейсхолдер на charcoal),
- * контент прижат вниз — eyebrow, H1 канона (вторая фраза em), sub, CTA на #collectio + прайс.
+ * Hero по прототипу landing.html: full-bleed фото-фон (до съёмки — заливка charcoal
+ * без текстового плейсхолдера, FIX-03), контент прижат вниз — eyebrow, H1 канона
+ * (вторая фраза em, точки не несёт — FIX-26), sub, CTA на #collectio + прайс.
  * Топбар поверх фото — scope ds-migration, здесь его нет.
  */
 export function Hero() {
   const { hero } = home;
   return (
-    <section className="bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden px-6 pt-24 pb-14 lg:px-30 lg:pb-24">
-      <span
-        aria-hidden="true"
-        className="text-bone/40 font-voice absolute right-6 bottom-5 text-sm italic select-none lg:right-30"
-      >
-        [ {hero.photoSlot} ]
-      </span>
-
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-7">
+    <section className="bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-14 lg:pb-24">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-7 px-[clamp(1.5rem,5vw,4rem)]">
         <KickerHeader className="text-bone/60">{hero.eyebrow}</KickerHeader>
         <h1 className="leading-hero tracking-display-hero font-voice text-[clamp(2.9rem,6.5vw,5.5rem)] font-light">
           {hero.title[0]}{" "}

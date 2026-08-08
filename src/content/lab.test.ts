@@ -44,6 +44,43 @@ describe("Контент /lab (прототип lab.html, пересборка 2
     expect(lab.hero.meaning).toContain("а не просто купить");
   });
 
+  /*
+   * Трио колб — переезд с главной (FIX-78). Сверяется не с эталоном
+   * lab.prototype.txt: в закоммиченный эталон эта секция ещё не попала,
+   * а его регенерация тянет переписанный блок «Проблема» — вне скоупа change.
+   */
+  it("трио колб на входе: шапка, мост к рецептурам, тройка-контраст", () => {
+    const { differentSoil } = lab;
+    expect(differentSoil.eyebrow).toBe("Состав");
+    expect(differentSoil.title).toBe("Разным растениям — разная земля");
+    expect(differentSoil.body).toContain(
+      "Один грунт «для всех» не подходит никому",
+    );
+    expect(differentSoil.bridge).toEqual({
+      label: "почему именно так →",
+      href: "#recs",
+    });
+    expect(differentSoil.vials.map((v) => v.skuSlug)).toEqual([
+      "anthurium",
+      "ficus",
+      "zamioculcas",
+    ]);
+    expect(differentSoil.legend.map((l) => l.label)).toEqual([
+      "основа",
+      "воздух",
+      "влага",
+      "дренаж",
+    ]);
+  });
+
+  it("доли колб: сумма 100% и slug'и есть в каталоге SKU", () => {
+    for (const vial of lab.differentSoil.vials) {
+      const { base, air, moisture, drainage } = vial.segments;
+      expect(base + air + moisture + drainage, vial.skuSlug).toBe(100);
+      expect(skus.some((s) => s.slug === vial.skuSlug)).toBe(true);
+    }
+  });
+
   it("якорь-навигация: 01 Рецептуры · 02 Компоненты · 03 Источники", () => {
     expect(lab.nav.map((n) => [n.num, n.label, n.href])).toEqual([
       ["01", "Рецептуры", "#recs"],

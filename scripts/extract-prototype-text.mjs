@@ -1,6 +1,6 @@
-// Выгрузка видимых текстовых узлов прототипов гайда (вход + два маршрута) и
-// lab.html как эталон для контент-тестов (diff-сверка переноса в
-// src/content/*.ts против прототипа).
+// Выгрузка видимых текстовых узлов прототипов гайда (вход + два маршрута),
+// lab.html и landing.html как эталон для контент-тестов (diff-сверка переноса
+// в src/content/*.ts против прототипа).
 //
 // Прототипы лежат во внешнем vault (read-only), в CI/ночной сборке его нет —
 // поэтому эталон коммитится в репозиторий, а тесты читают закоммиченный .txt.
@@ -77,7 +77,23 @@ function run(name) {
   console.log(`${name}: ${nodes.length} узлов → src/content/__fixtures__/${name}.prototype.txt`);
 }
 
-run("guide");
-run("guide-perevalka");
-run("guide-polnaya-zamena");
-run("lab");
+/*
+ * Без аргумента регенерируются все фикстуры разом: вместе с нужной подтянется
+ * дрейф vault по остальным прототипам и упадут их контент-тесты. Поэтому имя
+ * можно передать явно: `node scripts/extract-prototype-text.mjs landing`.
+ */
+const ALL = [
+  "guide",
+  "guide-perevalka",
+  "guide-polnaya-zamena",
+  "lab",
+  "landing",
+];
+const only = process.argv[2];
+
+if (only && !ALL.includes(only)) {
+  console.error(`неизвестный прототип: ${only}. Доступны: ${ALL.join(", ")}`);
+  process.exit(1);
+}
+
+for (const name of only ? [only] : ALL) run(name);

@@ -37,7 +37,8 @@ describe("SoilVial — растр через next/image", () => {
   it.skipIf(!existsSync("out"))(
     "в экспорте колба — ленивый тег на сам ассет, без слоя оптимизации",
     () => {
-      const html = readFileSync(join("out", "index.html"), "utf8");
+      /* Колбы живут на входе /lab: с главной трио снято в home-restructure (FIX-78) */
+      const html = readFileSync(join("out", "lab.html"), "utf8");
       const glass = html.match(/<img[^>]*src="\/soil-vial\.png"[^>]*>/)?.[0];
 
       expect(glass).toBeDefined();

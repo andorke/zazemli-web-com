@@ -18,6 +18,8 @@
  * SKU-цвета не используются: dot'ы компонентов красит страница по key.
  */
 
+import type { VialSegments } from "@/components/ui/soil-vial";
+
 /* 4 функции земли — полоска долей g4 и легенда под рецептурами */
 export type SoilFunction = "base" | "air" | "water" | "drain";
 
@@ -80,8 +82,25 @@ export type Recipe = {
 
 export type LabSource = { cite: string; doi?: string };
 
+/*
+ * Трио схема-колб на входе лаборатории — переезд с главной (PATCH-1 §2, FIX-78):
+ * лендинг продаёт быстро, «почему у каждого своя земля» живёт здесь и служит
+ * ключом к чтению рецептур ниже. Разметка и тексты — прототип lab.html, секция
+ * `.soil` (в закоммиченный эталон lab.prototype.txt эта секция ещё не попала:
+ * регенерация эталона тянет за собой переписанный блок «Проблема» — вне скоупа
+ * change home-restructure).
+ */
 export type LabContent = {
   hero: { eyebrow: string; title: string; sub: string; meaning: string };
+  differentSoil: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    bridge: { label: string; href: string };
+    /* тройка-контраст прототипа: доли по 4 группам, сумма = 100 */
+    vials: { skuSlug: string; segments: VialSegments }[];
+    legend: { key: keyof VialSegments; label: string }[];
+  };
   nav: { num: string; label: string; href: string }[];
   problem: {
     eyebrow: string;
@@ -129,6 +148,33 @@ export const lab: LabContent = {
     sub: "Земля, собранная под конкретное растение, а не одна на всех. Здесь видно, из чего она собрана и почему именно так.",
     meaning:
       "Страница для тех, кому важно понимать, что у растения под корнями, — а не просто купить.",
+  },
+  differentSoil: {
+    eyebrow: "Состав",
+    title: "Разным растениям — разная земля",
+    body: "Один грунт «для всех» не подходит никому. Мы собираем землю под то, как растение живёт в природе, и сверяем каждый состав с исследованиями.",
+    /* в прототипе якорь мёртвый (`#lab` — след лендинга); ведём к рецептурам, ключом к которым трио и служит */
+    bridge: { label: "почему именно так →", href: "#recs" },
+    vials: [
+      {
+        skuSlug: "anthurium",
+        segments: { base: 35, air: 20, moisture: 35, drainage: 10 },
+      },
+      {
+        skuSlug: "ficus",
+        segments: { base: 60, air: 10, moisture: 20, drainage: 10 },
+      },
+      {
+        skuSlug: "zamioculcas",
+        segments: { base: 55, air: 0, moisture: 20, drainage: 25 },
+      },
+    ],
+    legend: [
+      { key: "base", label: "основа" },
+      { key: "air", label: "воздух" },
+      { key: "moisture", label: "влага" },
+      { key: "drainage", label: "дренаж" },
+    ],
   },
   nav: [
     { num: "01", label: "Рецептуры", href: "#recs" },

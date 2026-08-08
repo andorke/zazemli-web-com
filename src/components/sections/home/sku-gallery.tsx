@@ -10,16 +10,21 @@ import { landingNumber, skus } from "@/content/sku";
  * (gap-1px по подложке), 7 кликабельных карточек (фото-слот · N° 01 · имя · фраза · мета)
  * + карточка-приглашение N° 08 + CTA. Карточки ведут на страницы товара /collectio/[slug]
  * (change product-pages); SKU-цвета на главной запрещены (spec).
+ *
+ * NEW-01: карточные стили висят на самой карточке, а не на «всех ссылках секции».
+ * В прототипе широкий селектор `.coll a` протекал на служебные ссылки формы N°08
+ * (ссылка в чекбоксе получала flex и padding карточки) — селектор-потомок здесь
+ * не заводить: механику плитки N°08 достраивает change waitlist-form.
  */
 export function SkuGallery() {
   const { skuGallery } = home;
   return (
     <section
       id="collectio"
-      className="bg-bone text-charcoal flex flex-col px-6 py-20 lg:px-30 lg:py-28"
+      className="bg-bone text-charcoal flex flex-col py-20 lg:py-28"
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col">
-        <div className="mb-12 grid items-end gap-5 lg:mb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col px-[clamp(1.5rem,5vw,4rem)]">
+        <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
             <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3rem)] font-light">
@@ -38,11 +43,8 @@ export function SkuGallery() {
                 href={`/collectio/${sku.slug}`}
                 className="bg-bone group flex flex-col no-underline"
               >
-                <span className="bg-chalk relative block aspect-[3/4]">
-                  <span className="text-charcoal/40 font-voice absolute top-1/2 left-1/2 -translate-1/2 text-sm italic">
-                    фото
-                  </span>
-                </span>
+                {/* слот фото карточки: до съёмки — заливка chalk без заглушки (FIX-03) */}
+                <span className="bg-chalk block aspect-[3/4]" />
                 <span className="flex flex-col gap-1.5 px-6 pt-5 pb-7">
                   <span className="tracking-kicker text-charcoal/50 font-ui text-[10px]">
                     {landingNumber(sku.number)}
