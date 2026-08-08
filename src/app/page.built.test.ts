@@ -43,8 +43,21 @@ const SP = "[ \\u00A0]";
 const ru = (source: string) => new RegExp(source, "iu");
 const W = "\\p{L}*";
 
+/*
+ * Только отрисованный <main>: после него Next кладёт RSC-payload
+ * (self.__next_f.push) — экранированную копию той же разметки. Поиск по всему
+ * файлу попадает в неё, а не в страницу: там разметка закодирована как
+ * ["$","a",…], поэтому проверки вида «в блоке нет <a>» становятся вечнозелёными.
+ */
+const mainHtml = (() => {
+  const html = built ?? "";
+  const start = html.indexOf("<main");
+  const end = html.indexOf("</main>");
+  return start >= 0 && end > start ? html.slice(start, end) : "";
+})();
+
 /* Текст без разметки: порядок блоков и заголовки проверяем по нему */
-const text = (built ?? "").replace(/<[^>]+>/g, "\n");
+const text = mainHtml.replace(/<[^>]+>/g, "\n");
 
 onBuild("Собранная главная: приёмка verify-prototypes.py", () => {
   it("FIX-02: старых цен 1 890 / 2 190 / 2 590 нет ни в одном варианте пробела", () => {
@@ -136,8 +149,12 @@ onBuild("Собранная главная: приёмка verify-prototypes.py"
     expect(built).toContain("Пересаживают раз в год, весной");
   });
 
+  it("сборка содержит отрисованный <main> — иначе проверки ниже пусты", () => {
+    expect(mainHtml.length).toBeGreaterThan(1000);
+  });
+
   it("NEW-03: плитки не кликабельны — в блоке «Купить» нет ссылок на объёмы", () => {
-    const buy = (built ?? "").slice((built ?? "").lastIndexOf("Купить"));
+    const buy = mainHtml.slice(mainHtml.lastIndexOf("Купить"));
     expect(buy).not.toMatch(/<a[^>]*>\s*(1,2|2,2|3,5) л/);
   });
 

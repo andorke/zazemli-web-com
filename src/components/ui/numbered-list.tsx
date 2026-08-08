@@ -18,15 +18,16 @@ export function NumberedList({ items }: { items: BoxItem[] }) {
           <span className="tracking-kicker text-charcoal/45 font-ui text-[10px] tabular-nums">
             {item.n}
           </span>
-          <span className="font-voice text-[17px]">
+          {/* div, а не span: ниже по дереву лежит <ul> — блочный элемент,
+              внутри phrasing-контейнера это невалидная разметка */}
+          <div className="font-voice text-[17px]">
             {item.text}
             {item.link ? (
               <>
                 {" · "}
-                <Link
-                  href={item.link.href}
-                  className="text-moss-ink whitespace-nowrap no-underline"
-                >
+                {/* без whitespace-nowrap: он раздувал min-content колонки и на
+                    320px давал горизонтальный скролл всей страницы */}
+                <Link href={item.link.href} className="text-moss-ink no-underline">
                   {item.link.label}
                 </Link>
               </>
@@ -43,7 +44,7 @@ export function NumberedList({ items }: { items: BoxItem[] }) {
                 ))}
               </ul>
             ) : null}
-          </span>
+          </div>
         </li>
       ))}
     </ol>

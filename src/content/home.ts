@@ -106,7 +106,7 @@ export const home: HomeContent = {
     invite: {
       number: "N° 08 — ?",
       question: "Твоего растения нет в коллекции?",
-      note: "Подскажи какое — соберём в следующей партии.",
+      note: "Назови какое — соберём в следующей партии.",
     },
     cta: { label: "Вся коллекция →", href: "/collectio" },
   },

@@ -55,7 +55,8 @@ describe("HowItWorks (3 шага прототипа)", () => {
 
   it("шаг 01 без «природной почвы» (FIX-04)", () => {
     const { container } = render(<HowItWorks />);
-    expect(container.textContent).not.toMatch(/природн\w*\s+почв/);
+    /* \p{L}, а не \w: в JS \w — только ASCII, против кириллицы guard пустой */
+    expect(container.textContent).not.toMatch(/природн\p{L}*\s+почв/u);
     expect(
       screen.getByText(
         "Собираем бокс под него — грунт под то, как оно живёт в природе.",

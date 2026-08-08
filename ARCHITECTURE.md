@@ -26,7 +26,7 @@ C4Context
 | Компонент | Ответственность |
 |-----------|-----------------|
 | `app/` (роуты + layout) | 5 страниц, метаданные/SEO, `not-found`, подключение шрифтов и обвязки |
-| `components/sections/<page>/` | Секции страниц (главная: Hero, WhatsInBox, DifferentSoil, WhatSoilGives, SkuGallery, Statement, About, Teasers, OzonCta) |
+| `components/sections/<page>/` | Секции страниц (главная, 9 блоков `home.md` v2.5: Hero, WhatsInBox, SkuGallery, HowItWorks, PhotoBand, WhatSoilGives, About, Teasers, Buy). DifferentSoil переехал в `sections/lab/`, Manifesto и OzonCta с главной сняты |
 | `components/site/` | SiteHeader, SiteFooter, CookieBanner (consent-gate), Metrika |
 | `components/ui/` | shadcn-примитивы + бренд-атомы DS (Fleuron, RitualNote, MaterialDot, KickerHeader, DetailsAccordion, BrandButton…) |
 | `content/` | Контент TS-константами: SKU, тексты секций, навигация, футер-реквизиты |
