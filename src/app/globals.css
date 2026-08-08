@@ -401,6 +401,35 @@
   }
 }
 
+/*
+ * Фото-баннер. Здесь таймлайн другой: не scroll(), а view() — полосе важна
+ * не позиция страницы, а собственный проход через экран. Кадр панорамируется,
+ * пока баннер виден, поэтому фактура читается как продолжение движения, а не
+ * как приклеенная картинка. Запас масштаба нужен, чтобы сдвиг не открыл край.
+ */
+.photo-band img {
+  transform: scale(1.18);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .photo-band img {
+      animation: band-pan linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+@keyframes band-pan {
+  from {
+    transform: scale(1.18) translate3d(0, -4.5%, 0);
+  }
+  to {
+    transform: scale(1.18) translate3d(0, 4.5%, 0);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
