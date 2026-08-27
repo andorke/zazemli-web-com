@@ -199,3 +199,7 @@ fix: skip cache when token is rotating
 - **Статусы, очередь, логи и отчёты** живут в `.night/` (в git не попадает). Ночные ветки — `night/<change>` от `base_ref` (по умолчанию origin/main); гейт каждого эпизода — `verify`+`lint` из `night.config.json`.
 - **MR не создаётся** (remote — GitHub, раннер поддерживает только GitLab API): ветки пушатся, PR утром руками — `gh pr create --draft --base main --head night/<change>`.
 - Ручные проверки (smoke, визуальная сверка) ночь не закрывает — их собирает утренний report в чек-лист «Что просмоучить»; это критерий приёмки перед мержем.
+
+# Agent Rules <!-- tessl-managed -->
+
+@.tessl/RULES.md follow the [instructions](.tessl/RULES.md)
