@@ -26,7 +26,7 @@ export function Teasers() {
             {teaser.link ? (
               <Link
                 href={teaser.link.href}
-                className="text-moss-ink font-ui mt-auto w-fit pt-2 text-eyebrow font-medium tracking-wide no-underline"
+                className="text-moss-ink font-ui mt-auto flex min-h-11 w-fit items-center pt-2 text-eyebrow font-medium tracking-wide no-underline"
               >
                 {teaser.link.label}
               </Link>

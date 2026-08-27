@@ -18,15 +18,6 @@ test.beforeEach(async ({ context }) => {
   });
 });
 
-/*
- * FIX-19 (таргеты ≥ 44 px) намеренно НЕ в гейте: замер показал 13 элементов
- * ниже порога — текстовые CTA 26px, навигация /lab 27px, <summary> аккордеонов
- * 20–23px, чекбоксы /diary-signup 16px. Это самостоятельный пункт реестра
- * (P1, статус ⬜), в наряд PATCH-1 §5 он не входит, а правка padding/min-height
- * тронет вёрстку многих компонентов и требует визуальной сверки. По design D5
- * уходит отдельным change; полный список — в inventory.md.
- */
-
 test("FIX-20: у элемента в фокусе есть видимая обводка", async ({ page }) => {
   await page.goto("/");
 
@@ -51,4 +42,66 @@ test("FIX-20: у элемента в фокусе есть видимая обв
     (outline!.style !== "none" && parseFloat(outline!.width) >= 2) ||
     (outline!.shadow !== "none" && outline!.shadow !== "");
   expect(visible, `outline: ${JSON.stringify(outline)}`).toBe(true);
+});
+
+const PAGES = ["/", "/lab", "/guide", "/guide/perevalka", "/collectio/monstera", "/diary-signup"];
+
+/*
+ * FIX-19: кликабельная зона не меньше 44 px. Мерим габарит элемента, а не
+ * кегль — патч прямо требует растить зону padding'ом и min-height, не трогая
+ * шрифт. Инлайновая ссылка внутри абзаца — часть текста, а не таргет: её
+ * высоту задаёт строка, поэтому такие пропускаем.
+ */
+for (const width of [390, 1440]) {
+  test(`FIX-19: интерактивные элементы >= 44px на ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    const small: string[] = [];
+
+    for (const path of PAGES) {
+      await page.goto(path);
+      const targets = page.locator(
+        "main a[href], main button, main summary, main input[type=checkbox]",
+      );
+      const count = await targets.count();
+      expect(count, `${path}: интерактивных элементов не найдено`).toBeGreaterThan(0);
+
+      for (let i = 0; i < count; i += 1) {
+        const el = targets.nth(i);
+        if (!(await el.isVisible())) continue;
+        const box = await el.boundingBox();
+        if (!box) continue;
+        if (await el.evaluate((n) => getComputedStyle(n).display === "inline")) continue;
+        /* зона чекбокса задаётся объемлющим label — оцениваем по нему */
+        const zone = await el.evaluate((n) => {
+          const label = n.closest("label");
+          return label ? label.getBoundingClientRect().height : n.getBoundingClientRect().height;
+        });
+        if (zone < 44) {
+          small.push(`${path} ${(await el.innerText()).slice(0, 24) || "(без текста)"} → ${Math.round(zone)}px`);
+        }
+      }
+    }
+
+    expect(small, small.join("; ")).toEqual([]);
+  });
+}
+
+/* FIX-25: skip-link — первый фокусируемый элемент, уводит за навигацию */
+test("FIX-25: первый Tab встаёт на skip-link и уводит к содержимому", async ({ page }) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+
+  const active = page.locator(":focus");
+  await expect(active).toHaveText("К основному содержанию");
+  await expect(active).toBeVisible();
+
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main$/);
+});
+
+test("FIX-25: skip-link не видна, пока не в фокусе", async ({ page }) => {
+  await page.goto("/");
+  const link = page.getByRole("link", { name: "К основному содержанию" });
+  const box = await link.boundingBox();
+  expect(box!.x, "ссылка должна быть за левым краем экрана").toBeLessThan(0);
 });

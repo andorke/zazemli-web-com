@@ -19,7 +19,7 @@ export function LabGlance() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-small inline-flex items-baseline gap-2 no-underline transition-opacity hover:opacity-60"
+              className="text-small inline-flex min-h-11 items-center gap-2 pr-2 no-underline transition-opacity hover:opacity-60"
             >
               <span className="text-moss-ink font-voice text-body tabular-nums">
                 {item.num}

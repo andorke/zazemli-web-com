@@ -19,7 +19,9 @@ export function DetailsAccordion({
     <details className={cn("group", className)} {...props}>
       <summary
         className={cn(
-          "text-moss-ink font-ui text-caption cursor-pointer list-none tracking-[0.04em]",
+          /* FIX-19: зона 44px растёт min-height, а не кеглем — вертикальный padding
+             сдвинул бы соседний текст и разъехалась бы сетка */
+          "text-moss-ink font-ui text-caption flex min-h-11 cursor-pointer list-none items-center tracking-[0.04em]",
           "underline decoration-dotted underline-offset-[3px]",
           "transition-opacity hover:opacity-70 [&::-webkit-details-marker]:hidden",
           summaryClassName,

@@ -270,7 +270,7 @@ export function SignupForm({
         </p>
       )}
 
-      <Button type="submit" size="lg" className="w-full" disabled={!pdn || submitting}>
+      <Button type="submit" size="lg" className="min-h-11 w-full" disabled={!pdn || submitting}>
         {form.submit}
       </Button>
       <p className="text-charcoal/60 text-caption">{form.trust}</p>

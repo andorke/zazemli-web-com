@@ -100,7 +100,7 @@ function renderBlock(block: TermsBlock, key: number) {
 
 export default function TermsPage() {
   return (
-    <main className="flex-1">
+    <main id="main" className="flex-1">
       <article style={documentStyle}>
         <h1 className="tracking-h1" style={h1Style}>
           {terms.title}

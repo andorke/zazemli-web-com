@@ -4,6 +4,7 @@ import { CookieBanner } from "@/components/site/cookie-banner";
 import { OrganizationJsonLd } from "@/components/site/json-ld";
 import { Metrika } from "@/components/site/metrika";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SkipLink } from "@/components/site/skip-link";
 import { SiteHeader } from "@/components/site/site-header";
 import { openGraphFor } from "@/lib/metadata";
 import { welcomeGateScript } from "@/lib/welcome-gate";
@@ -48,6 +49,8 @@ export default function RootLayout({
         <OrganizationJsonLd />
       </head>
       <body className="flex min-h-full flex-col">
+        {/* Первый фокусируемый элемент документа — до шапки (FIX-25) */}
+        <SkipLink />
         <SiteHeader />
         {children}
         <SiteFooter />

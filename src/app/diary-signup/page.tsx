@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 export default function DiarySignupPage() {
   const { hero, gift } = diary;
   return (
-    <main className="flex-1 px-6 py-16 lg:px-30">
+    <main id="main" className="flex-1 px-6 py-16 lg:px-30">
       <section className="mx-auto flex max-w-2xl flex-col">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
         <p className="text-charcoal/60 mt-4 text-ui">{hero.ack}</p>

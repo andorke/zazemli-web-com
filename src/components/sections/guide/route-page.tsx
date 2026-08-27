@@ -25,7 +25,7 @@ export function GuideRoutePage({ route }: { route: GuideRouteContent }) {
   };
 
   return (
-    <main className="flex-1">
+    <main id="main" className="flex-1">
       {/* JSON-LD в DOM для краулеров; экранируем < по рекомендации Next.js */}
       <script
         type="application/ld+json"

@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Страница не нашлась
 /* Копи 404 — утверждённая: Голос/ui-microcopy/error-message.md v1.0.1 §1 (вариант A) */
 export default function NotFound() {
   return (
-    <main className="flex flex-1 flex-col items-start gap-6 px-6 py-24 lg:px-30">
+    <main id="main" className="flex flex-1 flex-col items-start gap-6 px-6 py-24 lg:px-30">
       <h1 className="leading-heading tracking-h1 text-charcoal/80 text-h1 font-normal">
         Страница не нашлась.
       </h1>

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
  */
 export default function GuidePage() {
   return (
-    <main className="flex-1">
+    <main id="main" className="flex-1">
       <GuideHero hero={guideEntry.hero} />
       <GuideFlowBar items={guideEntry.flow} />
       <GuideKit kit={guideEntry.kit} />

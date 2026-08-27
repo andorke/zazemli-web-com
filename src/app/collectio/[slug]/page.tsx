@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: Params) {
 
   /* Секции шаблона по прототипу collectio-*.html (блоки 1–11). */
   return (
-    <main className="flex flex-1 flex-col" style={skuStyle}>
+    <main id="main" className="flex flex-1 flex-col" style={skuStyle}>
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       <ProductHero sku={sku} />

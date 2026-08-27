@@ -26,9 +26,13 @@ export default function CollectioRedirect() {
           __html: `location.replace(${JSON.stringify(TARGET)})`,
         }}
       />
-      <noscript>
-        <a href={TARGET}>Перейти к коллекции на главной</a>
-      </noscript>
+      {/* Содержимого у редирект-страницы нет, но якорь skip-link нужен и здесь:
+          без JS человек остаётся именно на ней. */}
+      <main id="main">
+        <noscript>
+          <a href={TARGET}>Перейти к коллекции на главной</a>
+        </noscript>
+      </main>
     </>
   );
 }

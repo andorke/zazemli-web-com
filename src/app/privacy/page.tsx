@@ -107,7 +107,7 @@ function renderBlock(block: PrivacyBlock, key: number) {
 
 export default function PrivacyPage() {
   return (
-    <main className="flex-1">
+    <main id="main" className="flex-1">
       <article style={documentStyle}>
         <h1 style={h1Style}>{privacy.title}</h1>
         <p style={dateStyle}>

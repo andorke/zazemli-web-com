@@ -29,7 +29,7 @@ const webSiteJsonLd = {
  */
 export default function Home() {
   return (
-    <main className="flex-1">
+    <main id="main" className="flex-1">
       <JsonLd data={webSiteJsonLd} />
       <Hero />
       <WhatsInBox />
