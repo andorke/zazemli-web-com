@@ -88,6 +88,22 @@ const ALL = [
   "guide-polnaya-zamena",
   "lab",
   "landing",
+  /*
+   * Карточки и юр-страницы добавлены 2026-08-28: до этого эталона у них не было,
+   * и сверка «перенос против прототипа» их не покрывала. Ровно так три недели
+   * прожили незамеченными 45 точек в заголовках и старый заголовок /lab —
+   * эталон был снят 12.07 и отставал от vault.
+   */
+  "collectio-monstera",
+  "collectio-ficus",
+  "collectio-anthurium",
+  "collectio-aglaonema",
+  "collectio-spathiphyllum",
+  "collectio-zamioculcas",
+  "collectio-epipremnum",
+  "diary-signup",
+  "privacy",
+  "terms",
 ];
 const only = process.argv[2];
 
