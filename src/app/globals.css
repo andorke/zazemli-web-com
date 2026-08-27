@@ -657,3 +657,116 @@ summary .shares-bar.in > * {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Курсор-компаньон и эффекты клика (change qr-welcome, design D7).
+ * Слой декоративный: не ловит указатель и скрыт от скринридеров. Живёт только
+ * при no-preference — на reduce компонент вообще не монтируется, а правила ниже
+ * дублируют защиту на случай, если разметка окажется в DOM другим путём.
+ */
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.fx-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--color-moss);
+  border-radius: 9999px;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-emphasized);
+  will-change: transform;
+}
+
+.fx-ring[data-visible="true"] {
+  opacity: 0.55;
+}
+
+.fx-seed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-moss);
+  translate: var(--fx-x) var(--fx-y);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fx-seed {
+    animation: fx-seed-out var(--duration-slow) var(--ease-emphasized) forwards;
+  }
+}
+
+@keyframes fx-seed-out {
+  from {
+    opacity: 0.5;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--fx-dx)), calc(-50% + var(--fx-dy)));
+  }
+}
+
+/*
+ * Каскад галереи семи SKU (change qr-welcome, задача 5.1). Карточки лежат в
+ * `li.contents` — обёртка не рисуется, поэтому стартовое состояние ставим на
+ * ссылку внутри, а шаг лесенки считаем по номеру `li`.
+ *
+ * Запускается классом `in`: на входе с якорем `#collectio` — сразу при
+ * монтировании, иначе по доскроллу (IntersectionObserver).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-welcome .welcome-gallery > li > a {
+    opacity: 0.1;
+    transform: translateY(10px);
+  }
+
+  html.js-welcome .welcome-gallery.in > li > a {
+    animation: welcome-fade-rise var(--welcome-duration) var(--welcome-ease)
+      backwards;
+  }
+
+  html.js-welcome .welcome-gallery.in > li:nth-child(1) > a { animation-delay: 0ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(2) > a { animation-delay: 70ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(3) > a { animation-delay: 140ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(4) > a { animation-delay: 210ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(5) > a { animation-delay: 280ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(6) > a { animation-delay: 350ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(7) > a { animation-delay: 420ms; }
+  html.js-welcome .welcome-gallery.in > li:nth-child(8) > a { animation-delay: 490ms; }
+}
+
+/*
+ * Лесенка семи писем в дневнике (change qr-welcome, задача 6.2). Пункты лежат
+ * в <ol>, который нельзя завернуть в <div> поэлементно, поэтому каскад
+ * описывается через вложенность: обёртка Reveal получает класс `in`, шаг
+ * задержки считается по номеру <li>.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-welcome .welcome-timeline > ol > li {
+    opacity: 0.1;
+    transform: translateY(10px);
+  }
+
+  html.js-welcome .welcome-timeline.in > ol > li {
+    animation: welcome-fade-rise var(--welcome-duration) var(--welcome-ease)
+      backwards;
+  }
+
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(1) { animation-delay: 0ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(2) { animation-delay: 70ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(3) { animation-delay: 140ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(4) { animation-delay: 210ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(5) { animation-delay: 280ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(6) { animation-delay: 350ms; }
+  html.js-welcome .welcome-timeline.in > ol > li:nth-child(7) { animation-delay: 420ms; }
+}

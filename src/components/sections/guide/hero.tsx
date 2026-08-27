@@ -13,7 +13,7 @@ export function GuideHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="bg-bone text-charcoal pt-24 pb-[clamp(3rem,6vw,5rem)] lg:pt-28">
+    <section data-fx className="bg-bone text-charcoal pt-24 pb-[clamp(3rem,6vw,5rem)] lg:pt-28">
       <div className="welcome-cascade mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
         <h1 className="font-voice leading-heading mt-5 max-w-[18ch] text-display-page font-light tracking-display-page">

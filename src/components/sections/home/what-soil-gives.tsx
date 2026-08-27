@@ -9,7 +9,7 @@ import { home } from "@/content/home";
 export function WhatSoilGives() {
   const { whatSoilGives } = home;
   return (
-    <section className="bg-bone text-charcoal py-20 lg:py-28">
+    <section data-fx className="bg-bone text-charcoal py-20 lg:py-28">
       <div className="wrap flex flex-col">
         <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">

@@ -9,7 +9,7 @@ import { lab } from "@/content/lab";
 export function LabProblem() {
   const { problem } = lab;
   return (
-    <section className="bg-bone py-[clamp(3.5rem,7vw,6rem)]">
+    <section data-fx className="bg-bone py-[clamp(3.5rem,7vw,6rem)]">
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-10 max-w-[54rem]">
           <KickerHeader>{problem.eyebrow}</KickerHeader>

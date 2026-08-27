@@ -9,7 +9,7 @@ import { home } from "@/content/home";
 export function About() {
   const { about } = home;
   return (
-    <section className="bg-chalk text-charcoal py-20 lg:py-28">
+    <section data-fx className="bg-chalk text-charcoal py-20 lg:py-28">
       <div className="wrap">
         <div className="mx-auto flex max-w-[42rem] flex-col items-center gap-6 text-center">
           <KickerHeader>{about.eyebrow}</KickerHeader>

@@ -4,6 +4,7 @@ import { CookieBanner } from "@/components/site/cookie-banner";
 import { OrganizationJsonLd } from "@/components/site/json-ld";
 import { Metrika } from "@/components/site/metrika";
 import { SiteFooter } from "@/components/site/site-footer";
+import { CursorCompanion } from "@/components/site/cursor-companion";
 import { SkipLink } from "@/components/site/skip-link";
 import { SiteHeader } from "@/components/site/site-header";
 import { openGraphFor } from "@/lib/metadata";
@@ -56,6 +57,8 @@ export default function RootLayout({
         <SiteFooter />
         <CookieBanner />
         <Metrika />
+        {/* Декоративный слой: монтируется только на мыши и при no-preference (D7) */}
+        <CursorCompanion />
       </body>
     </html>
   );

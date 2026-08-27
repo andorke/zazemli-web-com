@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/ui/reveal";
 import { diary } from "@/content/diary";
 
 /*
@@ -15,6 +16,7 @@ export function Inside() {
         {inside.title}
       </h2>
       <p className="text-charcoal/60 mt-3 max-w-xl text-ui">{inside.lead}</p>
+      <Reveal className="welcome-timeline">
       <ol className="mt-10 flex flex-col">
         {inside.letters.map((letter, index) => (
           <li
@@ -44,6 +46,7 @@ export function Inside() {
           </li>
         ))}
       </ol>
+      </Reveal>
       <p className="border-moss leading-body text-charcoal/70 mt-8 max-w-xl border-l-2 pl-4 text-ui">
         <span className="text-charcoal font-medium">
           {inside.eachLetter.lead}

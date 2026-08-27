@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 
 import { WaitlistForm } from "@/components/sections/home/waitlist-form";
+import { useAnchorReveal } from "@/components/ui/anchor-reveal";
 import { KickerHeader } from "@/components/ui/kicker-header";
 import { home } from "@/content/home";
 import { landingNumber, skus } from "@/content/sku";
@@ -18,6 +21,8 @@ import { landingNumber, skus } from "@/content/sku";
  */
 export function SkuGallery() {
   const { skuGallery } = home;
+  /* каскад карточек: при заходе по якорю — сразу, иначе по доскроллу (задача 5.1) */
+  const galleryRef = useAnchorReveal<HTMLUListElement>("#collectio");
   return (
     <section
       id="collectio"
@@ -36,7 +41,9 @@ export function SkuGallery() {
           </p>
         </div>
 
-        <ul className="border-charcoal/15 bg-charcoal/15 grid list-none [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))] gap-px border-y">
+        <ul
+          ref={galleryRef}
+          className="welcome-gallery border-charcoal/15 bg-charcoal/15 grid list-none [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))] gap-px border-y">
           {skus.map((sku) => (
             <li key={sku.number} className="contents">
               <Link

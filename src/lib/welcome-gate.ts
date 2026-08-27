@@ -9,7 +9,17 @@
 export const WELCOME_CLASS = "js-welcome";
 export const WELCOME_KEY = "zazemli-welcome";
 
+/*
+ * Транзитные страницы гейт не тратят. `/collectio` — редирект печатного QR
+ * партии 0: он мгновенно уводит на `/#collectio`, и если бы флаг ставился
+ * здесь, встреча на главной уже не показалась бы — скан QR не увидел бы её
+ * вовсе. Такая страница пропускается: и класс не вешает, и флаг не пишет.
+ */
+export const TRANSIT_PATHS = ["/collectio", "/collectio/"];
+
 export const welcomeGateScript =
-  `(function(){try{if(sessionStorage.getItem("${WELCOME_KEY}"))return;` +
+  `(function(){try{` +
+  `if(${JSON.stringify(TRANSIT_PATHS)}.indexOf(location.pathname)>-1)return;` +
+  `if(sessionStorage.getItem("${WELCOME_KEY}"))return;` +
   `sessionStorage.setItem("${WELCOME_KEY}","1")}catch(e){}` +
   `document.documentElement.classList.add("${WELCOME_CLASS}")})()`;

@@ -13,7 +13,7 @@ import { productPage, ritualLine, type Sku } from "@/content/sku";
  */
 export function Ritual({ sku }: { sku: Sku }) {
   return (
-    <section className="bg-chalk text-charcoal px-6 py-20 text-center lg:px-30 lg:py-28">
+    <section data-fx className="bg-chalk text-charcoal px-6 py-20 text-center lg:px-30 lg:py-28">
       <div className="mx-auto flex max-w-[40rem] flex-col items-center gap-4">
         <KickerHeader className="text-moss-ink">
           {productPage.ritualEyebrow}

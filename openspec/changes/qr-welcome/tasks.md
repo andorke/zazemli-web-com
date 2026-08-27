@@ -41,21 +41,21 @@
 
 ## 5. Главная — каскад коллекции
 
-- [ ] 5.1 Каскад карточек SkuGallery (opacity + translateY, шаг ~70ms): триггер по `location.hash === '#collectio'` при монтировании, иначе IO при доскролле; show-once гейт общий. Verify: заход на `/collectio` (редирект) запускает каскад, обычный заход + доскролл — тоже, повторная навигация — без каскада
+- [x] 5.1 Каскад карточек SkuGallery (opacity + translateY, шаг ~70ms): триггер по `location.hash === '#collectio'` при монтировании, иначе IO при доскролле; show-once гейт общий. Verify: заход на `/collectio` (редирект) запускает каскад, обычный заход + доскролл — тоже, повторная навигация — без каскада
 
 ## 6. /diary-signup — «Разворот письма»
 
-- [ ] 6.1 Каскад ack → h1 → подзаголовок → цитата-подарок → форма (последней), суммарно ≤1s; форма фокусируема с момента появления. Verify: e2e-проверка фокуса поля во время/после каскада
-- [ ] 6.2 Точки таймлайна 7 писем лесенкой через `Reveal`. Verify: визуально при доскролле
+- [x] 6.1 Каскад ack → h1 → подзаголовок → цитата-подарок → форма (последней), суммарно ≤1s; форма фокусируема с момента появления. Verify: e2e-проверка фокуса поля во время/после каскада
+- [x] 6.2 Точки таймлайна 7 писем лесенкой через `Reveal`. Verify: визуально при доскролле
 
 ## 7. Cursor-companion «кольцо мха»
 
-- [ ] 7.1 Компонент слоя в `layout.tsx`: fixed-слой `pointer-events: none` + `aria-hidden`, кольцо мха 10–12px, rAF-цикл с lerp ~0.15 и остановкой в простое, гейт `@media (hover:hover) and (pointer:fine)` + `pointerType === 'mouse'`, reduced-motion не монтирует слой (+подписка на change). Verify: unit-тесты гейтов, визуально на десктопе
-- [ ] 7.2 Click-burst: кольцо + 3–5 точек-семян из пула ≤8, возврат по `animationend`, только в зонах `data-fx`, guard `closest('a,button,input,label,summary,form')`. Verify: unit-тест guard'а, клик по OzonButton/ссылкам работает без задержки
-- [ ] 7.3 Tap-ripple: `pointerdown` (touch) в зонах `data-fx`, `{passive: true}`, гашение по `pointercancel`, `touch-action` не трогаем. Verify: на мобильном вьюпорте тап даёт рябь, свайп-скролл — нет
-- [ ] 7.4 Разметить зоны `data-fx` (hero и повествовательные секции 4 страниц + главной); форма `/diary-signup` и все CTA — вне зон. Verify: клики по интерактиву нигде не спавнят эффект
+- [x] 7.1 Компонент слоя в `layout.tsx`: fixed-слой `pointer-events: none` + `aria-hidden`, кольцо мха 10–12px, rAF-цикл с lerp ~0.15 и остановкой в простое, гейт `@media (hover:hover) and (pointer:fine)` + `pointerType === 'mouse'`, reduced-motion не монтирует слой (+подписка на change). Verify: unit-тесты гейтов, визуально на десктопе
+- [x] 7.2 Click-burst: кольцо + 3–5 точек-семян из пула ≤8, возврат по `animationend`, только в зонах `data-fx`, guard `closest('a,button,input,label,summary,form')`. Verify: unit-тест guard'а, клик по OzonButton/ссылкам работает без задержки
+- [x] 7.3 Tap-ripple: `pointerdown` (touch) в зонах `data-fx`, `{passive: true}`, гашение по `pointercancel`, `touch-action` не трогаем. Verify: на мобильном вьюпорте тап даёт рябь, свайп-скролл — нет
+- [x] 7.4 Разметить зоны `data-fx` (hero и повествовательные секции 4 страниц + главной); форма `/diary-signup` и все CTA — вне зон. Verify: клики по интерактиву нигде не спавнят эффект
 
 ## 8. Сквозная верификация
 
-- [ ] 8.1 e2e (Playwright, desktop 1440 + mobile 360): все 4 входа показывают встречу на первом заходе; повторная навигация — без встречи; эмуляция `prefers-reduced-motion` — контент статичен и полностью видим; `?src=qr` не ломает страницы. Verify: `npm run test:e2e`
-- [ ] 8.2 Финальный прогон: `npm run build`, `npm run ds-lint`, `npm run test`, `npm run test:e2e` — всё зелёное; сверить бандл-дельту (JS слоя ≤ ~5КБ). Verify: вывод команд в отчёте
+- [x] 8.1 e2e (Playwright, desktop 1440 + mobile 360): все 4 входа показывают встречу на первом заходе; повторная навигация — без встречи; эмуляция `prefers-reduced-motion` — контент статичен и полностью видим; `?src=qr` не ломает страницы. Verify: `npm run test:e2e`
+- [x] 8.2 Финальный прогон: `npm run build`, `npm run ds-lint`, `npm run test`, `npm run test:e2e` — всё зелёное; сверить бандл-дельту (JS слоя ≤ ~5КБ). Verify: вывод команд в отчёте

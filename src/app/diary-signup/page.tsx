@@ -32,7 +32,9 @@ export default function DiarySignupPage() {
   const { hero, gift } = diary;
   return (
     <main id="main" className="flex-1 px-6 py-16 lg:px-30">
-      <section className="mx-auto flex max-w-2xl flex-col">
+      {/* Каскад встречи QR-входа: ack → h1 → sub → тейк-подарок → форма
+          последней; форма фокусируема с момента появления (задача 6.1) */}
+      <section data-fx className="welcome-cascade mx-auto flex max-w-2xl flex-col">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
         <p className="text-charcoal/60 mt-4 text-ui">{hero.ack}</p>
         <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-voice text-display-page font-light">

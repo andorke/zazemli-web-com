@@ -16,7 +16,7 @@ import { home } from "@/content/home";
 export function Hero() {
   const { hero } = home;
   return (
-    <section className="hero-scene bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-14 lg:pb-24">
+    <section data-fx className="hero-scene bg-charcoal text-bone relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-14 lg:pb-24">
       <div className="hero-media" aria-hidden="true">
         {/*
          * Не next/image: в static export он не отдаёт ни srcset, ни выбор
