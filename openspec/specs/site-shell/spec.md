@@ -3,15 +3,14 @@
 ## Purpose
 
 Каркас сайта ЗАЗЕМЛИ: полный набор роутов MVP под static export (главная, 7 страниц товара + редирект-страница коллекции, лаборатория, гайд, дневник-форма, политика конфиденциальности), общие SiteHeader и SiteFooter, `/diary-signup` скрыт от навигации и индекса, SEO-минимум, UTM-контракт Ozon-ссылок и страница 404.
-
 ## Requirements
-
 ### Requirement: Роуты сайта
-Система SHALL отдавать: `/`, `/lab`, `/guide`, `/diary-signup`, `/privacy`, редирект-страницу `/collectio` и 7 страниц `/collectio/[slug]` (monstera, ficus, anthurium, aglaonema, spathiphyllum, zamioculcas, epipremnum) — итого 13 контентных роутов плюс страница 404. Сборка `next build` со `output: 'export'` SHALL завершаться успешно и порождать статический HTML для каждого.
+
+Система SHALL отдавать: `/`, `/lab`, `/guide`, `/diary-signup`, `/privacy`, `/terms`, редирект-страницу `/collectio` и 7 страниц `/collectio/[slug]` (monstera, ficus, anthurium, aglaonema, spathiphyllum, zamioculcas, epipremnum) — итого 14 контентных роутов плюс страница 404. Сборка `next build` со `output: 'export'` SHALL завершаться успешно и порождать статический HTML для каждого.
 
 #### Scenario: Static export собирается
 - **WHEN** выполняется `npm run build`
-- **THEN** в `out/` присутствуют HTML главной, lab, guide, diary-signup, privacy, редирект-страницы collectio, семи страниц товара и 404
+- **THEN** в `out/` присутствуют HTML главной, lab, guide, diary-signup, privacy, terms, редирект-страницы collectio, семи страниц товара и 404
 
 #### Scenario: Роуты отвечают
 - **WHEN** пользователь открывает каждый контентный URL
@@ -33,11 +32,20 @@
 - **THEN** открывается панель с теми же тремя пунктами; `aria-expanded` переключается
 
 ### Requirement: SiteFooter
-Футер SHALL повторять структуру футера прототипа `landing.html`: три колонки — (1) wordmark «ЗАЗЕМЛИ» + тэглайн «Земля и забота — всё, что нужно.», (2) «Связь»: Instagram · `@zazemli_collectio`, Telegram · `@zazemli_collectio`, email `team@zazemli.com` (текстом, без иконок), (3) «Разделы»: Коллекция → `/#collectio`, Лаборатория → `/lab`, Гайд → `/guide` — и legal-строку (реквизиты ИП/ОГРНИП, «© 2026 ЗАЗЕМЛИ», «Информация на сайте не является публичной офертой», ссылка «Политика конфиденциальности» → `/privacy`). QR-блок и гигантский wordmark из прежнего футера MUST NOT рендериться. Глобальный дисклеймер «Растения — не лекарство…» из футера удаляется (остаётся на `/lab`, см. capability `lab-page`).
+
+Футер SHALL повторять структуру футера прототипа `landing.html`: три колонки — (1) wordmark «ЗАЗЕМЛИ» + тэглайн «Земля и забота — всё, что нужно.», (2) «Связь»: Instagram · `@zazemli_collectio`, Telegram · `@zazemli_collectio`, email `team@zazemli.com` (текстом, без иконок), (3) «Разделы»: Коллекция → `/#collectio`, Лаборатория → `/lab`, Гайд → `/guide` — и legal-блок: строка реквизитов «ИП Минетто А. А. · ОГРНИП 326330000022761 · работаем по УСН», «© 2026 ЗАЗЕМЛИ. Информация на сайте не является публичной офертой», ссылки «Политика конфиденциальности» → `/privacy` и «Условия использования сайта» → `/terms`. ИНН и почтовый адрес в футере MUST NOT публиковаться (полные реквизиты — только во врезках `/privacy` и `/terms`). Соцупоминания IG/TG MUST NOT рендериться ложными ссылками (`href="#"` или несуществующий якорь): либо реальный URL профиля, либо текст без `<a>`. QR-блок и гигантский wordmark из прежнего футера MUST NOT рендериться.
 
 #### Scenario: Обязательные элементы футера
 - **WHEN** отрендерена любая страница
-- **THEN** в футере присутствуют тэглайн, email `team@zazemli.com`, три ссылки разделов, ссылка на `/privacy` и legal-строка с «не является публичной офертой»
+- **THEN** в футере присутствуют тэглайн, email `team@zazemli.com`, три ссылки разделов, ссылки на `/privacy` и `/terms`, строка «ИП Минетто А. А. · ОГРНИП 326330000022761 · работаем по УСН» и «не является публичной офертой»
+
+#### Scenario: ИНН и адрес не в футере
+- **WHEN** отрендерен футер любой страницы
+- **THEN** ИНН и почтовый адрес в нём отсутствуют
+
+#### Scenario: Соцссылки не ложные
+- **WHEN** отрендерен футер
+- **THEN** упоминания IG/TG либо ведут на реальные URL профилей, либо являются текстом; `href="#"` и пустых якорей в футере нет
 
 #### Scenario: Старые блоки удалены
 - **WHEN** отрендерен футер
@@ -88,7 +96,8 @@
 - **THEN** она показывает реальный контент по своей capability-специи, а не заглушку с одним заголовком
 
 ### Requirement: SEO-минимум
-Каждая контентная страница SHALL иметь title (шаблон «… — ЗАЗЕМЛИ»), description и canonical (`metadataBase` = `https://zazemli.com`). Система SHALL генерировать `sitemap.xml` (11 индексируемых страниц: главная, lab, guide, privacy, 7 страниц товара) и `robots.txt`.
+
+Каждая контентная страница SHALL иметь title (шаблон «… — ЗАЗЕМЛИ»), description и canonical (`metadataBase` = `https://zazemli.com`). Система SHALL генерировать `sitemap.xml` (12 индексируемых страниц: главная, lab, guide, privacy, terms, 7 страниц товара) и `robots.txt`.
 
 #### Scenario: Метаданные на странице
 - **WHEN** открыта `/collectio/monstera`
@@ -96,10 +105,11 @@
 
 #### Scenario: Sitemap расширен
 - **WHEN** сгенерирован `sitemap.xml`
-- **THEN** в нём 11 URL (главная, lab, guide, privacy, 7 товаров), без `/collectio` и `/diary-signup`
+- **THEN** в нём 12 URL (главная, lab, guide, privacy, terms, 7 товаров), без `/collectio` и `/diary-signup`
 
 ### Requirement: UTM-контракт Ozon-ссылок
-Все внешние ссылки на Ozon SHALL строиться через `lib/utm.ts` и содержать `utm_source=site`; ссылки конкретного SKU — дополнительно `utm_content=sku00X`. Пока `ozonStoreUrl` равен `null`, кнопки Ozon SHALL рендериться в состоянии «Скоро на Ozon» без внешней ссылки.
+
+Все внешние ссылки на Ozon SHALL строиться через `lib/utm.ts` и содержать `utm_source=site`; ссылки конкретного SKU — дополнительно `utm_content=sku00X`. Пока `ozonStoreUrl` равен `null`, кнопки Ozon SHALL рендериться в состоянии «Скоро на Ozon» без внешней ссылки. Ссылки на соцсети бренда (Instagram, Telegram) в футере SHALL также строиться через `lib/utm.ts` с UTM-разметкой (FIX-29); внешние ссылки бренда без UTM MUST NOT добавляться.
 
 #### Scenario: UTM добавляется
 - **WHEN** `buildOzonUrl(storeUrl)` вызывается с базовым URL магазина
@@ -109,9 +119,26 @@
 - **WHEN** `ozonStoreUrl` равен `null` и рендерится кнопка Ozon
 - **THEN** кнопка показывает «Скоро на Ozon» и не является ссылкой
 
+#### Scenario: Соцссылки с UTM
+- **WHEN** в футере отрендерены ссылки IG/TG (при наличии реальных URL профилей)
+- **THEN** их href содержит `utm_source=site`
+
 ### Requirement: Страница 404
 Система SHALL отдавать страницу 404 в DS-стиле с навигацией на главную.
 
 #### Scenario: Несуществующий URL
 - **WHEN** пользователь открывает `/nope`
 - **THEN** рендерится 404-страница со ссылкой на `/`
+
+### Requirement: OG-мета и JSON-LD Organization
+
+Каждая индексируемая страница SHALL отдавать Open Graph-мета (og:title, og:description, og:url, og:image через `opengraph-image` в layout) и Twitter-карточку. Сайт SHALL содержать JSON-LD Schema.org `Organization` (имя «ЗАЗЕМЛИ», url `https://zazemli.com`, email `team@zazemli.com`) — один раз, в layout. Данные разметки SHALL браться из тех же контент-источников, что и видимый контент.
+
+#### Scenario: OG на странице товара
+- **WHEN** отрендерена `/collectio/monstera`
+- **THEN** в `<head>` есть og:title/og:description/og:url и og:image с абсолютным URL
+
+#### Scenario: Organization в layout
+- **WHEN** отрендерена любая страница
+- **THEN** присутствует ровно один script `application/ld+json` типа Organization
+

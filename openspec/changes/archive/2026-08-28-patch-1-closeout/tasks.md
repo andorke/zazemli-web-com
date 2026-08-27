@@ -43,8 +43,8 @@
 
 > Ночной раннер и `/opsx:apply` этот блок не выполняют: команды потока запускает человек (AGENTS.md, «Управление потоком изменений»).
 
-- [ ] 8.1 `/opsx:verify` по пяти реализованным changes волны: `legal-fixes`, `font-mulish`, `guide-v4`, `waitlist-form`, `seo-meta`
-- [ ] 8.2 `requesting-code-review` на волну
-- [ ] 8.3 `/opsx:sync` по каждому change с delta-спеками — перенос в `openspec/specs/`
-- [ ] 8.4 `/opsx:bulk-archive` на волну целиком
+- [x] 8.1 `/opsx:verify` по пяти реализованным changes волны: `legal-fixes`, `font-mulish`, `guide-v4`, `waitlist-form`, `seo-meta`
+- [x] 8.2 `requesting-code-review` на волну
+- [x] 8.3 `/opsx:sync` по каждому change с delta-спеками — перенос в `openspec/specs/`
+- [x] 8.4 `/opsx:bulk-archive` на волну целиком
 - [x] 8.5 Обновить `CONTEXT.md`: запись в журнал, «Текущая задача» и «Следующие шаги»; флаг Насте про строку «Без анимации» в BUILD-SPEC и про отставание `tokens.json` v1.1.0 / `--charcoal-muted`

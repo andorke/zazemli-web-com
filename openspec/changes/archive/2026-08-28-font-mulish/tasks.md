@@ -20,5 +20,5 @@
 
 ## 4. Приёмка и доки
 
-- [ ] 4.1 Приёмка по PATCH-1 §1: имя voice-файла в `/_next/media/` содержит `mulish`; Network пуст по `fonts.googleapis.com`; заголовки с отрицательным трекингом; стык h2 → body различим на глаз
+- [x] 4.1 Приёмка по PATCH-1 §1: имя voice-файла в `/_next/media/` содержит `mulish`; Network пуст по `fonts.googleapis.com`; заголовки с отрицательным трекингом; стык h2 → body различим на глаз Закрыто в `patch-1-closeout` 4.1–4.2: `src/app/fonts.built.test.ts` проверяет имя voice-файла, отсутствие обращений к `fonts.googleapis.com` и отрицательный трекинг по сборке; стык h2 → body сверен глазами на 1440 и 390.
 - [x] 4.2 Обновить `DEVELOPMENT.md` (источник типографики: typography.md v3.0 + прототипы; веса по прототипу) и записать решение 30.07 в `CONTEXT.md` (включая отставание tokens.json v1.1.0 — флаг Насте)
