@@ -39,7 +39,7 @@ const compByKey = new Map(lab.components.map((c) => [c.key, c]));
 describe("Контент /lab (прототип lab.html, пересборка 2026-07-05)", () => {
   it("hero: eyebrow, H1, sub и смысловая строка", () => {
     expect(lab.hero.eyebrow).toBe("ЗАЗЕМЛИ · лаборатория");
-    expect(lab.hero.title).toBe("Лаборатория грунта.");
+    expect(lab.hero.title).toBe("Лаборатория грунта");
     expect(lab.hero.sub).toContain("собранная под конкретное растение");
     expect(lab.hero.meaning).toContain("а не просто купить");
   });
@@ -90,7 +90,7 @@ describe("Контент /lab (прототип lab.html, пересборка 2
   });
 
   it("проблема: pullbox с научным якорем Bugbee & Frink", () => {
-    expect(lab.problem.title).toBe("Универсальный грунт не под твоё растение.");
+    expect(lab.problem.title).toBe("Универсальный грунт не под твоё растение");
     expect(lab.problem.flow).toHaveLength(2);
     expect(lab.problem.pullbox.source.level).toBe("рецензируемо");
     expect(lab.problem.pullbox.source.text).toContain("Bugbee & Frink");

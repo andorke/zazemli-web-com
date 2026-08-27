@@ -112,14 +112,14 @@ export const productPage = {
   labBridge: "Весь состав и источники → в лаборатории",
   boxEyebrow: "Что в боксе",
   careEyebrow: "После пересадки",
-  careTitle: "Уход мы расписали за тебя.",
+  careTitle: "Уход мы расписали за тебя",
   careSources: "источники рекомендаций",
   diaryEyebrow: "Дневник на год",
   ritualEyebrow: "Ритуал",
   guideBridge: "Как пересадить, по шагам →",
   /* buybar (прототип collectio, блок 9) — точная копи eyebrow/title вопрос Насте */
   buyEyebrow: "Заземлить",
-  buyTitle: "Выбери объём.",
+  buyTitle: "Выбери объём",
   /* founder-quote + футер-мост (прототип collectio, блоки 10–11) — постоянные для всех SKU */
   founderQuote: "«Для тех, кто создаёт цифровое, а руками тянется к земле.»",
   founderSign: "— Настя, основательница",
@@ -128,7 +128,7 @@ export const productPage = {
 
 /* H1 hero и CTA собираются из винительного падежа названия (design-решение 2, вариант A). */
 export function heroTitle(sku: Sku): string {
-  return `Заземли ${sku.accusative}.`;
+  return `Заземли ${sku.accusative}`;
 }
 export function heroCtaLabel(sku: Sku): string {
   return `Заземлить ${sku.accusative} →`;
@@ -143,10 +143,10 @@ export function compositionEyebrow(sku: Sku): string {
   return `Состав · ${sku.components} компонентов`;
 }
 export function compositionTitle(sku: Sku): string {
-  return `Из чего собрана земля ${sku.genitive}.`;
+  return `Из чего собрана земля ${sku.genitive}`;
 }
 export function boxTitle(sku: Sku): string {
-  return `Всё на одну пересадку ${sku.genitive}.`;
+  return `Всё на одну пересадку ${sku.genitive}`;
 }
 
 /* CTA buybar под выбранный размер: «Купить {объём} на Ozon» (design-решение 4). */

@@ -1,7 +1,15 @@
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
-
 import { describe, expect, it } from "vitest";
+
+import {
+  hasBuild,
+  mainOf,
+  readBuilt,
+  ru,
+  SKU_ROUTES,
+  SP,
+  textOf,
+  W,
+} from "@/lib/built-output";
 
 /*
  * Приёмка PATCH-1 §7.1 по СОБРАННОЙ главной: применимые проверки из
@@ -10,54 +18,23 @@ import { describe, expect, it } from "vitest";
  * иначе правка «стоит ✅ в отчёте, а в файле её нет» (ровно так и сорвалась
  * прошлая итерация).
  *
- * Сборки в рабочем дереве может не быть (`npm run build` — отдельный шаг, out/
- * в git не попадает), поэтому проверки мягко скипаются: смысл теста —
- * воспроизводимость, а не блокировка обычного прогона vitest.
+ * Общий доступ к сборке и разбор разметки — в `@/lib/built-output`; здесь только
+ * сами проверки. Без `out/` набор мягко скипается.
  */
-const OUT = resolve(process.cwd(), "out", "index.html");
-const built = existsSync(OUT) ? readFileSync(OUT, "utf8") : null;
-const onBuild = built ? describe : describe.skip;
+const built = readBuilt("/");
+const onBuild = hasBuild() ? describe : describe.skip;
 
 /* Страницы товара — та же приёмка состава и цен (FIX-05/70, FIX-02) */
-const SKU_SLUGS = [
-  "monstera",
-  "ficus",
-  "anthurium",
-  "aglaonema",
-  "spathiphyllum",
-  "zamioculcas",
-  "epipremnum",
-];
-const skuPages = SKU_SLUGS.map((slug) => {
-  const file = resolve(process.cwd(), "out", "collectio", `${slug}.html`);
-  return { slug, html: existsSync(file) ? readFileSync(file, "utf8") : "" };
-});
+const SKU_SLUGS = SKU_ROUTES.map((route) => route.split("/").pop() as string);
+const skuPages = SKU_ROUTES.map((route) => ({
+  slug: route.split("/").pop() as string,
+  html: readBuilt(route) ?? "",
+}));
 
-/* Цены в сборке набраны неразрывным пробелом — ищем оба варианта (PATCH-1 §6) */
-const SP = "[ \\u00A0]";
-/*
- * `\w` в JS — ASCII-класс, на кириллице он не работает: «баночк\w*\s+» не найдёт
- * «баночка угольной», и проверка молча вырождается в вечнозелёную. Словоформы
- * задаём через \p{L} с флагом u — та же ловушка, что с неразрывным пробелом.
- */
-const ru = (source: string) => new RegExp(source, "iu");
-const W = "\\p{L}*";
-
-/*
- * Только отрисованный <main>: после него Next кладёт RSC-payload
- * (self.__next_f.push) — экранированную копию той же разметки. Поиск по всему
- * файлу попадает в неё, а не в страницу: там разметка закодирована как
- * ["$","a",…], поэтому проверки вида «в блоке нет <a>» становятся вечнозелёными.
- */
-const mainHtml = (() => {
-  const html = built ?? "";
-  const start = html.indexOf("<main");
-  const end = html.indexOf("</main>");
-  return start >= 0 && end > start ? html.slice(start, end) : "";
-})();
+const mainHtml = mainOf(built ?? "");
 
 /* Текст без разметки: порядок блоков и заголовки проверяем по нему */
-const text = mainHtml.replace(/<[^>]+>/g, "\n");
+const text = textOf(mainHtml);
 
 onBuild("Собранная главная: приёмка verify-prototypes.py", () => {
   it("FIX-02: старых цен 1 890 / 2 190 / 2 590 нет ни в одном варианте пробела", () => {

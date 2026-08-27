@@ -11,7 +11,7 @@ describe("Care («Уход мы расписали за тебя»)", () => {
     render(<Care sku={monstera} />);
     expect(screen.getByText("После пересадки")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Уход мы расписали за тебя.",
+      "Уход мы расписали за тебя",
     );
     expect(screen.getByText(/мы изучили именно монстеру/)).toBeInTheDocument();
   });

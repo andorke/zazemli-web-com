@@ -14,7 +14,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "ds-lint": "vitest run src/lib/ds-lint.test.ts src/lib/fonts-invariant.test.ts src/app/globals-tokens.test.ts",
-    "test:built": "next build && vitest run src/app/page.built.test.ts",
+    "test:built": "next build && vitest run .built.test",
     "extract:prototypes": "node scripts/extract-prototype-text.mjs"
   },
   "dependencies": {

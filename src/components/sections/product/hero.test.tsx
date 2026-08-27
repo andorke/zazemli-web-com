@@ -20,7 +20,7 @@ describe("ProductHero (страница товара)", () => {
   it("H1 «Заземли {растение}.» в винительном падеже", () => {
     render(<ProductHero sku={monstera} />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Заземли монстеру.",
+      "Заземли монстеру",
     );
   });
 

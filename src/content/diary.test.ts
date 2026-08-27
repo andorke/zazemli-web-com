@@ -82,7 +82,7 @@ describe("Контент /diary-signup — микрокопи состояний
   });
 
   it("confirmation — дословно, с эхом заботы и подписью", () => {
-    expect(diary.confirmation.title).toBe("Записали.");
+    expect(diary.confirmation.title).toBe("Записали");
     expect(diary.confirmation.body).toEqual([
       "Первое письмо — в почте через час.",
       "Земля уже в горшке. Заботу — напомним.",
@@ -95,12 +95,12 @@ describe("Контент /diary-signup — hero, эхо, попап полити
   it("hero H1 — по прототипу v3", () => {
     expect(diary.hero.eyebrow).toBe("Дневник растения");
     expect(diary.hero.title).toBe(
-      "Растение прижилось. Дальше — по дневнику, не наугад.",
+      "Растение прижилось. Дальше — по дневнику, не наугад",
     );
   });
 
   it("эхо-CTA несёт core formula и якорь к форме", () => {
-    expect(diary.echo.title).toBe("Земля и забота — всё, что нужно.");
+    expect(diary.echo.title).toBe("Земля и забота — всё, что нужно");
     expect(diary.echo.cta.href).toBe("#signup");
   });
 

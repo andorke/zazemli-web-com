@@ -93,11 +93,11 @@ describe("Эталоны прототипов маршрутов гайда", ()
 describe("Эталон прототипа /lab (extract-prototype-text.mjs)", () => {
   it("непустой и покрывает hero, проблему, заголовки секций, слоган", () => {
     expect(lab.length).toBeGreaterThan(100);
-    expect(lab).toContain("Лаборатория грунта.");
-    expect(lab).toContain("Универсальный грунт не под твоё растение.");
-    expect(lab).toContain("По одной земле на каждое растение.");
-    expect(lab).toContain("Из чего собраны эти земли.");
-    expect(lab).toContain("Мы не просим верить на слово.");
+    expect(lab).toContain("Лаборатория грунта");
+    expect(lab).toContain("Универсальный грунт не под твоё растение");
+    expect(lab).toContain("По одной земле на каждое растение");
+    expect(lab).toContain("Из чего мы собираем землю");
+    expect(lab).toContain("Мы не просим верить на слово");
     expect(lab).toContain("Эмпирика надёжнее.");
   });
 

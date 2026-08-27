@@ -11,7 +11,7 @@ describe("WhatsInBox (что в боксе, страница товара)", () 
     render(<WhatsInBox sku={monstera} />);
     expect(screen.getByText("Что в боксе")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Всё на одну пересадку монстеры.",
+      "Всё на одну пересадку монстеры",
     );
   });
 

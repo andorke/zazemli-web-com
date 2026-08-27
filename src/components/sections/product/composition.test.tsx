@@ -11,7 +11,7 @@ describe("Composition (состав грунта)", () => {
     render(<Composition sku={monstera} />);
     expect(screen.getByText("Состав · 10 компонентов")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Из чего собрана земля монстеры.",
+      "Из чего собрана земля монстеры",
     );
   });
 
