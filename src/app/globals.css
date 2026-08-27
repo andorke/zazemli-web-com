@@ -1,5 +1,10 @@
 /* Скан классов ограничен src/ — в docs/ лежат HTML/md-архивы БЗ с tailwind-подобными строками */
 @import "tailwindcss" source("../");
+/* Тесты из скана исключены: в них классы лежат строками-примерами (ds-lint
+   проверяет запрещённые утилиты по образцам), и Tailwind генерировал из них
+   мёртвые правила — после FIX-15 они ещё и ссылались на снятые токены. */
+@source not "../**/*.test.ts";
+@source not "../**/*.test.tsx";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -162,31 +167,31 @@
   --font-voice: var(--font-voice);
   --font-ui: var(--font-ui);
 
-  /* Типо-шкала ролей, десктоп px (tokens.typography.roles v1.1.0):
-     84 / 52 / 34 / 24 / 18 / 15 / 13 / 12 */
-  --text-display: 5.25rem;
-  --text-h1: 3.25rem;
-  --text-h2: 2.125rem;
-  --text-take: 1.5rem;
-  --text-body: 1.125rem;
-  --text-small: 0.9375rem;
-  --text-caption: 0.8125rem;
-  --text-eyebrow: 0.75rem;
+  /* Ролевая типо-шкала — typography.md v3.0, десктопные значения:
+     display 88/70/64 · h1 52 · h2 34 · take 24–26 · body 18 · ui 15 ·
+     small 15 · caption 13 · eyebrow 12. Числовой шкалы общего назначения
+     (xs…6xl) больше нет: пока систем было три, канон не имел одного места
+     применения — это и есть предмет FIX-15.
 
-  /* Type-scale Major Third ×1.25 (tokens.typography.scale) */
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.5rem;
-  --text-2xl: 1.875rem;
-  --text-3xl: 2.375rem;
-  --text-4xl: 3rem;
-  --text-5xl: 3.75rem;
-  --text-6xl: 4.75rem;
-  /* Fluid hero (tokens.typography.fluid) */
-  --text-hero: clamp(2.5rem, 5vw, 4.75rem);
-  --text-hero-inner: clamp(1.5rem, 3vw, 2.375rem);
+     Адаптив живёт ВНУТРИ токена, а не в классе на элементе: иначе
+     легитимный clamp() не отличить от того, которым шкала расползлась. */
+
+  /* Три уровня display и не больше (решение Насты 26.07).
+     ⚠️ Потолок hero — 7rem, а не канонные 5.5rem: решение от 08.08 про
+     широкие экраны (на 2560 полоса шире 1500px, канонный кегль читается
+     мелко). Расхождение с каноном открыто, вопрос Насте — change typo-scale. */
+  --text-display-hero: clamp(2.9rem, 6.5vw, 7rem);
+  --text-display-product: clamp(2.6rem, 5.5vw, 4.375rem); /* 70px, FIX-16 */
+  --text-display-page: clamp(2.4rem, 5vw, 4rem); /* 64px */
+
+  --text-h1: clamp(1.9rem, 2.6vw + 1rem, 3.25rem); /* 52px */
+  --text-h2: clamp(1.4rem, 2.5vw, 2.125rem); /* 34px */
+  --text-take: clamp(1.15rem, 1vw + 0.85rem, 1.5rem); /* 24px */
+  --text-body: 1.125rem; /* 18px */
+  --text-ui: 0.9375rem; /* 15px — меню, кнопки, лейблы (канон 14–16) */
+  --text-small: 0.9375rem; /* 15px */
+  --text-caption: 0.8125rem; /* 13px */
+  --text-eyebrow: 0.75rem; /* 12px */
 
   /* Line-height (tokens.typography.lineHeight) */
   --leading-display: 1;

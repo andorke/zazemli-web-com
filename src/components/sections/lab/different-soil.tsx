@@ -20,10 +20,10 @@ export function LabDifferentSoil() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mx-auto mb-10 flex max-w-[38ch] flex-col items-center gap-5 text-center">
           <KickerHeader>{differentSoil.eyebrow}</KickerHeader>
-          <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+          <h2 className="tracking-h2 leading-heading font-voice text-h2 font-light">
             {differentSoil.title}
           </h2>
-          <p className="text-charcoal/70 font-voice text-base leading-relaxed">
+          <p className="text-charcoal/70 font-voice text-body leading-relaxed">
             {differentSoil.body}{" "}
             <Link
               href={differentSoil.bridge.href}
@@ -49,14 +49,14 @@ export function LabDifferentSoil() {
                   className="w-[clamp(6rem,11vw,8rem)]"
                 />
                 <figcaption className="flex flex-col items-center gap-1.5">
-                  <span className="text-moss-ink font-voice text-lg leading-snug italic">
+                  <span className="text-moss-ink font-voice text-take leading-snug italic">
                     {sku.tagline}
                   </span>
-                  <span className="tracking-kicker text-charcoal/55 font-ui text-[10px] uppercase">
+                  <span className="tracking-kicker text-charcoal/55 font-ui text-eyebrow uppercase">
                     {sku.nameRu} · {landingNumber(sku.number)}
                   </span>
                   {sku.biotope ? (
-                    <span className="text-charcoal/45 font-voice text-sm italic">
+                    <span className="text-charcoal/45 font-voice text-ui italic">
                       {sku.biotope}
                     </span>
                   ) : null}
@@ -66,7 +66,7 @@ export function LabDifferentSoil() {
           })}
         </div>
 
-        <ul className="text-charcoal/55 font-ui mt-12 flex list-none flex-wrap justify-center gap-x-7 gap-y-2 text-[11px]">
+        <ul className="text-charcoal/55 font-ui mt-12 flex list-none flex-wrap justify-center gap-x-7 gap-y-2 text-eyebrow">
           {differentSoil.legend.map((item) => {
             const fill = GROUPS.find((g) => g.key === item.key)?.fill;
             return (

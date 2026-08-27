@@ -13,10 +13,10 @@ export function LabProblem() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-10 max-w-[54rem]">
           <KickerHeader>{problem.eyebrow}</KickerHeader>
-          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3.5rem)] font-light">
+          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-h1 font-light">
             {problem.title}
           </h2>
-          <p className="text-charcoal mt-5 max-w-[42rem] text-[1.05rem] leading-normal">
+          <p className="text-charcoal mt-5 max-w-[42rem] text-body leading-normal">
             {problem.lead}
           </p>
         </div>
@@ -29,7 +29,7 @@ export function LabProblem() {
             ))}
           </div>
           <div className="border-moss border-l-2 py-1 pl-5">
-            <p className="text-charcoal font-voice text-[1.3rem] leading-snug">
+            <p className="text-charcoal font-voice text-take leading-snug">
               {problem.pullbox.quote}
             </p>
             <DetailsAccordion

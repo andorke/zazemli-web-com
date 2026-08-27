@@ -9,10 +9,10 @@ export function LabHero() {
       {/* Каскад встречи (qr-welcome 4.1): лесенка по прямым детям, nth-child */}
       <div className="welcome-cascade mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
-        <h1 className="leading-heading tracking-display-page mt-5 max-w-[18ch] font-voice text-[clamp(2.4rem,5vw,4rem)] font-light">
+        <h1 className="leading-heading tracking-display-page mt-5 max-w-[18ch] font-voice text-display-page font-light">
           {hero.title}
         </h1>
-        <p className="text-charcoal mt-6 max-w-[36rem] font-voice text-[clamp(1.15rem,1vw_+_0.85rem,1.45rem)] leading-normal font-light">
+        <p className="text-charcoal mt-6 max-w-[36rem] font-voice text-take leading-normal font-light">
           {hero.sub}
         </p>
         <p className="text-ink-muted text-body mt-4 max-w-[34rem] font-voice leading-normal italic">

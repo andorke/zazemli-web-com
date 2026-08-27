@@ -117,7 +117,7 @@ export function SoilVial({
         bands.map((b) => (
           <span
             key={b.key}
-            className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-voice text-sm leading-none italic whitespace-nowrap"
+            className="text-charcoal/55 absolute -translate-y-1/2 pl-1 font-voice text-ui leading-none italic whitespace-nowrap"
             style={{ left: `${GLASS_RIGHT}%`, top: `${b.mid}%` }}
           >
             {b.label}

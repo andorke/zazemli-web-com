@@ -81,11 +81,11 @@ export function WaitlistForm() {
           placeholder={step1.placeholder}
           onChange={(event) => setPlant(event.target.value)}
           autoComplete="off"
-          className="border-charcoal/25 bg-bone focus-visible:border-moss-ink focus-visible:ring-moss-ink text-charcoal placeholder:text-charcoal/40 font-ui w-full min-w-0 border px-3 py-2.5 text-[15px] outline-none focus-visible:ring-1"
+          className="border-charcoal/25 bg-bone focus-visible:border-moss-ink focus-visible:ring-moss-ink text-charcoal placeholder:text-charcoal/40 font-ui w-full min-w-0 border px-3 py-2.5 text-small outline-none focus-visible:ring-1"
         />
         <button
           type="submit"
-          className="border-moss bg-moss text-bone font-ui min-h-11 w-fit border px-4 py-2.5 text-[15px] font-medium"
+          className="border-moss bg-moss text-bone font-ui min-h-11 w-fit border px-4 py-2.5 text-small font-medium"
         >
           {step1.submit}
         </button>

@@ -86,14 +86,14 @@ export function ComponentModal({
           type="button"
           onClick={onClose}
           aria-label="Закрыть"
-          className="text-ink-muted hover:text-charcoal absolute top-2 right-2 flex size-11 items-center justify-center text-2xl leading-none"
+          className="text-ink-muted hover:text-charcoal absolute top-2 right-2 flex size-11 items-center justify-center text-h2 leading-none"
         >
           ×
         </button>
         <span className="font-ui text-eyebrow tracking-eyebrow text-text-muted mb-2 block font-medium uppercase">
           {component.group}
         </span>
-        <h3 id={TITLE_ID} className="pr-8 font-voice text-[1.5rem] font-normal">
+        <h3 id={TITLE_ID} className="pr-8 font-voice text-take font-normal">
           {component.name}
         </h3>
         <div className="text-charcoal/80 text-small leading-body mt-4 flex flex-col gap-3">

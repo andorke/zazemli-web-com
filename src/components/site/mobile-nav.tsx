@@ -36,7 +36,7 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="right" className="bg-bone">
         <SheetHeader>
-          <SheetTitle className="font-voice text-base font-normal tracking-[0.06em]">
+          <SheetTitle className="font-voice text-body font-normal tracking-[0.06em]">
             ЗАЗЕМЛИ
           </SheetTitle>
         </SheetHeader>
@@ -46,7 +46,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="text-charcoal font-ui text-base"
+              className="text-charcoal font-ui text-body"
             >
               {item.label}
             </Link>

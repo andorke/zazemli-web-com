@@ -14,7 +14,7 @@ export function GuideFork({ fork }: { fork: GuideEntryContent["fork"] }) {
       id={fork.id}
       className="border-charcoal/15 mt-[clamp(2rem,4vw,2.8rem)] scroll-mt-8 border-y py-[clamp(1.6rem,3vw,2.2rem)]"
     >
-      <p className="font-voice text-charcoal max-w-[30ch] text-[clamp(1.5rem,1vw_+_1rem,1.7rem)] leading-snug">
+      <p className="font-voice text-charcoal max-w-[30ch] text-take leading-snug">
         {fork.title}
       </p>
       <p className="text-text-muted text-small mt-2 max-w-[40rem]">{fork.sub}</p>
@@ -25,7 +25,7 @@ export function GuideFork({ fork }: { fork: GuideEntryContent["fork"] }) {
             key={path.title}
             className="border-moss border-l-2 pl-[clamp(0.9rem,2vw,1.3rem)]"
           >
-            <h2 className="font-voice text-charcoal tracking-h2 text-[clamp(1.5rem,1vw_+_1rem,1.7rem)] font-normal">
+            <h2 className="font-voice text-charcoal tracking-h2 text-take font-normal">
               {path.title}
             </h2>
             <p className="text-ink-muted mt-2 mb-4 leading-snug">{path.lede}</p>

@@ -14,10 +14,10 @@ export function Care({ sku }: { sku: Sku }) {
     <section className="bg-bone text-charcoal px-6 py-20 lg:px-30 lg:py-28">
       <div className="mb-10 flex max-w-[42ch] flex-col gap-4 lg:mb-12">
         <KickerHeader>{productPage.careEyebrow}</KickerHeader>
-        <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+        <h2 className="tracking-h2 leading-heading font-voice text-h1 font-light">
           {productPage.careTitle}
         </h2>
-        <p className="text-charcoal/85 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal">
+        <p className="text-charcoal/85 max-w-[34rem] font-voice text-take leading-normal">
           {care.lead}
         </p>
       </div>
@@ -25,7 +25,7 @@ export function Care({ sku }: { sku: Sku }) {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12">
         {care.items.map((item) => (
           <div key={item.label} className="flex flex-col gap-2">
-            <h3 className="text-moss-ink font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic">
+            <h3 className="text-moss-ink font-voice text-take italic">
               {item.label}
             </h3>
             <p className="text-charcoal/85">{item.text}</p>
@@ -37,7 +37,7 @@ export function Care({ sku }: { sku: Sku }) {
         className="mt-8 max-w-[34rem]"
         summary={productPage.careSources}
       >
-        <div className="border-moss bg-chalk text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-[13px] leading-relaxed">
+        <div className="border-moss bg-chalk text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-caption leading-relaxed">
           {care.sources}
         </div>
       </DetailsAccordion>
@@ -49,7 +49,7 @@ export function Care({ sku }: { sku: Sku }) {
         <KickerHeader className="text-moss-ink">
           {productPage.diaryEyebrow}
         </KickerHeader>
-        <p className="text-charcoal mt-2 font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] leading-snug">
+        <p className="text-charcoal mt-2 font-voice text-take leading-snug">
           {care.diary}
         </p>
       </div>

@@ -38,7 +38,7 @@ export function RecipeCard({
           </span>
           <span
             aria-hidden="true"
-            className="border-charcoal/15 group-open:border-moss inline-flex size-7 items-center justify-center rounded-full border text-lg leading-none transition-transform group-open:rotate-45"
+            className="border-charcoal/15 group-open:border-moss inline-flex size-7 items-center justify-center rounded-full border text-take leading-none transition-transform group-open:rotate-45"
           >
             +
           </span>

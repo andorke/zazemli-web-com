@@ -66,7 +66,7 @@ describe("WaitlistModal — разметка попапа (task 3.1)", () => {
     expect(screen.getByText(modal.question)).not.toHaveTextContent("фикус");
   });
 
-  it("два согласия: ведущее 15px первым, ПДн ≥13px вторым, оба пусты (NEW-06)", () => {
+  it("два согласия: ведущее small(15px) первым, ПДн caption(13px) вторым, оба пусты (NEW-06)", () => {
     setup();
     const boxes = screen.getAllByRole("checkbox");
     expect(boxes).toHaveLength(2);
@@ -77,8 +77,8 @@ describe("WaitlistModal — разметка попапа (task 3.1)", () => {
 
     const leadLabel = boxes[0].closest("label");
     const pdnLabel = boxes[1].closest("label");
-    expect(leadLabel).toHaveClass("text-[15px]");
-    expect(pdnLabel).toHaveClass("text-[13px]");
+    expect(leadLabel).toHaveClass("text-small"); // 15px, роль small
+    expect(pdnLabel).toHaveClass("text-caption"); // 13px, роль caption — ниже не опускаем
     // таргет не меньше 44px у обоих
     expect(leadLabel).toHaveClass("min-h-11");
     expect(pdnLabel).toHaveClass("min-h-11");

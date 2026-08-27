@@ -55,13 +55,13 @@ export function PolicyModal({
           type="button"
           onClick={onClose}
           aria-label="Закрыть"
-          className="text-charcoal/70 absolute top-2 right-2 flex size-11 items-center justify-center text-2xl leading-none"
+          className="text-charcoal/70 absolute top-2 right-2 flex size-11 items-center justify-center text-h2 leading-none"
         >
           ×
         </button>
         <h2
           id="policyModalTitle"
-          className="tracking-h2 text-charcoal pr-8 font-voice text-2xl font-light"
+          className="tracking-h2 text-charcoal pr-8 font-voice text-h2 font-light"
         >
           {policyModal.title}
         </h2>
@@ -69,7 +69,7 @@ export function PolicyModal({
           {policyModal.points.map((point) => (
             <li
               key={point}
-              className="text-charcoal/70 leading-body flex gap-2 text-sm"
+              className="text-charcoal/70 leading-body flex gap-2 text-ui"
             >
               <span className="text-moss-ink/60" aria-hidden>
                 —
@@ -80,7 +80,7 @@ export function PolicyModal({
         </ul>
         <Link
           href={policyModal.fullLink.href}
-          className="text-moss-ink mt-6 inline-block text-sm font-medium underline underline-offset-2"
+          className="text-moss-ink mt-6 inline-block text-ui font-medium underline underline-offset-2"
         >
           {policyModal.fullLink.label}
         </Link>

@@ -58,12 +58,12 @@ function RouteStage({
       <span
         aria-hidden="true"
         className={
-          "text-moss/30 font-voice block text-[clamp(2.4rem,5vw,4rem)] leading-none font-light tabular-nums" // ds-allow: moss-large — номер стадии 38–64px (≥18pt)
+          "text-moss/30 font-voice block text-display-page leading-none font-light tabular-nums" // ds-allow: moss-large — номер стадии 38–64px (≥18pt)
         }
       >
         {stage.num}
       </span>
-      <h2 className="font-voice tracking-h2 mt-2 max-w-[24ch] text-[clamp(1.9rem,2.6vw_+_1rem,3.5rem)] leading-heading font-light">
+      <h2 className="font-voice tracking-h2 mt-2 max-w-[24ch] text-h1 leading-heading font-light">
         {stage.title}
       </h2>
 
@@ -74,7 +74,7 @@ function RouteStage({
               <span
                 aria-hidden="true"
                 className={
-                  "text-moss font-voice text-[clamp(1.5rem,1vw_+_1rem,1.7rem)] leading-tight tabular-nums" // ds-allow: moss-large — номер микрошага 24–27px (≥18pt)
+                  "text-moss font-voice text-take leading-tight tabular-nums" // ds-allow: moss-large — номер микрошага 24–27px (≥18pt)
                 }
               >
                 {i + 1}

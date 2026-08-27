@@ -31,6 +31,23 @@ const RULES: Array<{ name: string; pattern: RegExp; allowMark?: string }> = [
       /(?:^|[\s"'`:])text-(?:sku-[a-z]+|cosmos|iris|buttercup|sky|poppy)\b/,
     allowMark: "ds-allow: sku-accent",
   },
+  /*
+   * FIX-15: кегль — только ролевым токеном шкалы typography.md v3.0.
+   * Ловим утилиту размера с литеральным значением (13px, 1.3rem) и точечный
+   * clamp(); адаптив живёт внутри токена, а не в классе на элементе — иначе
+   * легитимный случай не отличить от того, которым шкала и расползлась.
+   * Другие произвольные утилиты (max-w-[16ch], leading-[1.2]) не трогаем.
+   */
+  {
+    name: "произвольный кегль (только ролевые токены шкалы)",
+    pattern: /(?:^|[\s"'`:])text-\[(?:-?[\d.]+(?:px|rem|em)\]|clamp\()/,
+    allowMark: "ds-allow: type-scale",
+  },
+  {
+    name: "легаси-шкала кегля (роли вместо xs…6xl)",
+    pattern: /(?:^|[\s"'`:])text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)\b/,
+    allowMark: "ds-allow: type-scale",
+  },
   {
     name: "устаревшее имя токена: var(--moss|--soil|…) → var(--color-*)",
     pattern:

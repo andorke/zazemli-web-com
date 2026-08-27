@@ -14,11 +14,11 @@ export function WhatSoilGives() {
         <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{whatSoilGives.eyebrow}</KickerHeader>
-            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-h1 font-light">
               {whatSoilGives.title}
             </h2>
           </div>
-          <p className="text-charcoal/70 font-voice max-w-[38rem] text-base leading-relaxed">
+          <p className="text-charcoal/70 font-voice max-w-[38rem] text-body leading-relaxed">
             {whatSoilGives.lead}
           </p>
         </div>
@@ -28,19 +28,19 @@ export function WhatSoilGives() {
             <div key={col.label} className="flex flex-col gap-3">
               <h3
                 className={
-                  "text-moss font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] italic" // ds-allow: moss-large — заголовок колонки 24–27px (≥18pt)
+                  "text-moss font-voice text-take italic" // ds-allow: moss-large — заголовок колонки 24–27px (≥18pt)
                 }
               >
                 {col.label}
               </h3>
-              <p className="text-charcoal/70 font-voice max-w-[38rem] text-base leading-relaxed">
+              <p className="text-charcoal/70 font-voice max-w-[38rem] text-body leading-relaxed">
                 {col.text}
               </p>
             </div>
           ))}
         </div>
 
-        <p className="border-charcoal/15 text-charcoal font-voice mt-10 border-t pt-8 text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-snug lg:mt-12">
+        <p className="border-charcoal/15 text-charcoal font-voice mt-10 border-t pt-8 text-take leading-snug lg:mt-12">
           {whatSoilGives.coreFormula}
         </p>
       </div>

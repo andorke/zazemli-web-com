@@ -15,12 +15,12 @@ export function NumberedList({ items }: { items: BoxItem[] }) {
           key={item.n}
           className="border-charcoal/10 grid grid-cols-[auto_1fr] items-baseline gap-6 border-b py-4"
         >
-          <span className="tracking-kicker text-charcoal/45 font-ui text-[10px] tabular-nums">
+          <span className="tracking-kicker text-charcoal/45 font-ui text-eyebrow tabular-nums">
             {item.n}
           </span>
           {/* div, а не span: ниже по дереву лежит <ul> — блочный элемент,
               внутри phrasing-контейнера это невалидная разметка */}
-          <div className="font-voice text-[17px]">
+          <div className="font-voice text-body">
             {item.text}
             {item.link ? (
               <>
@@ -37,7 +37,7 @@ export function NumberedList({ items }: { items: BoxItem[] }) {
                 {item.sub.map((sub) => (
                   <li
                     key={sub}
-                    className="text-charcoal/70 -indent-[1.1rem] pl-[1.1rem] text-[15px] leading-normal"
+                    className="text-charcoal/70 -indent-[1.1rem] pl-[1.1rem] text-small leading-normal"
                   >
                     — {sub}
                   </li>

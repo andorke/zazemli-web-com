@@ -66,22 +66,22 @@ export function Hero() {
         <KickerHeader className="text-bone/60">{hero.eyebrow}</KickerHeader>
         {/* потолок 7rem, а не 5.5: на 2560 полоса контента шире 1500px,
             и прежний кегль читался мелко относительно полотна */}
-        <h1 className="leading-hero tracking-display-hero font-voice text-[clamp(2.9rem,6.5vw,7rem)] font-light">
+        <h1 className="leading-hero tracking-display-hero font-voice text-display-hero font-light">
           {hero.title[0]}{" "}
           {/* block: вторая фраза всегда с новой строки, как в прототипе */}
           <em className="block italic">{hero.title[1]}</em>
         </h1>
-        <p className="text-bone/70 font-voice max-w-[32rem] text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal">
+        <p className="text-bone/70 font-voice max-w-[32rem] text-take leading-normal">
           {hero.sub}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-6">
           <Link
             href={hero.cta.href}
-            className="bg-moss text-bone border-moss font-voice border px-8 py-4 text-[17px]"
+            className="bg-moss text-bone border-moss font-voice border px-8 py-4 text-body"
           >
             {hero.cta.label}
           </Link>
-          <span className="text-bone/55 font-ui text-[11px] tracking-wide">
+          <span className="text-bone/55 font-ui text-eyebrow tracking-wide">
             {hero.price}
           </span>
         </div>

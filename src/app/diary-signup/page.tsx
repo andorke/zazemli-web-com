@@ -34,14 +34,14 @@ export default function DiarySignupPage() {
     <main className="flex-1 px-6 py-16 lg:px-30">
       <section className="mx-auto flex max-w-2xl flex-col">
         <KickerHeader>{hero.eyebrow}</KickerHeader>
-        <p className="text-charcoal/60 mt-4 text-sm">{hero.ack}</p>
-        <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-voice text-[clamp(2.2rem,6vw,3.6rem)] font-light">
+        <p className="text-charcoal/60 mt-4 text-ui">{hero.ack}</p>
+        <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-voice text-display-page font-light">
           {hero.title}
         </h1>
-        <p className="leading-narrative text-charcoal/90 mt-6 max-w-xl font-voice text-lg font-light">
+        <p className="leading-narrative text-charcoal/90 mt-6 max-w-xl font-voice text-take font-light">
           {hero.sub}
         </p>
-        <p className="border-moss leading-body text-charcoal/70 mt-6 max-w-xl border-l-2 pl-4 text-sm">
+        <p className="border-moss leading-body text-charcoal/70 mt-6 max-w-xl border-l-2 pl-4 text-ui">
           <span className="text-charcoal font-medium">{gift.lead}</span>{" "}
           {gift.body}
         </p>

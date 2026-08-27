@@ -18,7 +18,7 @@ export function WhySoil({ sku }: { sku: Sku }) {
       <div className="mx-auto grid max-w-[70rem] grid-cols-1 items-center gap-12 md:grid-cols-[1.2fr_0.8fr] md:gap-16">
         <div className="flex flex-col gap-5">
           <KickerHeader>{productPage.whyEyebrow}</KickerHeader>
-          <p className="text-charcoal/85 max-w-[34rem] font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-relaxed font-light">
+          <p className="text-charcoal/85 max-w-[34rem] font-voice text-take leading-relaxed font-light">
             {sku.whyProse}
           </p>
 
@@ -26,8 +26,8 @@ export function WhySoil({ sku }: { sku: Sku }) {
             className="mt-1 max-w-[34rem]"
             summary={sku.sourceNote.summary}
           >
-            <div className="border-moss bg-bone text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-[13px] leading-relaxed">
-              <span className="text-moss-ink font-ui text-[11px] tracking-wide uppercase">
+            <div className="border-moss bg-bone text-charcoal/70 mt-3 border-l-2 py-2 pr-3 pl-4 font-ui text-caption leading-relaxed">
+              <span className="text-moss-ink font-ui text-eyebrow tracking-wide uppercase">
                 {productPage.sourceBadge}
               </span>
               <p className="mt-1">{sku.sourceNote.claim}</p>
@@ -35,7 +35,7 @@ export function WhySoil({ sku }: { sku: Sku }) {
             </div>
           </DetailsAccordion>
 
-          <p className="mt-1 font-ui text-[13px]">
+          <p className="mt-1 font-ui text-caption">
             <Link href={labHref(sku)} className="text-moss-ink no-underline">
               {productPage.labBridge}
             </Link>
@@ -48,7 +48,7 @@ export function WhySoil({ sku }: { sku: Sku }) {
             labels={false}
             className="w-[clamp(120px,16vw,168px)]"
           />
-          <ul className="text-charcoal/60 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 font-ui text-[11px]">
+          <ul className="text-charcoal/60 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 font-ui text-eyebrow">
             {legend.map((g) => (
               <li key={g.key} className="inline-flex items-center gap-2">
                 <span

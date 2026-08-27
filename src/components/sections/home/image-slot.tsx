@@ -26,7 +26,7 @@ export function ImageSlot({
       )}
     >
       {caption ? (
-        <span className="font-voice px-4 text-center text-sm italic">
+        <span className="font-voice px-4 text-center text-ui italic">
           {caption}
         </span>
       ) : null}

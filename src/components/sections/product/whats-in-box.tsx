@@ -14,7 +14,7 @@ export function WhatsInBox({ sku }: { sku: Sku }) {
       <div className="mx-auto max-w-[40rem]">
         <div className="mb-10 flex max-w-[34ch] flex-col gap-4 lg:mb-12">
           <KickerHeader>{productPage.boxEyebrow}</KickerHeader>
-          <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+          <h2 className="tracking-h2 leading-heading font-voice text-h1 font-light">
             {boxTitle(sku)}
           </h2>
         </div>

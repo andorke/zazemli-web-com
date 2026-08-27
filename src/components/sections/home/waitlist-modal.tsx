@@ -146,7 +146,7 @@ export function WaitlistModal({
             type="button"
             onClick={() => dialogRef.current?.close()}
             aria-label={modal.close}
-            className="text-charcoal/70 absolute top-1.5 right-1.5 flex size-11 items-center justify-center text-2xl leading-none"
+            className="text-charcoal/70 absolute top-1.5 right-1.5 flex size-11 items-center justify-center text-h2 leading-none"
           >
             ×
           </button>
@@ -154,7 +154,7 @@ export function WaitlistModal({
           <p className="tracking-eyebrow font-ui text-eyebrow text-moss-ink mb-4 font-medium uppercase">
             {modal.kicker}
           </p>
-          <p className="text-moss-ink font-voice mr-10 text-[clamp(1.5rem,2.8vw,1.95rem)] leading-tight font-light [overflow-wrap:anywhere]">
+          <p className="text-moss-ink font-voice mr-10 text-h2 leading-tight font-light [overflow-wrap:anywhere]">
             {plant}
           </p>
           <hr className="border-charcoal/15 my-4" />
@@ -163,11 +163,11 @@ export function WaitlistModal({
             <div
               role="status"
               aria-live="polite"
-              className="font-voice text-lg"
+              className="font-voice text-take"
             >
               <p>{done.title}</p>
               <p className="mt-1">{done.body}</p>
-              <p className="text-charcoal/50 mt-3 text-[13px] italic">
+              <p className="text-charcoal/50 mt-3 text-caption italic">
                 {done.signature}
               </p>
             </div>
@@ -175,18 +175,18 @@ export function WaitlistModal({
             <>
               <p
                 id="waitlistQuestion"
-                className="font-voice mr-6 max-w-[24ch] text-[clamp(1.32rem,2.4vw,1.66rem)] leading-tight font-light"
+                className="font-voice mr-6 max-w-[24ch] text-h2 leading-tight font-light"
               >
                 {modal.question}
               </p>
-              <p className="text-charcoal/60 mt-2 text-[15px] leading-normal">
+              <p className="text-charcoal/60 mt-2 text-small leading-normal">
                 {modal.sub}
               </p>
 
               <form noValidate onSubmit={handleSubmit} className="mt-5">
                 <label
                   htmlFor="waitlistEmail"
-                  className="text-charcoal/60 mb-1.5 block text-[13px]"
+                  className="text-charcoal/60 mb-1.5 block text-caption"
                 >
                   {modal.emailLabel}
                 </label>
@@ -207,20 +207,20 @@ export function WaitlistModal({
                   autoCorrect="off"
                   aria-invalid={emailError || undefined}
                   aria-describedby={emailError ? "waitlistEmailMsg" : undefined}
-                  className="border-charcoal/25 focus-visible:border-moss-ink focus-visible:ring-moss-ink text-charcoal placeholder:text-charcoal/40 aria-invalid:border-destructive font-ui min-h-12 w-full border bg-transparent px-3.5 py-3 text-base outline-none focus-visible:ring-1"
+                  className="border-charcoal/25 focus-visible:border-moss-ink focus-visible:ring-moss-ink text-charcoal placeholder:text-charcoal/40 aria-invalid:border-destructive font-ui min-h-12 w-full border bg-transparent px-3.5 py-3 text-body outline-none focus-visible:ring-1"
                 />
                 {emailError && (
                   <p
                     id="waitlistEmailMsg"
                     role="alert"
-                    className="text-destructive mt-1.5 text-[13px]"
+                    className="text-destructive mt-1.5 text-caption"
                   >
                     {states.email}
                   </p>
                 )}
 
                 <div className="mt-4 flex flex-col gap-3">
-                  <label className="text-charcoal grid min-h-11 cursor-pointer grid-cols-[20px_1fr] items-start gap-2.5 text-[15px] leading-normal">
+                  <label className="text-charcoal grid min-h-11 cursor-pointer grid-cols-[20px_1fr] items-start gap-2.5 text-small leading-normal">
                     <input
                       ref={leadRef}
                       type="checkbox"
@@ -236,7 +236,7 @@ export function WaitlistModal({
                       <ConsentText consent={lead} />
                     </span>
                   </label>
-                  <label className="text-charcoal/70 grid min-h-11 cursor-pointer grid-cols-[20px_1fr] items-start gap-2.5 text-[13px] leading-normal">
+                  <label className="text-charcoal/70 grid min-h-11 cursor-pointer grid-cols-[20px_1fr] items-start gap-2.5 text-caption leading-normal">
                     <input
                       ref={pdnRef}
                       type="checkbox"
@@ -253,7 +253,7 @@ export function WaitlistModal({
                     </span>
                   </label>
                   {consentError && (
-                    <p role="alert" className="text-destructive text-[13px]">
+                    <p role="alert" className="text-destructive text-caption">
                       {states.consent}
                     </p>
                   )}
@@ -261,7 +261,7 @@ export function WaitlistModal({
 
                 <button
                   type="submit"
-                  className="border-moss bg-moss text-bone font-ui mt-5 min-h-12 w-full border px-5 py-3 text-[15px] font-medium"
+                  className="border-moss bg-moss text-bone font-ui mt-5 min-h-12 w-full border px-5 py-3 text-small font-medium"
                 >
                   {modal.submit}
                 </button>

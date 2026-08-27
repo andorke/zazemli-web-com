@@ -17,21 +17,21 @@ export function Teasers() {
             className="border-charcoal flex flex-col gap-4 border-t pt-6"
           >
             <KickerHeader>{teaser.eyebrow}</KickerHeader>
-            <h3 className="font-voice text-[clamp(1.5rem,1vw+1rem,1.7rem)] leading-snug">
+            <h3 className="font-voice text-take leading-snug">
               {teaser.title}
             </h3>
-            <p className="text-charcoal/70 font-voice text-base leading-relaxed">
+            <p className="text-charcoal/70 font-voice text-body leading-relaxed">
               {teaser.body}
             </p>
             {teaser.link ? (
               <Link
                 href={teaser.link.href}
-                className="text-moss-ink font-ui mt-auto w-fit pt-2 text-[12px] font-medium tracking-wide no-underline"
+                className="text-moss-ink font-ui mt-auto w-fit pt-2 text-eyebrow font-medium tracking-wide no-underline"
               >
                 {teaser.link.label}
               </Link>
             ) : (
-              <span className="text-charcoal/50 font-ui mt-auto pt-2 text-[11px] tracking-wide">
+              <span className="text-charcoal/50 font-ui mt-auto pt-2 text-eyebrow tracking-wide">
                 {teaser.note}
               </span>
             )}

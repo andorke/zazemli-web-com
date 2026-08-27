@@ -13,7 +13,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
         <Link
           href="/"
-          className="text-charcoal font-voice text-[1.3rem] tracking-[0.06em]"
+          className="text-charcoal font-voice text-take tracking-[0.06em]"
         >
           ЗАЗЕМЛИ
         </Link>

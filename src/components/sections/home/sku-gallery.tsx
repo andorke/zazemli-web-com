@@ -27,11 +27,11 @@ export function SkuGallery() {
         <div className="layout:mb-16 layout:grid-cols-[1.15fr_1fr] layout:gap-24 mb-12 grid items-end gap-5">
           <div className="flex flex-col gap-5">
             <KickerHeader>{skuGallery.eyebrow}</KickerHeader>
-            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice max-w-[14ch] text-h1 font-light">
               {skuGallery.title}
             </h2>
           </div>
-          <p className="text-charcoal/70 font-voice max-w-[38rem] text-base leading-relaxed">
+          <p className="text-charcoal/70 font-voice max-w-[38rem] text-body leading-relaxed">
             {skuGallery.lead}
           </p>
         </div>
@@ -46,22 +46,22 @@ export function SkuGallery() {
                 {/* слот фото карточки: до съёмки — заливка chalk без заглушки (FIX-03) */}
                 <span className="bg-chalk block aspect-[3/4]" />
                 <span className="flex flex-col gap-1.5 px-6 pt-5 pb-7">
-                  <span className="tracking-kicker text-charcoal/50 font-ui text-[10px]">
+                  <span className="tracking-kicker text-charcoal/50 font-ui text-eyebrow">
                     {landingNumber(sku.number)}
                   </span>
-                  <span className="font-voice text-[1.55rem] leading-tight">
+                  <span className="font-voice text-take leading-tight">
                     {sku.nameRu}
                   </span>
-                  <span className="text-charcoal/45 font-voice text-base italic">
+                  <span className="text-charcoal/45 font-voice text-body italic">
                     {sku.tagline}
                   </span>
-                  <span className="border-charcoal/10 text-charcoal/50 font-ui mt-3 flex flex-col gap-1 border-t pt-3 text-[10px] tracking-wide tabular-nums">
+                  <span className="border-charcoal/10 text-charcoal/50 font-ui mt-3 flex flex-col gap-1 border-t pt-3 text-eyebrow tracking-wide tabular-nums">
                     <span>{sku.components} компонентов</span>
                     <span>
                       {sku.volumes} · {sku.priceFrom}
                     </span>
                   </span>
-                  <span className="text-moss-ink mt-3 text-[13px] font-medium opacity-0 transition-opacity group-hover:opacity-100">
+                  <span className="text-moss-ink mt-3 text-caption font-medium opacity-0 transition-opacity group-hover:opacity-100">
                     {skuGallery.cardCta}
                   </span>
                 </span>
@@ -70,13 +70,13 @@ export function SkuGallery() {
           ))}
           <li className="contents">
             <div className="bg-chalk flex min-w-0 flex-col gap-3 px-6 py-8">
-              <span className="tracking-kicker text-charcoal/50 font-ui text-[10px]">
+              <span className="tracking-kicker text-charcoal/50 font-ui text-eyebrow">
                 {skuGallery.invite.number}
               </span>
-              <span className="text-charcoal/60 font-voice max-w-[16ch] text-[1.3rem] leading-snug italic">
+              <span className="text-charcoal/60 font-voice max-w-[16ch] text-take leading-snug italic">
                 {skuGallery.invite.question}
               </span>
-              <span className="text-charcoal/55 font-voice text-sm">
+              <span className="text-charcoal/55 font-voice text-ui">
                 {skuGallery.invite.note}
               </span>
               {/* шаг 1 листа ожидания; шаг 2 — попап (change waitlist-form) */}
@@ -87,7 +87,7 @@ export function SkuGallery() {
 
         <Link
           href={skuGallery.cta.href}
-          className="border-charcoal text-charcoal font-voice mt-10 w-fit border px-8 py-4 text-[15px]"
+          className="border-charcoal text-charcoal font-voice mt-10 w-fit border px-8 py-4 text-small"
         >
           {skuGallery.cta.label}
         </Link>

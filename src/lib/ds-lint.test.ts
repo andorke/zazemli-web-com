@@ -99,6 +99,48 @@ describe("checkDsViolations", () => {
     ).toHaveLength(0);
   });
 
+  /*
+   * FIX-15: кегль задаётся только ролевым токеном шкалы. Произвольные text-[…]
+   * и точечные clamp() — та самая механика, которой шкала расползлась до 28
+   * значений при норме канона ≤9.
+   */
+  it("находит произвольный кегль text-[13px]", () => {
+    expect(checkDsViolations('<p className="text-[13px]">x</p>')).toContain(
+      "произвольный кегль (только ролевые токены шкалы)",
+    );
+  });
+
+  it("находит точечный clamp() в классе", () => {
+    expect(
+      checkDsViolations('<h2 className="text-[clamp(1.9rem,2.6vw+1rem,3.5rem)]">x</h2>'),
+    ).toContain("произвольный кегль (только ролевые токены шкалы)");
+  });
+
+  it("находит легаси-шкалу text-sm / text-2xl", () => {
+    expect(checkDsViolations('<p className="text-sm">x</p>')).toContain(
+      "легаси-шкала кегля (роли вместо xs…6xl)",
+    );
+    expect(checkDsViolations('<p className="text-2xl">x</p>')).toContain(
+      "легаси-шкала кегля (роли вместо xs…6xl)",
+    );
+  });
+
+  it("пропускает ролевые классы шкалы", () => {
+    for (const cls of ["text-display-hero", "text-h2", "text-body", "text-caption", "text-eyebrow"]) {
+      expect(checkDsViolations(`<p className="${cls}">x</p>`)).toEqual([]);
+    }
+  });
+
+  it("пропускает произвольный кегль с меткой ds-allow: type-scale", () => {
+    expect(
+      checkDsViolations('<span className="text-[1.3rem]">знак</span> /* ds-allow: type-scale */'),
+    ).toEqual([]);
+  });
+
+  it("не путает кегль с другими произвольными утилитами", () => {
+    expect(checkDsViolations('<p className="max-w-[16ch] leading-[1.2]">x</p>')).toEqual([]);
+  });
+
   it("находит устаревшие имена токенов var(--moss) → var(--color-moss)", () => {
     expect(checkDsViolations('fill: "var(--soil)"')).not.toHaveLength(0);
     expect(checkDsViolations("color: var(--moss)")).not.toHaveLength(0);

@@ -16,12 +16,12 @@ export function About() {
           {about.paragraphs.map((paragraph) => (
             <p
               key={paragraph.slice(0, 24)}
-              className="text-charcoal/85 font-voice text-[clamp(1.15rem,1vw+0.85rem,1.45rem)] leading-normal font-light"
+              className="text-charcoal/85 font-voice text-take leading-normal font-light"
             >
               {paragraph}
             </p>
           ))}
-          <p className="text-moss-ink font-voice text-[17px] italic">
+          <p className="text-moss-ink font-voice text-body italic">
             {about.signature} <Fleuron className="not-italic" />
           </p>
         </div>

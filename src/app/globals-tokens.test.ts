@@ -54,15 +54,34 @@ describe("токены v1.1.0 на :root", () => {
 });
 
 describe("шкалы v1.1.0 в теме", () => {
-  it("типо-шкала ролей 84/52/34/24/18/15/13/12 (tokens.typography.roles)", () => {
-    expect(has(css, "--text-display: 5.25rem")).toBe(true); // 84
-    expect(has(css, "--text-h1: 3.25rem")).toBe(true); // 52
-    expect(has(css, "--text-h2: 2.125rem")).toBe(true); // 34
-    expect(has(css, "--text-take: 1.5rem")).toBe(true); // 24
+  /*
+   * FIX-15: шкала ролевая и единственная. Три уровня display, адаптив внутри
+   * токена. Потолок hero — 7rem по решению 08.08 про широкие экраны, а не
+   * канонные 5.5rem: расхождение открыто и вынесено Насте, тест фиксирует
+   * фактическое значение, чтобы правка не прошла молча.
+   */
+  it("ролевая типо-шкала typography.md v3.0", () => {
+    expect(has(css, "--text-display-hero: clamp(2.9rem, 6.5vw, 7rem)")).toBe(true);
+    expect(has(css, "--text-display-product: clamp(2.6rem, 5.5vw, 4.375rem)")).toBe(true); // 70
+    expect(has(css, "--text-display-page: clamp(2.4rem, 5vw, 4rem)")).toBe(true); // 64
+    expect(has(css, "--text-h1: clamp(1.9rem, 2.6vw + 1rem, 3.25rem)")).toBe(true); // 52
+    expect(has(css, "--text-h2: clamp(1.4rem, 2.5vw, 2.125rem)")).toBe(true); // 34
+    expect(has(css, "--text-take: clamp(1.15rem, 1vw + 0.85rem, 1.5rem)")).toBe(true); // 24
     expect(has(css, "--text-body: 1.125rem")).toBe(true); // 18
+    expect(has(css, "--text-ui: 0.9375rem")).toBe(true); // 15
     expect(has(css, "--text-small: 0.9375rem")).toBe(true); // 15
     expect(has(css, "--text-caption: 0.8125rem")).toBe(true); // 13
     expect(has(css, "--text-eyebrow: 0.75rem")).toBe(true); // 12
+  });
+
+  it("числовой шкалы общего назначения больше нет — параллельных систем кегля быть не должно", () => {
+    for (const legacy of [
+      "--text-xs:", "--text-sm:", "--text-base:", "--text-lg:", "--text-xl:",
+      "--text-2xl:", "--text-3xl:", "--text-4xl:", "--text-5xl:", "--text-6xl:",
+      "--text-hero:", "--text-hero-inner:", "--text-display:",
+    ]) {
+      expect(has(css, legacy), legacy).toBe(false);
+    }
   });
 
   it("семантическая spacing-шкала (tokens.space.semantic)", () => {

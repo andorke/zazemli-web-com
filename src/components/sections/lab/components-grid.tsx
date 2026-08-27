@@ -22,7 +22,7 @@ export function LabComponentsGrid() {
       <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
         <div className="mb-8 max-w-[54rem]">
           <KickerHeader>{componentsSection.eyebrow}</KickerHeader>
-          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-[clamp(1.9rem,2.6vw_+_1rem,3.5rem)] font-light">
+          <h2 className="tracking-h2 leading-heading mt-4 max-w-[20ch] font-voice text-h1 font-light">
             {componentsSection.title}
           </h2>
           <p className="text-charcoal/85 mt-4 max-w-[42rem] leading-normal">
@@ -47,7 +47,7 @@ export function LabComponentsGrid() {
                   material={GROUP_MATERIAL[component.group]}
                   className="absolute top-2.5 left-2.5 size-2.5"
                 />
-                <span className="text-ink-muted px-3 text-center font-voice text-[0.8rem] italic">
+                <span className="text-ink-muted px-3 text-center font-voice text-caption italic">
                   {component.photo}
                 </span>
               </span>

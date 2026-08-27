@@ -20,7 +20,7 @@ export function Buy() {
     <section className="bg-charcoal text-bone py-24 lg:py-32">
       <div className="wrap flex flex-col items-center gap-7 text-center">
         <KickerHeader className="text-bone/55">{buy.eyebrow}</KickerHeader>
-        <h2 className="tracking-h2 font-voice max-w-[18ch] text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] leading-tight font-light">
+        <h2 className="tracking-h2 font-voice max-w-[18ch] text-h1 leading-tight font-light">
           {buy.title}
         </h2>
 
@@ -30,10 +30,10 @@ export function Buy() {
               key={tier.volume}
               className="border-bone/40 border px-3 py-4 text-center"
             >
-              <span className="font-voice text-bone block text-[clamp(1.5rem,2.4vw,1.95rem)] leading-tight font-light tracking-[-0.03em] tabular-nums">
+              <span className="font-voice text-bone block text-h2 leading-tight font-light tracking-[-0.03em] tabular-nums">
                 {tier.volume}
               </span>
-              <span className="font-ui text-bone/60 mt-1.5 block text-[13px] leading-snug">
+              <span className="font-ui text-bone/60 mt-1.5 block text-caption leading-snug">
                 {buy.potLabel}
                 <br />
                 {tier.pot}
@@ -42,14 +42,14 @@ export function Buy() {
           ))}
         </ul>
 
-        <p className="text-bone/50 font-ui text-[13px]">{buy.note}</p>
+        <p className="text-bone/50 font-ui text-caption">{buy.note}</p>
 
         <OzonButton
           href={ozonStoreUrl}
           className="bg-moss text-bone hover:bg-moss/90 px-10 py-6"
         />
 
-        <p className="text-bone/70 font-voice max-w-[38rem] text-[15px] leading-relaxed">
+        <p className="text-bone/70 font-voice max-w-[38rem] text-small leading-relaxed">
           {buy.riskReversal}{" "}
           <a
             href={`mailto:${footer.email}`}
@@ -59,7 +59,7 @@ export function Buy() {
           </a>
         </p>
 
-        <p className="text-bone/50 font-voice max-w-[38rem] text-[13px] leading-relaxed">
+        <p className="text-bone/50 font-voice max-w-[38rem] text-caption leading-relaxed">
           {buy.caption}
         </p>
       </div>

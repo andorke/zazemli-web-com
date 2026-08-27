@@ -21,7 +21,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl">
         <div className="layout:grid-cols-[1.5fr_1fr_1fr] grid grid-cols-1 gap-8 pt-16 pb-8">
           <div>
-            <div className="text-bone font-voice text-[1.3rem] tracking-[0.06em]">
+            <div className="text-bone font-voice text-take tracking-[0.06em]">
               ЗАЗЕМЛИ
             </div>
             <p className="text-small mt-3">{footer.tagline}</p>

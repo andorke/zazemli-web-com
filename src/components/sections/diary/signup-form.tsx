@@ -166,19 +166,19 @@ export function SignupForm({
         tabIndex={-1}
         className="border-charcoal/15 bg-bone mt-10 border p-6 outline-none lg:p-8"
       >
-        <Fleuron className="text-xl" />
-        <h2 className="tracking-h2 text-charcoal mt-2 font-voice text-2xl font-light">
+        <Fleuron className="text-take" />
+        <h2 className="tracking-h2 text-charcoal mt-2 font-voice text-h2 font-light">
           {confirmation.title}
         </h2>
         {confirmation.body.map((line) => (
           <p
             key={line}
-            className="text-charcoal/70 leading-body mt-2 max-w-md text-base"
+            className="text-charcoal/70 leading-body mt-2 max-w-md text-body"
           >
             {line}
           </p>
         ))}
-        <p className="text-charcoal/50 mt-4 font-voice text-sm italic">
+        <p className="text-charcoal/50 mt-4 font-voice text-ui italic">
           {confirmation.signature}
         </p>
       </div>
@@ -193,7 +193,7 @@ export function SignupForm({
       className="border-charcoal/15 bg-bone mt-10 flex flex-col gap-5 border p-6 lg:p-8"
     >
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="email" className="text-charcoal text-sm font-medium">
+        <label htmlFor="email" className="text-charcoal text-ui font-medium">
           {form.label}
         </label>
         <input
@@ -217,20 +217,20 @@ export function SignupForm({
                 : undefined
           }
           aria-describedby="emailMsg"
-          className="border-charcoal/25 focus-visible:border-moss focus-visible:ring-moss/30 text-charcoal placeholder:text-charcoal/40 aria-invalid:border-destructive rounded-sm border bg-transparent px-3 py-2 text-base outline-none focus-visible:ring-3"
+          className="border-charcoal/25 focus-visible:border-moss focus-visible:ring-moss/30 text-charcoal placeholder:text-charcoal/40 aria-invalid:border-destructive rounded-sm border bg-transparent px-3 py-2 text-body outline-none focus-visible:ring-3"
         />
         {emailValid === true && (
-          <p className="text-moss-ink text-sm">{form.emailOk}</p>
+          <p className="text-moss-ink text-ui">{form.emailOk}</p>
         )}
         {emailValid === false && (
-          <p id="emailMsg" role="alert" className="text-destructive text-sm">
+          <p id="emailMsg" role="alert" className="text-destructive text-ui">
             {states.validation}
           </p>
         )}
       </div>
 
       <div className="flex flex-col gap-3">
-        <label className="text-charcoal/80 leading-body flex gap-3 text-sm">
+        <label className="text-charcoal/80 leading-body flex gap-3 text-ui">
           <input
             ref={pdnRef}
             type="checkbox"
@@ -246,7 +246,7 @@ export function SignupForm({
             />
           </span>
         </label>
-        <label className="text-charcoal/80 leading-body flex gap-3 text-sm">
+        <label className="text-charcoal/80 leading-body flex gap-3 text-ui">
           <input
             ref={adsRef}
             type="checkbox"
@@ -258,14 +258,14 @@ export function SignupForm({
           <span>{adsConsent.text}</span>
         </label>
         {consentError && (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-destructive text-ui">
             {form.consentError}
           </p>
         )}
       </div>
 
       {submitError && (
-        <p role="alert" className="text-destructive text-sm">
+        <p role="alert" className="text-destructive text-ui">
           {states[submitError]}
         </p>
       )}
@@ -273,8 +273,8 @@ export function SignupForm({
       <Button type="submit" size="lg" className="w-full" disabled={!pdn || submitting}>
         {form.submit}
       </Button>
-      <p className="text-charcoal/60 text-xs">{form.trust}</p>
-      <p className="text-charcoal/60 text-xs">{form.footnote}</p>
+      <p className="text-charcoal/60 text-caption">{form.trust}</p>
+      <p className="text-charcoal/60 text-caption">{form.footnote}</p>
 
       <PolicyModal open={policyOpen} onClose={() => setPolicyOpen(false)} />
     </form>

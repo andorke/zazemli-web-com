@@ -16,14 +16,14 @@ export function WhatsInBox() {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-5">
             <KickerHeader>{whatsInBox.eyebrow}</KickerHeader>
-            <h2 className="tracking-h2 leading-heading font-voice text-[clamp(1.9rem,2.6vw+1rem,3.5rem)] font-light">
+            <h2 className="tracking-h2 leading-heading font-voice text-h1 font-light">
               {whatsInBox.title}
             </h2>
           </div>
 
           <NumberedList items={whatsInBox.items} />
 
-          <p className="text-charcoal/50 font-voice text-lg italic">
+          <p className="text-charcoal/50 font-voice text-take italic">
             {whatsInBox.after}
           </p>
         </div>
