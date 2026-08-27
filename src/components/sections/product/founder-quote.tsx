@@ -21,6 +21,10 @@ export function FounderQuote() {
         <p className="text-moss-ink font-voice text-body italic">
           {productPage.founderSign} <Fleuron className="not-italic" />
         </p>
+        {/* Тейк Т8 — сразу за подписью, по прототипу (блок 10) */}
+        <p className="text-charcoal/70 font-ui text-small mt-4 leading-relaxed">
+          {productPage.founderGift}
+        </p>
         <p className="mt-6 font-ui text-caption">
           <Link href="/#collectio" className="text-moss-ink no-underline">
             {productPage.collectionBridge}

@@ -47,14 +47,49 @@ onBuild("Собранные карточки и главная: остаток �
     }
   });
 
-  /*
-   * FIX-38 (ритуал-блок: кофе-якорь, блок 6b «Собрать самому» с таблицей
-   * сравнения, тейк Т8 «подарок для друга») и FIX-35 в части карточек
-   * (risk-reversal с team@zazemli.com) в сборку не доехали: в прототипе они
-   * есть, на семи карточках — нет ни одного из четырёх. Это не правка текста,
-   * а недостающий раздел страницы, которого нет и в спеке product-page, —
-   * по design D5 уходит отдельным change. Зафиксировано в inventory.md.
-   */
+  it("FIX-38: ритуал-блок — кофе-якорь и строка про содержимое коробки", () => {
+    for (const { route, text } of skus) {
+      expect(text, route).toMatch(/чашек кофе навынос/iu);
+      expect(text, route).toContain("В коробке — собранный опыт пересадки");
+    }
+  });
+
+  it("FIX-38: блок «Собрать самому» с таблицей сравнения на всех семи", () => {
+    for (const { route, text } of skus) {
+      expect(text, route).toContain("Собрать самому");
+      expect(text, route).toMatch(/четырнадцать отдельных мешков/iu);
+      for (const row of ["Закупка на старте", "Уйдёт на одну пересадку", "Останется лежать", "Рецептура"]) {
+        expect(text, `${route}: строка «${row}»`).toContain(row);
+      }
+      expect(text, route).toMatch(/Честная рамка/iu);
+    }
+  });
+
+  it("FIX-38: цена в таблице совпадает с блоком покупки — источник один", () => {
+    for (const { route, text } of skus) {
+      /* базовый объём: первая цена карточки должна встречаться и в таблице */
+      const prices = [...text.matchAll(/(\d[\d\u00A0 ]*)\s*₽/g)].map((m) => m[1].trim());
+      expect(prices.length, route).toBeGreaterThan(1);
+      const base = prices.find((p) => /^[12]/.test(p));
+      expect(text.split(base as string).length - 1, `${route}: цена ${base} встречается один раз`).toBeGreaterThan(1);
+    }
+  });
+
+  it("FIX-35: risk-reversal на карточках, а не только на главной", () => {
+    for (const { route, text } of skus) {
+      expect(text, route).toContain("team@zazemli.com");
+      expect(text, route).toMatch(/Сомневаешься с объёмом/iu);
+    }
+  });
+
+  it("Т8: тейк о подарке другу после цитаты основательницы", () => {
+    for (const { route, text } of skus) {
+      const quote = text.indexOf("руками тянется к земле");
+      const gift = text.indexOf("подарок для друга");
+      expect(quote, `${route}: цитаты нет`).toBeGreaterThan(-1);
+      expect(gift, `${route}: тейка Т8 нет`).toBeGreaterThan(quote);
+    }
+  });
 
   it("FIX-44: блок «Растению — дом, тебе — меньше хлопот» и тейк Т12 на главной", () => {
     expect(home).toMatch(/Растению — дом/iu);

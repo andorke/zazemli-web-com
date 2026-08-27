@@ -27,6 +27,13 @@ export function Ritual({ sku }: { sku: Sku }) {
         >
           {sku.ritualPhrase}
         </RitualNote>
+        {/* Кофе-якорь и содержимое коробки — вторая половина блока прототипа (FIX-38) */}
+        <p className="text-charcoal/75 font-ui text-small mt-2 max-w-[34rem] leading-relaxed">
+          {productPage.ritualCoffee}
+        </p>
+        <p className="text-charcoal/75 font-ui text-small max-w-[34rem] leading-relaxed">
+          {productPage.ritualBox}
+        </p>
         <p className="mt-4 font-ui text-caption">
           <Link href="/guide" className="text-moss-ink no-underline">
             {productPage.guideBridge}

@@ -56,6 +56,11 @@ export function Buybar({ sku }: { sku: Sku }) {
         label={buyCtaLabel(size)}
         className="bg-moss text-bone hover:bg-moss/90 px-10 py-6"
       />
+
+      {/* FIX-35: risk-reversal — на главной он был, на карточках его не было */}
+      <p className="text-bone/70 font-ui text-caption mt-6 max-w-[30rem] text-center leading-relaxed">
+        {productPage.riskReversal}
+      </p>
     </section>
   );
 }

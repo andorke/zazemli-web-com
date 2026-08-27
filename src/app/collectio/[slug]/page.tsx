@@ -6,6 +6,7 @@ import { Care } from "@/components/sections/product/care";
 import { Composition } from "@/components/sections/product/composition";
 import { FounderQuote } from "@/components/sections/product/founder-quote";
 import { ProductHero } from "@/components/sections/product/hero";
+import { DiyCompare } from "@/components/sections/product/diy-compare";
 import { Ritual } from "@/components/sections/product/ritual";
 import { WhatsInBox } from "@/components/sections/product/whats-in-box";
 import { WhySoil } from "@/components/sections/product/why-soil";
@@ -118,6 +119,7 @@ export default async function ProductPage({ params }: Params) {
       <WhatsInBox sku={sku} />
       <Care sku={sku} />
       <Ritual sku={sku} />
+      <DiyCompare sku={sku} />
       <Buybar sku={sku} />
       <FounderQuote />
     </main>
