@@ -18,7 +18,7 @@ const pages = ALL_ROUTES.map((route) => ({
 }));
 
 const headings = (main: string) =>
-  [...main.matchAll(/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gs)].map((m) =>
+  [...main.matchAll(/<h[1-3][^>]*>([\s\S]*?)<\/h[1-3]>/g)].map((m) =>
     m[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim(),
   );
 

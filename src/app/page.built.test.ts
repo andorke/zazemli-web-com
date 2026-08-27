@@ -25,7 +25,6 @@ const built = readBuilt("/");
 const onBuild = hasBuild() ? describe : describe.skip;
 
 /* Страницы товара — та же приёмка состава и цен (FIX-05/70, FIX-02) */
-const SKU_SLUGS = SKU_ROUTES.map((route) => route.split("/").pop() as string);
 const skuPages = SKU_ROUTES.map((route) => ({
   slug: route.split("/").pop() as string,
   html: readBuilt(route) ?? "",

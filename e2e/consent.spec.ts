@@ -55,3 +55,42 @@ test("«Принять все»: баннер скрыт, выбор сохра�
     await page.evaluate(() => localStorage.getItem("zazemli-consent")),
   ).toBe("all");
 });
+
+/*
+ * Приёмка PATCH-1 §7.3: патч требует смотреть вкладку Network, а не разметку —
+ * «до „Принять все" запросов к mc.yandex.ru нет». Проверка по <script> в DOM
+ * этого не доказывает: счётчик может уйти fetch/img-пикселем мимо тега.
+ */
+test("§7.3: до согласия ни одного сетевого запроса к mc.yandex.ru", async ({
+  page,
+}) => {
+  const metrikaCalls: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("mc.yandex.ru")) metrikaCalls.push(request.url());
+  });
+
+  await page.goto("/");
+  await page.getByRole("button", { name: "Только необходимые" }).click();
+  await page.reload();
+  await page.goto("/lab");
+
+  expect(metrikaCalls, `запросы: ${metrikaCalls.join(", ")}`).toEqual([]);
+});
+
+test("§7.3: выбор переживает переход между страницами, баннер не возвращается", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Принять все" }).click();
+
+  for (const path of ["/lab", "/guide", "/privacy"]) {
+    await page.goto(path);
+    await expect(
+      page.getByRole("button", { name: "Принять все" }),
+      `баннер вернулся на ${path}`,
+    ).not.toBeVisible();
+  }
+  expect(await page.evaluate(() => localStorage.getItem("zazemli-consent"))).toBe(
+    "all",
+  );
+});

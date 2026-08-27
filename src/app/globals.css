@@ -453,6 +453,20 @@
   h3 {
     @apply font-voice;
   }
+  /*
+   * FIX-20 (WCAG 2.4.7): видимый фокус клавиатурой. Правило прототипов —
+   * `outline: 2px solid var(--moss); outline-offset: 3px`. Браузерный дефолт
+   * (1px auto) требование «≥2px, контраст ≥3:1» не закрывает, а на bone
+   * moss #4A7C59 даёт 4.43:1 — порога 3:1 для нетекстового контраста хватает.
+   */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-moss);
+    outline-offset: 3px;
+  }
 }
 
 /*
