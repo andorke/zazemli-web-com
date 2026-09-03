@@ -3,7 +3,32 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# Публичные переменные Next инлайнятся В МОМЕНТ СБОРКИ. Деплой идёт с машины
+# разработчика, и без этого файла `process.env.NEXT_PUBLIC_*` уезжает в бандл
+# необработанным обращением — счётчик Метрики тогда не грузится вообще, молча.
+# Файл не в git (.gitignore: .env*), значения берутся у владельца.
+if [ -f .env.production ]; then
+  set -a
+  # shellcheck disable=SC1091
+  . ./.env.production
+  set +a
+  echo "→ env сборки: .env.production подхвачен"
+else
+  echo "→ .env.production нет: Метрика и эндпоинт формы останутся выключенными"
+fi
+
 npm run build
+
+# Сборка молча уносит незаданные переменные в бандл как есть — проверяем итог,
+# а не намерение: если ID задан, он должен оказаться в статике.
+if [ -n "${NEXT_PUBLIC_METRIKA_ID:-}" ]; then
+  if grep -rq "$NEXT_PUBLIC_METRIKA_ID" out/_next/static 2>/dev/null; then
+    echo "✓ Метрика: ID $NEXT_PUBLIC_METRIKA_ID в сборке"
+  else
+    echo "✗ Метрика: ID задан, но в сборку не попал — деплой остановлен" >&2
+    exit 1
+  fi
+fi
 rsync -az --delete out/ zazemli:/var/www/zazemli/
 
 # IndexNow-пинг Яндекса: ускоряет переобход после публикации (Google протокол
