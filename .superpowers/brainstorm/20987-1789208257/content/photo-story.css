@@ -106,3 +106,43 @@
  .scene.story-v2 .kit-hotspots[data-box-photo=anthurium] [data-kit="2"]{left:35%!important}
  .scene.story-v2 .kit-hotspots[data-box-photo=anthurium] [data-kit="1"]{left:53%!important}
 }
+
+/* Product opening: choosing a size and buying fit in the first desktop viewport. */
+@container(min-width:760px){
+ .scene.story-v2.page-product .nav{height:56px}
+ .scene.story-v2.page-product .crumb{padding:6px 4cqw;min-height:32px;font-size:14px}
+ .scene.story-v2.page-product .crumb .page-link{padding:4px 0;font-size:14px}
+ .scene.story-v2.page-product .purchase-layout{padding:12px 4cqw 40px;gap:4cqw;grid-template-columns:52% minmax(0,1fr)}
+ .scene.story-v2.page-product .purchase-copy{display:grid;grid-template-columns:auto minmax(180px,1fr);column-gap:20px;align-items:start}
+ .scene.story-v2.page-product .purchase-copy>*{grid-column:1/-1}
+ .scene.story-v2.page-product .box-switch-label{font-size:12px;margin-bottom:4px}
+ .scene.story-v2.page-product .box-switch{min-height:44px;padding:10px 36px 10px 12px;font-size:15px;margin-bottom:10px;border-radius:10px}
+ .scene.story-v2.page-product .purchase-copy>.micro{font-size:11px;line-height:1.4}
+ .scene.story-v2.page-product .purchase-copy h1{font-size:clamp(34px,3.25cqw,44px);line-height:1.08;margin:8px 0;letter-spacing:-.04em}
+ .scene.story-v2.page-product .purchase-summary{font-size:16px;line-height:1.4;max-width:none}
+ .scene.story-v2.page-product .size-title{font-size:13px;line-height:1.4;margin:12px 0 8px}
+ .scene.story-v2.page-product .size-options{gap:10px;flex-wrap:wrap}
+ .scene.story-v2.page-product .size-options button{padding:9px 14px;gap:4px;min-height:58px;border-radius:10px}
+ .scene.story-v2.page-product .size-options b{font-size:18px}
+ .scene.story-v2.page-product .size-options span{font-size:13px}
+ .scene.story-v2.page-product .price-line{grid-column:1;display:flex;flex-direction:column;gap:0;margin:12px 0 0;align-self:center;font-size:12px;line-height:1.35}
+ .scene.story-v2.page-product .price{font-size:32px;line-height:1.15;white-space:nowrap}
+ .scene.story-v2.page-product .buy-action{grid-column:2;align-self:center;margin-top:12px;min-height:50px;padding:12px 20px;font-size:16px;gap:24px}
+ .scene.story-v2.page-product .marketplace-note{font-size:12px;line-height:1.4;margin:8px 0 0;text-align:right}
+ .scene.story-v2.page-product .purchase-value{order:1;gap:5px;margin:16px 0 0;padding:14px 0;font-size:14px}
+ .scene.story-v2.page-product .purchase-copy>.page-link{order:2;margin-top:8px;padding:8px 0;font-size:14px}
+ .scene.story-v2.page-product .availability-note{order:3;font-size:13px;margin-top:10px;max-width:none}
+ .scene.story-v2.page-product .purchase-gallery>.box-image,.scene.story-v2.page-product .purchase-gallery>.real-shot{width:min(100%,calc((100dvh - 370px)*4/3));height:auto;aspect-ratio:4/3;margin-inline:auto}
+ .scene.story-v2.page-product .gallery-controls{padding:6px 0}
+ .scene.story-v2.page-product .gallery-controls>span,.scene.story-v2.page-product .gallery-caption{font-size:12px}
+ .scene.story-v2.page-product .gallery-caption{margin-top:8px}
+}
+@media(max-height:820px){
+ @container(min-width:760px){
+  .scene.story-v2.page-product .nav{height:52px}
+  .scene.story-v2.page-product .crumb{padding-block:2px;min-height:28px}
+  .scene.story-v2.page-product .purchase-copy h1{font-size:clamp(34px,3.05cqw,40px);margin-block:6px}
+  .scene.story-v2.page-product .size-title{margin-top:8px}
+  .scene.story-v2.page-product .purchase-summary{order:1;margin-top:14px}
+ }
+}
