@@ -35,3 +35,19 @@ npm-debug.log*
 
 # Артефакт сборки: генерится scripts/optimize-images.mjs из assets/
 /public/img/
+
+# Локальные сессии; сохраняем только клиентский исходник концептов
+/.superpowers/*
+!/.superpowers/brainstorm/
+/.superpowers/brainstorm/*
+!/.superpowers/brainstorm/20987-1789208257/
+/.superpowers/brainstorm/20987-1789208257/*
+!/.superpowers/brainstorm/20987-1789208257/content/
+/.superpowers/brainstorm/20987-1789208257/content/*
+
+# Исходные фотосъёмки и промежуточные RAW-конвертации локальные
+/storage/*
+!/storage/photos/
+/storage/photos/*
+!/storage/photos/*.md
+!/storage/photos/*.json

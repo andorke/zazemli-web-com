@@ -83,3 +83,7 @@ npm run lint       # eslint
 - ESLint (конфиг next/core-web-vitals + typescript) + Prettier + prettier-plugin-tailwindcss.
 - Pre-commit hooks не используем (решение Фазы 0 — не усложнять).
 - Конвенция коммитов и PR — в `AGENTS.md` («Стиль коммитов и pull request»).
+
+## Экспериментальные концепты
+
+Отдельная статическая витрина `/rubinovoe-more/` публикуется через `scripts/deploy-concepts.sh`; упаковка — `scripts/package-concepts.py`. Она не входит в Next.js export и не меняет основной сайт. Исходник текущих макетов, порядок обновления и проверки: [deploy/CONCEPTS.md](deploy/CONCEPTS.md).

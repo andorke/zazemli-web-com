@@ -1,0 +1,57 @@
+/* design-system: brand primitives → reading roles → component typography. */
+.scene.story-v2{
+ --type-mulish:Mulish,Arial,sans-serif;--type-commissioner:Commissioner,Arial,sans-serif;
+ --type-body-size:1.35cqw;--type-small-size:1.1cqw;--type-caption-size:.95cqw;
+ --type-body-leading:1.65;--type-reading-leading:1.75;--type-display-leading:1.12;
+ --type-body-tracking:0;--type-heading-tracking:-.04em;
+ --font-reading:var(--type-mulish);--font-interface:var(--type-commissioner);
+ --paragraph-measure:65ch;--chapter-title-tracking:var(--type-heading-tracking);
+ --motion-ui-duration:220ms;--motion-ui-ease:cubic-bezier(.2,.8,.2,1);
+ font-kerning:normal;font-optical-sizing:auto;font-synthesis:none;
+}
+.scene.story-v2 h1,.scene.story-v2 h2,.scene.story-v2 h3{text-wrap:balance;font-kerning:normal}
+.scene.story-v2 .chapter-heading h2{letter-spacing:var(--chapter-title-tracking);line-height:1.17}
+.scene.story-v2 p{text-wrap:pretty;letter-spacing:var(--type-body-tracking)}
+.scene.story-v2 .micro{font-weight:450;letter-spacing:.105em;line-height:1.5}
+.scene.story-v2 .price,.scene.story-v2 .compact-mix b,.scene.story-v2 .plant-price,.scene.story-v2 .gallery-controls>span{font-variant-numeric:tabular-nums lining-nums}
+.scene.story-v2 .price{font-weight:350;letter-spacing:-.045em}
+.scene.story-v2 .story-hero-copy>p,.scene.story-v2 .purchase-summary{max-width:34ch;line-height:var(--type-body-leading)}
+.scene.story-v2 .lab-reading p,.scene.story-v2 .material-article p,.scene.story-v2 .recipe-dossier p,.scene.story-v2 .legal-layout article,.scene.story-v2 .source-groups li{max-width:var(--paragraph-measure);line-height:var(--type-reading-leading)}
+.scene.story-v2 .kit-inventory h3{font-weight:500;letter-spacing:-.018em;line-height:1.3}
+.scene.story-v2 .chapter-heading>.micro{position:relative;padding-left:1.6cqw}
+.scene.story-v2 .chapter-heading>.micro:before{content:'';position:absolute;width:.6cqw;height:.6cqw;background:currentColor;border-radius:50%;left:0;top:1.05cqw;opacity:.65}
+.scene.story-v2 .page-link,.scene.story-v2 .cta{transition:color var(--motion-ui-duration),background var(--motion-ui-duration),border-color var(--motion-ui-duration);touch-action:manipulation}
+.scene.story-v2 .page-link>span,.scene.story-v2 .cta>span{display:inline-block;transition:transform var(--motion-ui-duration) var(--motion-ui-ease)}
+.scene.story-v2 .page-link:is(:hover,:focus-visible)>span,.scene.story-v2 .cta:is(:hover,:focus-visible)>span{transform:translate(3px,-2px)}
+.scene.story-v2 .nav-links button{position:relative}
+.scene.story-v2 .nav-links button:after{content:'';height:1px;position:absolute;inset:auto 0 0;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform var(--motion-ui-duration) var(--motion-ui-ease)}
+.scene.story-v2 .nav-links button:is(:hover,:focus-visible):after{transform:scaleX(1)}
+.scene.story-v2 .home-plant-index button{transition:background var(--motion-ui-duration),color var(--motion-ui-duration);font-weight:350;letter-spacing:-.025em}
+.scene.story-v2 :is(.serega-emotional,.serega-gentle){max-width:100%;vertical-align:baseline}
+.scene.story-v2 [data-motion-part].serega-gentle{display:contents}
+.scene.story-v2 .serega-emotional__word,.scene.story-v2 .serega-gentle__word{vertical-align:baseline}
+.scene.story-v2[data-motion=off] *,.scene.story-v2[data-motion=off] *:before,.scene.story-v2[data-motion=off] *:after{transition:none!important;animation:none!important}
+/* Readable at actual preview size; overview cards keep their scaled typography. */
+.dialog-content .scene.story-v2{--type-body-size:clamp(16px,1.35cqw,19px);--type-small-size:clamp(14px,1.1cqw,16px);--type-caption-size:clamp(12px,.95cqw,14px)}
+.dialog-content .scene.story-v2 .kit-inventory p,.dialog-content .scene.story-v2 .kit-wide .kit-inventory p,.dialog-content .scene.story-v2 .soil-reasons li p,.dialog-content .scene.story-v2 .ritual-layout>div>p+p,.dialog-content .scene.story-v2 .diary-value-layout>div>p+p,.dialog-content .scene.story-v2 .lab-reading p,.dialog-content .scene.story-v2 .material-article p,.dialog-content .scene.story-v2 .recipe-dossier p,.dialog-content .scene.story-v2 .stage-copy li,.dialog-content .scene.story-v2 .fold p{font-size:var(--type-body-size);line-height:var(--type-body-leading)}
+.dialog-content .scene.story-v2 .section-lead{font-size:clamp(18px,1.65cqw,24px);line-height:1.55}
+.dialog-content .scene.story-v2 .research-source,.dialog-content .scene.story-v2 .source-groups ul,.dialog-content .scene.story-v2 .source-base-note{font-size:var(--type-small-size)!important;line-height:var(--type-reading-leading)}
+.dialog-content .scene.story-v2 .footer-legal p,.dialog-content .scene.story-v2 .story-footer p,.dialog-content .scene.story-v2 .story-footer a,.dialog-content .scene.story-v2 .story-footer .page-link,.dialog-content .scene.story-v2 .availability-note,.dialog-content .scene.story-v2 .diary-included{font-size:var(--type-small-size)}
+.dialog-content .scene.story-v2 .gallery-caption,.dialog-content .scene.story-v2 .box-image figcaption,.dialog-content .scene.story-v2 .hero-core,.dialog-content .scene.story-v2 .soil-source-note,.dialog-content .scene.story-v2 .object-number{font-size:var(--type-caption-size)}
+.dialog-content .scene.story-v2 .kit-hint,.dialog-content .scene.story-v2 .kit-bottom,.dialog-content .scene.story-v2 .purchase-value{font-size:var(--type-small-size);line-height:1.6}
+.dialog-content .scene.story-v2 .story-footer .micro{font-size:var(--type-caption-size)}
+.dialog-content .scene.story-v2 .compact-mix>div,.dialog-content .scene.story-v2 .compact-mix>button{font-size:var(--type-small-size)}
+.dialog-content .scene.story-v2 .page-link,.dialog-content .scene.story-v2 .kit-inventory .page-link,.dialog-content .scene.story-v2 .kit-wide .kit-inventory .page-link{font-size:var(--type-small-size)}
+.dialog-content .scene.story-v2 .legal-layout article{font-size:var(--type-body-size)}
+/* Distinct editorial voices, using the two existing brand families. */
+.c1.story-v2{--type-heading-tracking:-.045em}.c2.story-v2{--type-heading-tracking:-.025em}.c2.story-v2 .chapter-heading h2{font-weight:350}
+.c3.story-v2{--type-heading-tracking:-.055em}.c3.story-v2 .story-hero h1{font-weight:450}.c3.story-v2 .chapter-heading h2{font-weight:400}
+.c4.story-v2 .chapter-heading>.micro,.c4.story-v2 .micro{letter-spacing:.15em}.c4.story-v2 .chapter-heading h2{font-weight:350}
+.c5.story-v2 .chapter-heading h2{font-weight:450}.c5.story-v2 .home-plant-index button{font-weight:400;letter-spacing:-.04em}
+.c6.story-v2 .kit-inventory h3{font-family:var(--font-interface);font-weight:450;letter-spacing:-.025em}
+.c7.story-v2{--type-heading-tracking:-.055em}.c7.story-v2 .chapter-heading h2{font-weight:300}
+.c8.story-v2{--type-heading-tracking:-.025em}.c8.story-v2 .story-hero h1{line-height:1.16}
+.c9.story-v2 .chapter-heading h2{font-weight:400}.c10.story-v2 .chapter-heading h2{font-weight:450;letter-spacing:-.045em}
+#motion-toggle[aria-pressed=true]{background:#314733;color:#f5f3ed}.skills-applied{margin:24px 0;padding:20px;background:#e5e9df;font-size:14px;line-height:1.65;max-width:950px}.skills-applied b{font-weight:550}
+@container(max-width:450px){.scene.story-v2 .chapter-heading>.micro{padding-left:4cqw}.scene.story-v2 .chapter-heading>.micro:before{width:1.5cqw;height:1.5cqw;top:1.25cqw}.scene.story-v2 .story-hero h1{line-height:1.16}.scene.story-v2 .chapter-heading h2{line-height:1.2}.scene.story-v2 .kit-hint{min-height:24cqw}.dialog-content .scene.story-v2 .story-footer a{overflow-wrap:anywhere}.dialog-content .scene.story-v2 .kit-inventory .page-link{font-size:14px}.scene.story-v2 .purchase-copy h1{font-size:8.8cqw}.dialog-content .scene.story-v2 .kit-wide .kit-inventory h3{font-size:4.6cqw}}
+@media(prefers-reduced-motion:reduce){.scene.story-v2 *,.scene.story-v2 *:before,.scene.story-v2 *:after{transition:none!important;animation:none!important}.scene.story-v2 .serega-emotional__unit,.scene.story-v2 .serega-gentle__unit{will-change:auto}}
