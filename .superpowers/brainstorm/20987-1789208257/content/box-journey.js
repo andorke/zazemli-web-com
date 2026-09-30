@@ -3,7 +3,9 @@
 export function mountBoxJourney(stage,viewer,{enabled=true}={}){
  const scene=stage.querySelector('.page-home');
  if(!enabled||!scene)return {destroy(){}};
- const hero=scene.querySelector('.story-hero'),kit=scene.querySelector('.kit-section'),heroObject=hero.querySelector('.hero-object'),kitVisual=kit.querySelector('.kit-visual'),points=kit.querySelector('.kit-hotspots'),hint=kit.querySelector('.kit-hint');
+ const hero=scene.querySelector('.story-hero'),kit=scene.querySelector('.kit-section');
+ if(!hero||!kit)return {destroy(){}};
+ const heroObject=hero.querySelector('.hero-object'),kitVisual=kit.querySelector('.kit-visual'),points=kit.querySelector('.kit-hotspots'),hint=kit.querySelector('.kit-hint');
  const pointsHome=points.parentNode,hintHome=hint.parentNode,heroHome=heroObject.parentNode;
  const buttons=[...points.querySelectorAll('button')];
  let opening=null,visual=null,frame=0,disposed=false,mode='',chapter='';
