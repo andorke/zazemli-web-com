@@ -80,27 +80,6 @@
  .scene.story-v2 .kit-hotspots .kit-detail-dot{font-size:22px}
  .scene.story-v2 .kit-visual>.kit-hint{display:none}
 }
-#kit-sheet{position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,430px);max-width:100%;max-height:80dvh;padding:0;border:1px solid #d6d1c1;border-bottom:0;border-radius:20px 20px 0 0;background:#f5f0e6;color:#29291f;box-shadow:0 -8px 40px #29291f1a;font:400 15px/1.5 Commissioner;overflow:hidden}
-#kit-sheet[open]{display:flex;flex-direction:column}
-#kit-sheet::backdrop{background:#22281f66}
-#kit-sheet *{box-sizing:border-box}
-#kit-sheet button{font:500 15px Commissioner;color:inherit;cursor:pointer}
-#kit-sheet .kit-sheet-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 0 22px;flex-shrink:0}
-#kit-sheet .kit-sheet-head>span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#59614e}
-#kit-sheet [data-sheet-close]{width:48px;height:48px;background:none;border:0;font-size:28px;font-weight:300}
-#kit-sheet nav{display:flex;gap:10px;padding:4px 22px 18px;flex-shrink:0}
-#kit-sheet [data-sheet-item]{width:48px;height:44px;border:1px solid #b8bfaa;border-radius:100px;background:transparent}
-#kit-sheet [data-sheet-item][aria-pressed=true]{background:#435638;border-color:#435638;color:#fffaf0}
-#kit-sheet .kit-sheet-body{overflow:auto;overscroll-behavior:contain;min-height:0;padding:0 22px 20px}
-#kit-sheet h2{font:400 25px/1.2 Mulish;letter-spacing:-.035em;margin:0 0 12px;outline:none}
-#kit-sheet .kit-sheet-description{margin:0;font-size:15px;line-height:1.55}
-#kit-sheet [data-sheet-recipe]{display:flex;gap:22px;align-items:center;border:0;border-bottom:1px solid #939c86;background:none;min-height:44px;margin-top:14px;padding:0}
-#kit-sheet footer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 12px;padding:16px 22px max(18px,env(safe-area-inset-bottom));border-top:1px solid #d6d1c1;flex-shrink:0}
-#kit-sheet .kit-sheet-price{font-size:13px;line-height:1.4}
-#kit-sheet [data-sheet-buy]{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:48px;padding:12px 18px;background:#435638;color:#fffaf0;border:0;border-radius:100px}
-#kit-sheet footer small{grid-column:1/-1;font-size:11px;color:#59614e}
-#kit-sheet button:focus-visible{outline:2px solid #52613c;outline-offset:3px}
-@media(prefers-reduced-motion:no-preference){#kit-sheet[open][data-motion=on]{animation:kit-sheet-enter 240ms cubic-bezier(.2,.8,.2,1) both}@keyframes kit-sheet-enter{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}}
 @container(max-width:600px){
  /* Separate the two pouch targets on the narrow photograph; both stay on their pouch. */
  .scene.story-v2 .kit-hotspots[data-box-photo=anthurium] [data-kit="2"]{left:35%!important}
@@ -146,3 +125,25 @@
   .scene.story-v2.page-product .purchase-summary{order:1;margin-top:14px}
  }
 }
+
+/* A detail stays attached to its photograph; other hotspots remain interactive. */
+.kit-object-outline{position:absolute;border:2px solid #52613c;border-radius:10px;box-shadow:0 0 0 2px #fffaf0b3;pointer-events:none;background:#fffaf00d}
+#kit-popover{position:fixed;inset:auto;margin:0;padding:0 14px 10px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);overflow:visible;border:1px solid #c7cbb9;border-radius:16px;background:#f5f0e6;color:#29291f;box-shadow:0 8px 28px #29291f26;font:400 14px/1.45 Commissioner}
+#kit-popover::backdrop{background:transparent;pointer-events:none}
+#kit-popover *{box-sizing:border-box}
+#kit-popover header{display:flex;justify-content:space-between;align-items:center;min-height:42px}
+#kit-popover .kit-popover-number{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#52613c}
+#kit-popover button{font:500 13px Commissioner;cursor:pointer;min-height:44px;color:#435638;background:none;border:0}
+#kit-popover [data-kit-close]{width:44px;font-size:25px;font-weight:300;margin-right:-10px}
+#kit-popover .kit-popover-content{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;align-items:start}
+#kit-popover .kit-detail-crop{height:118px;position:relative;overflow:hidden;border-radius:9px;background:#e7ddcb}
+#kit-popover .kit-detail-crop img{position:absolute;max-width:none;object-fit:fill}
+#kit-popover h2{font:500 17px/1.2 Mulish;letter-spacing:-.025em;margin:0 0 7px}
+#kit-popover p{font-size:13px;line-height:1.45;margin:0}
+#kit-popover footer{display:flex;justify-content:space-between;gap:10px;margin-top:8px;border-top:1px solid #d6d1c1}
+#kit-popover [data-kit-purchase]{margin-left:auto}
+#kit-popover button:focus-visible{outline:2px solid #52613c;outline-offset:1px;border-radius:6px}
+#kit-popover .kit-popover-arrow{position:absolute;left:var(--arrow-x);width:12px;height:12px;background:#f5f0e6;transform:translateX(-50%) rotate(45deg);z-index:-1}
+#kit-popover[data-side=bottom] .kit-popover-arrow{top:-7px;border-left:1px solid #c7cbb9;border-top:1px solid #c7cbb9}
+#kit-popover[data-side=top] .kit-popover-arrow{bottom:-7px;border-right:1px solid #c7cbb9;border-bottom:1px solid #c7cbb9}
+@media(prefers-reduced-motion:no-preference){#kit-popover:popover-open[data-motion=on]{animation:kit-detail-arrive 160ms ease-out both}@keyframes kit-detail-arrive{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
