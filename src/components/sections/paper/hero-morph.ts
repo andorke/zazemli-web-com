@@ -5,14 +5,15 @@ export type SoilSelection = { zone: Zone; index: number };
 type Tile = SoilSelection & { bounds: SoilBounds };
 type TilePair = { from?: Tile; to?: Tile };
 type Palette = { outline: string; tint: string; shadow: string };
+type Backdrops = { from: HTMLCanvasElement; to: HTMLCanvasElement };
 
-const duration = 680;
+const duration = 820;
 const full = { x: 0, y: 0, ...soilPhotoSize };
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
 function ease(progress: number, start = 0, end = 1) {
   const t = Math.max(0, Math.min(1, (progress - start) / (end - start)));
-  return t * t * (3 - 2 * t);
+  return (1 - Math.cos(Math.PI * t)) / 2;
 }
 
 function tiles(plant: Plant): Tile[] {
@@ -38,13 +39,6 @@ function tiles(plant: Plant): Tile[] {
 function distance(a: SoilBounds, b: SoilBounds) {
   return (a.x + a.width / 2 - b.x - b.width / 2) ** 2 +
     (a.y + a.height / 2 - b.y - b.height / 2) ** 2;
-}
-
-function soilBacking(list: Tile[]) {
-  const dark = list.filter(({ zone }) => zone === "dark" || zone === "peat" || zone === "humus");
-  return (dark.length ? dark : list)
-    .reduce((a, b) => a.bounds.width * a.bounds.height >= b.bounds.width * b.bounds.height ? a : b)
-    .bounds;
 }
 
 export function prepareHeroMorph(from: Plant, to: Plant, selection: SoilSelection | null) {
@@ -73,8 +67,6 @@ export function prepareHeroMorph(from: Plant, to: Plant, selection: SoilSelectio
     selected: selected || null,
     accent: accent || null,
     selection: selected?.to ? { zone: selected.to.zone, index: selected.to.index } : null,
-    fromBacking: soilBacking(original),
-    toBacking: soilBacking(next),
   };
 }
 
@@ -101,6 +93,37 @@ export function paintHeroPhoto(ctx: CanvasRenderingContext2D, photo: HTMLImageEl
   paint(ctx, photo);
 }
 
+function backdrop(photo: HTMLImageElement) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 28;
+  canvas.height = 20;
+  const ctx = canvas.getContext("2d")!;
+  paint(ctx, photo, view, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+  return canvas;
+}
+
+function paintBackdrop(ctx: CanvasRenderingContext2D, backdrops: Backdrops, progress: number) {
+  ctx.drawImage(backdrops.from, view.x, view.y, view.width, view.height);
+  ctx.globalAlpha = ease(progress, .14, .86);
+  ctx.drawImage(backdrops.to, view.x, view.y, view.width, view.height);
+  ctx.globalAlpha = 1;
+}
+
+function paintTile(
+  ctx: CanvasRenderingContext2D, photo: HTMLImageElement,
+  source: SoilBounds, box: SoilBounds, opacity: number,
+) {
+  const ratio = box.width / box.height;
+  const width = Math.min(source.width, source.height * ratio);
+  const height = Math.min(source.height, source.width / ratio);
+  paint(ctx, photo, {
+    x: source.x + (source.width - width) / 2,
+    y: source.y + (source.height - height) / 2,
+    width,
+    height,
+  }, box, opacity);
+}
+
 function outline(ctx: CanvasRenderingContext2D, box: SoilBounds, opacity: number, stroke: number, palette: Palette) {
   ctx.globalAlpha = opacity * .09;
   ctx.fillStyle = palette.tint;
@@ -114,44 +137,52 @@ function outline(ctx: CanvasRenderingContext2D, box: SoilBounds, opacity: number
 
 function render(
   ctx: CanvasRenderingContext2D, from: HTMLImageElement, to: HTMLImageElement,
-  morph: Morph, progress: number, stroke: number, palette: Palette,
+  morph: Morph, backdrops: Backdrops, progress: number, stroke: number, palette: Palette,
 ) {
-  paint(ctx, from);
-  paint(ctx, to, view, view, ease(progress, .18, .94));
-  const lift = ease(progress, .02, .27) * (1 - ease(progress, .71, 1));
-  paint(ctx, from, morph.fromBacking, view, lift * .93);
-  paint(ctx, to, morph.toBacking, view, lift * .68 * ease(progress));
+  if (progress === 0) {
+    paint(ctx, from);
+    if (morph.selected?.from) outline(ctx, morph.selected.from.bounds, .95, stroke, palette);
+    return;
+  }
+
+  // Keep a softly resolved version of the scene in the gaps between moving pieces.
+  paintBackdrop(ctx, backdrops, progress);
+  if (progress < .22) paint(ctx, from, view, view, 1 - ease(progress, 0, .22));
+  if (progress > .79) paint(ctx, to, view, view, ease(progress, .79, .99));
   let accentBounds: SoilBounds | undefined;
 
   for (const [index, pair] of morph.pairs.entries()) {
     const a = (pair.from ?? pair.to)!.bounds;
     const b = (pair.to ?? pair.from)!.bounds;
-    const t = ease(progress, .03 + index % 4 * .022, .93);
-    const separation = Math.sin(Math.PI * t);
-    const stretch = pair.from && pair.to ? 1 : pair.from ? mix(1, .86, t) : mix(.86, 1, t);
+    const t = ease(progress, index % 4 * .014, .955);
+    const lift = Math.sin(Math.PI * t);
+    const shared = pair.from && pair.to;
+    const alpha = shared ? 1 : pair.from
+      ? 1 - ease(progress, .18, .76)
+      : ease(progress, .28, .945);
+    const stretch = mix(.92, 1, alpha);
     const width = mix(a.width, b.width, t);
     const height = mix(a.height, b.height, t);
-    const inset = 4 * separation;
+    const inset = 2.5 * lift;
     const box = {
       x: mix(a.x, b.x, t) + width * (1 - stretch) / 2 + inset,
-      y: mix(a.y, b.y, t) + height * (1 - stretch) / 2 + inset - 15 * separation,
+      y: mix(a.y, b.y, t) + height * (1 - stretch) / 2 + inset - 10 * lift,
       width: width * stretch - 2 * inset,
       height: height * stretch - 2 * inset,
     };
     if (pair === morph.accent) accentBounds = box;
-    if (lift === 0 || box.width <= 0 || box.height <= 0) continue;
-    const alpha = lift * (pair.from && pair.to
-      ? 1
-      : pair.from ? 1 - ease(progress, .13, .52) : ease(progress, .34, .78));
+    if (alpha === 0 || box.width <= 0 || box.height <= 0) continue;
     ctx.fillStyle = palette.shadow;
-    ctx.globalAlpha = alpha * separation;
-    ctx.fillRect(box.x + 3 * separation, box.y + 7 * separation, box.width, box.height);
-    if (pair.from) paint(ctx, from, a, box, alpha);
-    if (pair.to) paint(ctx, to, b, box, alpha * (pair.from ? ease(t, .2, .8) : 1));
+    ctx.globalAlpha = alpha * lift * .72;
+    ctx.fillRect(box.x + 2 * lift, box.y + 6 * lift, box.width, box.height);
     ctx.globalAlpha = 1;
+    if (pair.from) paintTile(ctx, from, a, box, alpha);
+    if (pair.to) paintTile(ctx, to, b, box, shared ? ease(t, .32, .94) : alpha);
   }
   if (accentBounds) {
-    const intensity = morph.selected ? morph.selection ? .95 : .95 * (1 - ease(progress, .25, .62)) : .82 * lift;
+    const intensity = morph.selected
+      ? morph.selection ? .95 : .95 * (1 - ease(progress, .24, .75))
+      : .82 * ease(progress, .07, .27) * (1 - ease(progress, .72, .965));
     outline(ctx, accentBounds, intensity, stroke, palette);
   }
 }
@@ -172,8 +203,9 @@ export function animateHeroMorph(
   };
   const screenScale = Math.max(canvas.clientWidth / view.width, canvas.clientHeight / view.height);
   const stroke = 1.6 / screenScale;
+  const backdrops = { from: backdrop(from), to: backdrop(to) };
   viewport(ctx);
-  render(ctx, from, to, morph, 0, stroke, palette);
+  render(ctx, from, to, morph, backdrops, 0, stroke, palette);
   canvas.dataset.animating = "true";
 
   return new Promise<void>((resolve) => {
@@ -190,7 +222,7 @@ export function animateHeroMorph(
         stop();
         return;
       }
-      render(ctx, from, to, morph, progress, stroke, palette);
+      render(ctx, from, to, morph, backdrops, progress, stroke, palette);
       frame = requestAnimationFrame(step);
     }
     signal.addEventListener("abort", stop, { once: true });
