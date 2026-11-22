@@ -109,7 +109,6 @@ h3,
 .hero {
   --hero-outline-stroke: #fff9e8;
   --hero-outline-fill: #fff8e8;
-  --hero-tile-shadow: rgb(24 14 8 / 45%);
   position: relative;
   isolation: isolate;
   display: grid;
@@ -118,11 +117,14 @@ h3,
   color: var(--chalk);
   min-height: clamp(530px, 44vw, 680px);
 }
+.hero-photo-contours {
+  position: absolute;
+}
 .material-stage {
   position: relative;
   min-width: 0;
   min-height: 100%;
-  clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+  clip-path: url(#hero-photo-wide);
   background: #63503b;
 }
 #mosaic {
@@ -191,9 +193,6 @@ h3,
   border-color: var(--action-field);
   background: var(--action-field);
   color: var(--action-text);
-}
-.hero-choices button[data-pending="true"] {
-  border-color: currentColor;
 }
 .hero-choices button:focus-visible {
   outline: 2px solid currentColor;
@@ -612,7 +611,7 @@ footer {
   }
   .material-stage {
     height: clamp(230px, 66vw, 345px);
-    clip-path: polygon(0 0, 100% 0, 100% 93%, 0 100%);
+    clip-path: url(#hero-photo-narrow);
   }
   .stage-legend {
     bottom: 20px;

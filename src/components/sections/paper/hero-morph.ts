@@ -1,39 +1,57 @@
 import type { Plant, Zone } from "@/content/paper/catalog";
 import { rectangles, soilBounds, soilPhotoSize, soilPhotoViewport as view, type SoilBounds } from "./soil-geometry";
 
-export type SoilSelection = { zone: Zone; index: number };
-type Tile = SoilSelection & { bounds: SoilBounds };
-type TilePair = { from?: Tile; to?: Tile };
-type Palette = { outline: string; tint: string; shadow: string };
-type Backdrops = { from: HTMLCanvasElement; to: HTMLCanvasElement };
+import { soilTexture } from "./hero-texture";
 
-const duration = 820;
-const full = { x: 0, y: 0, ...soilPhotoSize };
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+export type SoilSelection = { zone: Zone; index: number };
+type Material = SoilSelection & { bounds: SoilBounds; outline: SoilBounds };
+type Pair = { from?: Material; to?: Material };
+type Photo = {
+  image: HTMLImageElement | HTMLCanvasElement;
+  bounds: SoilBounds;
+  scaleX: number;
+  scaleY: number;
+};
+type Frame = { photo: Photo; materials: Material[]; selected: Material | null; outlineOpacity: number };
+
+const duration = 680;
+const mix = (from: number, to: number, t: number) => from + (to - from) * t;
 
 function ease(progress: number, start = 0, end = 1) {
   const t = Math.max(0, Math.min(1, (progress - start) / (end - start)));
-  return (1 - Math.cos(Math.PI * t)) / 2;
+  return t * t * (3 - 2 * t);
 }
 
-function tiles(plant: Plant): Tile[] {
-  return (Object.keys(plant.zones) as Zone[]).flatMap((zone) =>
+function photoSource(image: HTMLImageElement): Photo {
+  return {
+    image,
+    bounds: { x: 0, y: 0, ...soilPhotoSize },
+    scaleX: image.naturalWidth / soilPhotoSize.width,
+    scaleY: image.naturalHeight / soilPhotoSize.height,
+  };
+}
+
+export function heroFrame(plant: Plant, image: HTMLImageElement, selection: SoilSelection | null): Frame {
+  const materials = (Object.keys(plant.zones) as Zone[]).flatMap((zone) =>
     rectangles(plant.zones[zone]).map((rectangle, index) => {
-      const area = soilBounds(rectangle);
-      const x = Math.max(view.x, area.x);
-      const y = Math.max(view.y, area.y);
+      const outline = soilBounds(rectangle);
+      const x = Math.max(view.x, outline.x);
+      const y = Math.max(view.y, outline.y);
       return {
         zone,
         index,
+        outline,
         bounds: {
           x,
           y,
-          width: Math.min(view.x + view.width, area.x + area.width) - x,
-          height: Math.min(view.y + view.height, area.y + area.height) - y,
+          width: Math.min(view.x + view.width, outline.x + outline.width) - x,
+          height: Math.min(view.y + view.height, outline.y + outline.height) - y,
         },
       };
     }),
   );
+  const selected = materials.find(({ zone, index }) => selection?.zone === zone && selection.index === index) ?? null;
+  return { photo: photoSource(image), materials, selected, outlineOpacity: selected ? 1 : 0 };
 }
 
 function distance(a: SoilBounds, b: SoilBounds) {
@@ -41,36 +59,31 @@ function distance(a: SoilBounds, b: SoilBounds) {
     (a.y + a.height / 2 - b.y - b.height / 2) ** 2;
 }
 
-export function prepareHeroMorph(from: Plant, to: Plant, selection: SoilSelection | null) {
-  const original = tiles(from);
-  const next = tiles(to);
-  const unused = new Set(next);
-  const pairs: TilePair[] = original.map((tile) => {
-    // Mixed soil can occupy two distinct areas. Pair the nearest areas first.
-    const target = [...unused].filter((candidate) => candidate.zone === tile.zone)
-      .sort((a, b) => distance(tile.bounds, a.bounds) - distance(tile.bounds, b.bounds))[0];
+function matchMaterials(from: Frame, to: Frame) {
+  const unused = new Set(to.materials);
+  function takeNearest(material: Material, accepts: (candidate: Material) => boolean) {
+    const target = [...unused].filter(accepts)
+      .sort((a, b) => distance(material.bounds, a.bounds) - distance(material.bounds, b.bounds))[0];
     if (target) unused.delete(target);
-    return { from: tile, to: target };
-  });
-  for (const tile of unused) pairs.push({ to: tile });
-
-  const selected = selection && pairs.find((pair) =>
-    pair.from?.zone === selection.zone && pair.from.index === selection.index,
-  );
-  const accent = selection ? selected : pairs.find((pair) =>
-    pair.from?.zone === "bark" && pair.to,
-  ) ?? pairs.find((pair) => pair.from?.zone === "zeolite" && pair.to);
-  // The selected piece sits above neighbouring pieces on the way to its new position.
-  const ordered = accent ? [...pairs.filter((pair) => pair !== accent), accent] : pairs;
-  return {
-    pairs: ordered,
-    selected: selected || null,
-    accent: accent || null,
-    selection: selected?.to ? { zone: selected.to.zone, index: selected.to.index } : null,
-  };
+    return target;
+  }
+  // Some photos show the same mixture in two distinct areas.
+  const matched = from.materials.map((material) => ({
+    from: material,
+    to: takeNearest(material, (candidate) => candidate.zone === material.zone),
+  }));
+  const darkSoils: Zone[] = ["dark", "peat", "humus"];
+  for (const pair of matched) {
+    if (!pair.to && darkSoils.includes(pair.from.zone)) {
+      // The dark base remains visually continuous when a photo shows the
+      // constituents separately and another shows them in the mixture.
+      pair.to = takeNearest(pair.from, (candidate) => darkSoils.includes(candidate.zone));
+    }
+  }
+  const pairs: Pair[] = matched;
+  for (const material of unused) pairs.push({ to: material });
+  return pairs;
 }
-
-type Morph = ReturnType<typeof prepareHeroMorph>;
 
 function viewport(ctx: CanvasRenderingContext2D) {
   const sx = ctx.canvas.width / view.width;
@@ -78,154 +91,169 @@ function viewport(ctx: CanvasRenderingContext2D) {
   ctx.setTransform(sx, 0, 0, sy, -view.x * sx, -view.y * sy);
 }
 
-function paint(ctx: CanvasRenderingContext2D, photo: HTMLImageElement, crop = view, place = view, opacity = 1) {
+function paint(ctx: CanvasRenderingContext2D, photo: Photo, crop = view, place = view, opacity = 1) {
   if (opacity <= 0) return;
-  const sx = photo.naturalWidth / full.width;
-  const sy = photo.naturalHeight / full.height;
   ctx.globalAlpha = opacity;
-  ctx.drawImage(photo, crop.x * sx, crop.y * sy, crop.width * sx, crop.height * sy,
+  ctx.drawImage(photo.image,
+    (crop.x - photo.bounds.x) * photo.scaleX, (crop.y - photo.bounds.y) * photo.scaleY,
+    crop.width * photo.scaleX, crop.height * photo.scaleY,
     place.x, place.y, place.width, place.height);
   ctx.globalAlpha = 1;
 }
 
 export function paintHeroPhoto(ctx: CanvasRenderingContext2D, photo: HTMLImageElement) {
   viewport(ctx);
-  paint(ctx, photo);
+  paint(ctx, photoSource(photo));
 }
 
-function backdrop(photo: HTMLImageElement) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 28;
-  canvas.height = 20;
-  const ctx = canvas.getContext("2d")!;
-  paint(ctx, photo, view, { x: 0, y: 0, width: canvas.width, height: canvas.height });
-  return canvas;
+function interpolate(a: SoilBounds, b: SoilBounds, progress: number): SoilBounds {
+  return {
+    x: mix(a.x, b.x, progress),
+    y: mix(a.y, b.y, progress),
+    width: mix(a.width, b.width, progress),
+    height: mix(a.height, b.height, progress),
+  };
 }
 
-function paintBackdrop(ctx: CanvasRenderingContext2D, backdrops: Backdrops, progress: number) {
-  ctx.drawImage(backdrops.from, view.x, view.y, view.width, view.height);
-  ctx.globalAlpha = ease(progress, .14, .86);
-  ctx.drawImage(backdrops.to, view.x, view.y, view.width, view.height);
-  ctx.globalAlpha = 1;
-}
-
-function paintTile(
-  ctx: CanvasRenderingContext2D, photo: HTMLImageElement,
-  source: SoilBounds, box: SoilBounds, opacity: number,
-) {
-  const ratio = box.width / box.height;
-  const width = Math.min(source.width, source.height * ratio);
-  const height = Math.min(source.height, source.width / ratio);
-  paint(ctx, photo, {
-    x: source.x + (source.width - width) / 2,
-    y: source.y + (source.height - height) / 2,
-    width,
-    height,
-  }, box, opacity);
-}
-
-function outline(ctx: CanvasRenderingContext2D, box: SoilBounds, opacity: number, stroke: number, palette: Palette) {
-  ctx.globalAlpha = opacity * .09;
-  ctx.fillStyle = palette.tint;
-  ctx.fillRect(box.x, box.y, box.width, box.height);
-  ctx.globalAlpha = opacity;
-  ctx.lineWidth = stroke;
-  ctx.strokeStyle = palette.outline;
-  ctx.strokeRect(box.x, box.y, box.width, box.height);
-  ctx.globalAlpha = 1;
-}
-
-function render(
-  ctx: CanvasRenderingContext2D, from: HTMLImageElement, to: HTMLImageElement,
-  morph: Morph, backdrops: Backdrops, progress: number, stroke: number, palette: Palette,
-) {
-  if (progress === 0) {
-    paint(ctx, from);
-    if (morph.selected?.from) outline(ctx, morph.selected.from.bounds, .95, stroke, palette);
-    return;
+function materialFrame(from: Frame, pairs: Pair[], progress: number): Frame {
+  if (progress === 0) return from;
+  const travel = ease(progress, 0, .96);
+  const materials: Material[] = [];
+  let selected: Material | null = null;
+  let outlineOpacity = from.outlineOpacity;
+  for (const { from: previous, to: next } of pairs) {
+    if (previous && next) {
+      const material = {
+        ...(previous === from.selected ? previous : next),
+        bounds: interpolate(previous.bounds, next.bounds, travel),
+        outline: interpolate(previous.outline, next.outline, travel),
+      };
+      materials.push(material);
+      if (previous === from.selected) {
+        selected = material;
+        if (previous.zone !== next.zone) outlineOpacity *= 1 - ease(progress, .18, .7);
+      }
+    } else {
+      const material = (previous ?? next)!;
+      if (previous ? progress < .62 : progress > .38) materials.push(material);
+      if (previous && previous === from.selected) {
+        selected = previous;
+        outlineOpacity *= 1 - ease(progress, .14, .64);
+      }
+    }
   }
+  return { photo: from.photo, materials, selected, outlineOpacity };
+}
 
-  // Keep a softly resolved version of the scene in the gaps between moving pieces.
-  paintBackdrop(ctx, backdrops, progress);
-  if (progress < .22) paint(ctx, from, view, view, 1 - ease(progress, 0, .22));
-  if (progress > .79) paint(ctx, to, view, view, ease(progress, .79, .99));
-  let accentBounds: SoilBounds | undefined;
-
-  for (const [index, pair] of morph.pairs.entries()) {
-    const a = (pair.from ?? pair.to)!.bounds;
-    const b = (pair.to ?? pair.from)!.bounds;
-    const t = ease(progress, index % 4 * .014, .955);
-    const lift = Math.sin(Math.PI * t);
-    const shared = pair.from && pair.to;
-    const alpha = shared ? 1 : pair.from
-      ? 1 - ease(progress, .18, .76)
-      : ease(progress, .28, .945);
-    const stretch = mix(.92, 1, alpha);
-    const width = mix(a.width, b.width, t);
-    const height = mix(a.height, b.height, t);
-    const inset = 2.5 * lift;
-    const box = {
-      x: mix(a.x, b.x, t) + width * (1 - stretch) / 2 + inset,
-      y: mix(a.y, b.y, t) + height * (1 - stretch) / 2 + inset - 10 * lift,
-      width: width * stretch - 2 * inset,
-      height: height * stretch - 2 * inset,
-    };
-    if (pair === morph.accent) accentBounds = box;
-    if (alpha === 0 || box.width <= 0 || box.height <= 0) continue;
-    ctx.fillStyle = palette.shadow;
-    ctx.globalAlpha = alpha * lift * .72;
-    ctx.fillRect(box.x + 2 * lift, box.y + 6 * lift, box.width, box.height);
-    ctx.globalAlpha = 1;
-    if (pair.from) paintTile(ctx, from, a, box, alpha);
-    if (pair.to) paintTile(ctx, to, b, box, shared ? ease(t, .32, .94) : alpha);
-  }
-  if (accentBounds) {
-    const intensity = morph.selected
-      ? morph.selection ? .95 : .95 * (1 - ease(progress, .24, .75))
-      : .82 * ease(progress, .07, .27) * (1 - ease(progress, .72, .965));
-    outline(ctx, accentBounds, intensity, stroke, palette);
+function paintWipe(ctx: CanvasRenderingContext2D, from: Photo, to: Photo, progress: number, direction: number) {
+  paint(ctx, from);
+  const y = view.y;
+  const h = view.height;
+  const edge = -.36 + progress * 1.72;
+  const x = (at: number) => view.x + (direction > 0 ? at : 1 - at) * view.width;
+  for (const [offset, opacity] of [[.035, .28], [0, .5], [-.035, 1]]) {
+    const front = edge + offset;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x(-.2), y);
+    ctx.lineTo(x(front + .085), y);
+    ctx.bezierCurveTo(x(front - .075), y + h * .32, x(front + .18), y + h * .72, x(front - .1), y + h);
+    ctx.lineTo(x(-.2), y + h);
+    ctx.closePath();
+    ctx.clip();
+    paint(ctx, to, view, view, opacity);
+    ctx.restore();
   }
 }
 
-export function animateHeroMorph(
-  ctx: CanvasRenderingContext2D, from: HTMLImageElement, to: HTMLImageElement,
-  morph: Morph, signal: AbortSignal,
-) {
+export function animateHeroMorph(ctx: CanvasRenderingContext2D, from: Frame, to: Frame) {
+  const pairs = matchMaterials(from, to);
+  const selected = pairs.find((pair) => pair.from && pair.from === from.selected)?.to;
+  const selection = selected && selected.zone === from.selected?.zone ? { zone: selected.zone, index: selected.index } : null;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  if (reduced.matches || signal.aborted || document.hidden) return Promise.resolve();
-
   const canvas = ctx.canvas;
   const style = getComputedStyle(canvas);
-  const palette = {
-    outline: style.getPropertyValue("--hero-outline-stroke").trim(),
-    tint: style.getPropertyValue("--hero-outline-fill").trim(),
-    shadow: style.getPropertyValue("--hero-tile-shadow").trim(),
-  };
-  const screenScale = Math.max(canvas.clientWidth / view.width, canvas.clientHeight / view.height);
-  const stroke = 1.6 / screenScale;
-  const backdrops = { from: backdrop(from), to: backdrop(to) };
-  viewport(ctx);
-  render(ctx, from, to, morph, backdrops, 0, stroke, palette);
-  canvas.dataset.animating = "true";
+  const stroke = 1.6 / Math.max(canvas.clientWidth / view.width, canvas.clientHeight / view.height);
+  const tint = style.getPropertyValue("--hero-outline-fill").trim();
+  const ink = style.getPropertyValue("--hero-outline-stroke").trim();
+  const tracks = pairs.flatMap((pair) =>
+    pair.from && pair.to ? [{ from: pair.from.bounds, to: pair.to.bounds }] : [],
+  );
+  const lead = pairs.find((pair) => pair.from?.zone === "zeolite" && pair.to);
+  const direction = lead?.from && lead.to && lead.to.bounds.x > lead.from.bounds.x ? -1 : 1;
+  const texture = reduced.matches || document.hidden
+    ? null
+    : soilTexture(canvas, from.photo, to.photo, tracks, direction);
+  let request = 0;
+  let progress = 0;
+  let resolve!: (completed: boolean) => void;
+  const finished = new Promise<boolean>((done) => { resolve = done; });
 
-  return new Promise<void>((resolve) => {
-    let frame = 0;
-    const started = performance.now();
-    const stop = () => {
-      cancelAnimationFrame(frame);
-      signal.removeEventListener("abort", stop);
-      resolve();
+  function drawPhoto() {
+    if (progress === 0) {
+      paint(ctx, from.photo);
+    } else {
+      const eased = ease(progress);
+      const surface = texture?.(eased);
+      if (surface) ctx.drawImage(surface, view.x, view.y, view.width, view.height);
+      else paintWipe(ctx, from.photo, to.photo, eased, -direction);
+    }
+  }
+
+  function drawFrame() {
+    drawPhoto();
+    const frame = materialFrame(from, pairs, progress);
+    if (!frame.selected || frame.outlineOpacity < .01) return;
+    const { x, y, width, height } = frame.selected.outline;
+    ctx.globalAlpha = frame.outlineOpacity * .09;
+    ctx.fillStyle = tint;
+    ctx.fillRect(x, y, width, height);
+    ctx.globalAlpha = frame.outlineOpacity;
+    ctx.strokeStyle = ink;
+    ctx.lineWidth = stroke;
+    ctx.strokeRect(x, y, width, height);
+    ctx.globalAlpha = 1;
+  }
+
+  function stop(completed: boolean) {
+    cancelAnimationFrame(request);
+    resolve(completed);
+  }
+
+  function interrupt(): Frame {
+    stop(false);
+    // Copy the actual frame without the indicator. The next morph draws that
+    // same indicator at its current position, so it can't appear twice.
+    drawPhoto();
+    const frame = materialFrame(from, pairs, progress);
+    const snapshot = document.createElement("canvas");
+    snapshot.width = canvas.width;
+    snapshot.height = canvas.height;
+    snapshot.getContext("2d")!.drawImage(canvas, 0, 0);
+    return {
+      ...frame,
+      photo: { image: snapshot, bounds: view, scaleX: canvas.width / view.width, scaleY: canvas.height / view.height },
     };
+  }
+
+  if (reduced.matches || document.hidden) {
+    stop(true);
+  } else {
+    viewport(ctx);
+    drawFrame();
+    canvas.dataset.animating = "true";
+    const started = performance.now();
     function step(now: number) {
-      const progress = (now - started) / duration;
+      progress = Math.min(1, (now - started) / duration);
       if (progress >= 1 || reduced.matches) {
-        stop();
+        stop(true);
         return;
       }
-      render(ctx, from, to, morph, backdrops, progress, stroke, palette);
-      frame = requestAnimationFrame(step);
+      drawFrame();
+      request = requestAnimationFrame(step);
     }
-    signal.addEventListener("abort", stop, { once: true });
-    frame = requestAnimationFrame(step);
-  });
+    request = requestAnimationFrame(step);
+  }
+
+  return { selection, finished, interrupt, cancel: () => stop(false) };
 }

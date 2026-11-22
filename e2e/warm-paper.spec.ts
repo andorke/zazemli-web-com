@@ -74,6 +74,60 @@ test("шапка ждёт новую раскладку и переносит в
   }
 });
 
+test("фото в шапке скруглено сверху справа", async ({ page }) => {
+  await page.goto("/");
+  const stage = page.locator(".material-stage");
+  const hits = await stage.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const mobile = innerWidth < 700;
+    const bevelX = rect.left + rect.width * (mobile ? 1 : .86);
+    const bevelY = rect.top + rect.height * (mobile ? .93 : 1);
+    return [
+      [rect.left + 2, rect.top + 2],
+      [rect.right - 2, rect.top + 2],
+      [bevelX - 2, bevelY - 2],
+      [rect.left + 2, rect.bottom - 2],
+      [rect.left + rect.width / 2, rect.top + rect.height / 2],
+    ].map(([x, y]) => element.contains(document.elementFromPoint(x, y)));
+  });
+  expect(hits).toEqual([true, false, true, true, true]);
+});
+
+test("быстрый тап в шапке сразу перенаправляет уже начатый морф", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const hero = page.locator(".hero");
+  const choices = hero.getByRole("group", { name: "Раскладки грунта" });
+  const ficus = choices.getByRole("button", { name: "Фикус", exact: true });
+  const monstera = choices.getByRole("button", { name: "Монстера", exact: true });
+  const canvas = hero.locator(".hero-morph");
+  await expect(ficus).toBeEnabled();
+
+  await page.evaluate(async () => {
+    await Promise.all(["ficus", "monstera"].map((slug) => {
+      const photo = new Image();
+      photo.src = `/warm-paper/assets/soil-${slug}.webp`;
+      return photo.decode();
+    }));
+  });
+  const now = new Date();
+  await page.clock.install({ time: now });
+  await page.clock.pauseAt(new Date(now.getTime() + 1000));
+
+  await ficus.dispatchEvent("click");
+  await expect(canvas).toHaveAttribute("data-animating", "true");
+  await page.clock.runFor(160);
+  await monstera.dispatchEvent("click");
+  await expect(monstera).toHaveAttribute("data-pending", "true");
+  await page.clock.runFor(560);
+  await expect(canvas).toHaveAttribute("data-animating", "true", { timeout: 1000 });
+  await page.clock.runFor(200);
+
+  await expect(hero).toHaveAttribute("data-plant", "monstera");
+  await expect(monstera).toHaveAttribute("aria-pressed", "true");
+  await expect(canvas).not.toHaveAttribute("data-animating");
+});
+
 test("рамка материала плавно переходит к другой области на главной и в лаборатории", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const [path, map, attribute, material] of [

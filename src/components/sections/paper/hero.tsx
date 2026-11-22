@@ -14,7 +14,7 @@ import {
   type PlantSlug,
   type Zone,
 } from "@/content/paper/catalog";
-import { animateHeroMorph, paintHeroPhoto, prepareHeroMorph, type SoilSelection } from "./hero-morph";
+import { animateHeroMorph, heroFrame, paintHeroPhoto, type SoilSelection } from "./hero-morph";
 import { decodePaperImage } from "./motion";
 import { soilPhotoSize } from "./soil-geometry";
 import { SoilMap } from "./soil-map";
@@ -23,7 +23,6 @@ const initialPlant = findPlant("anthurium")!;
 const heroPlants = [initialPlant, ...plants.filter((plant) => plant !== initialPlant)];
 const subscribeClient = () => () => {};
 type Scene = { plant: Plant; selection: SoilSelection | null; painted: boolean };
-type Choice = { plant: Plant; image: HTMLImageElement; order: number };
 
 export function PaperHero() {
   const [scene, setScene] = useState<Scene>({ plant: initialPlant, selection: null, painted: false });
@@ -32,16 +31,15 @@ export function PaperHero() {
   const current = useRef(scene);
   const canvas = useRef<HTMLCanvasElement>(null);
   const photos = useRef(new Map<PlantSlug, Promise<HTMLImageElement>>());
-  const queued = useRef<Choice | null>(null);
+  const displayedPhoto = useRef<HTMLImageElement | null>(null);
   const order = useRef(0);
-  const playback = useRef<AbortController | null>(null);
+  const playback = useRef<ReturnType<typeof animateHeroMorph> | null>(null);
   const { plant, selection, painted } = scene;
   const material = selection?.zone ?? null;
 
   useEffect(() => () => {
     order.current++;
-    queued.current = null;
-    playback.current?.abort();
+    playback.current?.cancel();
   }, []);
 
   function commit(next: Scene) {
@@ -67,47 +65,9 @@ export function PaperHero() {
     commit({ ...scene, selection: zone ? { zone, index } : null });
   }
 
-  async function playReadyChoices() {
-    if (playback.current) return;
-    const controller = new AbortController();
-    playback.current = controller;
-    try {
-      while (queued.current && !controller.signal.aborted) {
-        const choice = queued.current;
-        queued.current = null;
-        const previous = current.current.plant;
-        if (previous.slug === choice.plant.slug) {
-          setPending(null);
-          continue;
-        }
-        const original = await photo(previous.slug).catch(() => null);
-        if (choice.order !== order.current || controller.signal.aborted) continue;
-        const morph = prepareHeroMorph(previous, choice.plant, current.current.selection);
-        const context = canvas.current?.getContext("2d");
-        if (context && original) {
-          await animateHeroMorph(context, original, choice.image, morph, controller.signal);
-        }
-        if (controller.signal.aborted) return;
-
-        // Keep the decoded final frame under the interactive SVG map.
-        if (context) {
-          paintHeroPhoto(context, choice.image);
-          context.canvas.dataset.plant = choice.plant.slug;
-        }
-        flushSync(() => {
-          commit({ plant: choice.plant, selection: morph.selection, painted: Boolean(context) });
-          if (choice.order === order.current) setPending(null);
-        });
-        if (context) delete context.canvas.dataset.animating;
-      }
-    } finally {
-      playback.current = null;
-    }
-  }
-
   async function choose(target: Plant) {
+    if (target.slug === pending) return;
     const selectedOrder = ++order.current;
-    queued.current = null;
     if (target.slug === current.current.plant.slug && !playback.current) {
       setPending(null);
       return;
@@ -121,12 +81,46 @@ export function PaperHero() {
       return;
     }
     if (selectedOrder !== order.current) return;
-    queued.current = { plant: target, image, order: selectedOrder };
-    void playReadyChoices();
+
+    const firstPhoto = displayedPhoto.current ? null : await photo(initialPlant.slug).catch(() => null);
+    if (selectedOrder !== order.current) return;
+
+    const context = canvas.current?.getContext("2d");
+    const previous = current.current;
+    const original = displayedPhoto.current ?? firstPhoto;
+    const from = playback.current?.interrupt() ?? (original && heroFrame(previous.plant, original, previous.selection));
+    const motion = context && from && animateHeroMorph(context, from, heroFrame(target, image, null));
+    if (motion) {
+      playback.current = motion;
+      if (!(await motion.finished)) return;
+    }
+    playback.current = null;
+    displayedPhoto.current = image;
+
+    // Keep the decoded final frame aligned with the interactive SVG map.
+    if (context) {
+      paintHeroPhoto(context, image);
+      context.canvas.dataset.plant = target.slug;
+    }
+    flushSync(() => {
+      commit({ plant: target, selection: motion ? motion.selection : null, painted: Boolean(context) });
+      if (selectedOrder === order.current) setPending(null);
+    });
+    if (context) delete context.canvas.dataset.animating;
   }
 
   return (
     <section className="hero" data-plant={plant.slug} aria-labelledby="hero-title">
+      <svg className="hero-photo-contours" width="0" height="0" aria-hidden="true">
+        <defs>
+          <clipPath id="hero-photo-wide" clipPathUnits="objectBoundingBox">
+            <path d="M 0 0 H .969 Q 1 0 .995 .035 L .86 1 H 0 Z" />
+          </clipPath>
+          <clipPath id="hero-photo-narrow" clipPathUnits="objectBoundingBox">
+            <path d="M 0 0 H .952 Q 1 0 1 .073 V .93 L 0 1 Z" />
+          </clipPath>
+        </defs>
+      </svg>
       <div className="material-stage" id="stage" aria-busy={pending !== null}>
         <canvas className="hero-morph" ref={canvas} {...soilPhotoSize} aria-hidden="true" />
         <SoilMap
@@ -157,7 +151,7 @@ export function PaperHero() {
               key={entry.slug}
               type="button"
               disabled={!interactive}
-              aria-pressed={entry.slug === plant.slug}
+              aria-pressed={entry.slug === (pending ?? plant.slug)}
               data-pending={entry.slug === pending || undefined}
               onClick={() => { void choose(entry); }}
             >
