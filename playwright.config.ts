@@ -1,11 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const baseURL = process.env.PLAYWRIGHT_TEST_BASE_URL ?? "http://127.0.0.1:28300";
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL,
   },
   projects: [
     {
@@ -19,19 +21,13 @@ export default defineConfig({
       name: "mobile",
       use: {
         ...devices["Desktop Chrome"],
-        viewport: { width: 360, height: 740 },
+        viewport: { width: 390, height: 844 },
       },
     },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL ? undefined : {
+    command: "npm run dev -- --hostname 127.0.0.1 --port 28300",
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
-    /*
-     * Лист ожидания N°08 живёт за фича-флагом и в прод-сборке выключен (форма
-     * в плитке не рендерится). Для e2e включаем — сами запросы к /api/waitlist/*
-     * перехватываются в waitlist.spec.ts, бэкенда нет.
-     */
-    env: { NEXT_PUBLIC_WAITLIST_API: "/api/waitlist" },
   },
 });

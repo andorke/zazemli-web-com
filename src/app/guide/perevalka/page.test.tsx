@@ -1,15 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
+vi.mock("next/font/local", () => ({ default: () => ({ variable: "" }) }));
+import { render, screen } from "@testing-library/react";
+import { guidePerevalka } from "@/content/guide";
+import Page, { metadata } from "./page";
 
-import { metadata } from "@/app/guide/perevalka/page";
-
-/* Ветка вне индекса: её шаги «Дренаж»/«Дневник» дословно совпадают со второй
-   веткой, вес отдаём входу /guide (spec guide-page «Canonical/noindex-контракт») */
-describe("/guide/perevalka: мета", () => {
-  it("noindex, follow", () => {
-    expect(metadata.robots).toMatchObject({ index: false, follow: true });
-  });
-
-  it("canonical на вход /guide", () => {
-    expect(metadata.alternates?.canonical).toBe("/guide");
-  });
+it("старая инструкция перевалки остаётся доступна со своим canonical", () => {
+  render(<Page />);
+  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(guidePerevalka.hero.title);
+  expect(metadata.alternates?.canonical).toBe("/guide/perevalka");
 });

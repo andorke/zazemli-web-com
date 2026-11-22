@@ -53,7 +53,7 @@ describe("Ложных ссылок нет ни на одной странице
         if (!fragment) return [];
         /* внешние ссылки с якорем не проверяем — целевой страницы у нас нет */
         if (path !== "" && !path.startsWith("/")) return [];
-        const target = path === "" ? file : pageFile(path);
+        const target = path === "" ? file : pageFile(path.split("?")[0]);
         if (!existsSync(target)) return [`${file}: ${href} → нет ${target}`];
         return idsIn(target).has(fragment) ? [] : [`${file}: ${href}`];
       }),

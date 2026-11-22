@@ -42,11 +42,14 @@ describe("UTM на исходящих ссылках бренда", () => {
     },
   );
 
-  /* Соцпрофили в футере есть на каждой странице — если их нет, предыдущий тест пуст и зелен */
-  it.skipIf(!existsSync("out"))("соцпрофили действительно в экспорте", () => {
-    const branded = htmlFiles("out").flatMap((file) =>
-      externalHrefs(file).filter(isBrand),
-    );
-    expect(branded.length).toBeGreaterThan(0);
+  it.skipIf(!existsSync("out"))("брендовые профили сохранены в Organization", () => {
+    const home = readFileSync("out/index.html", "utf8");
+    const values = Array.from(home.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g),
+      match => JSON.parse(match[1]));
+    const org = values.find(node => node["@type"] === "Organization");
+    expect(org?.sameAs).toEqual([
+      "https://instagram.com/zazemli_collectio",
+      "https://t.me/zazemli_collectio",
+    ]);
   });
 });

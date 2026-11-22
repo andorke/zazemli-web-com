@@ -1,61 +1,22 @@
-import { render } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, render } from "@testing-library/react";
+import { afterEach, expect, it, vi } from "vitest";
+import { setConsent } from "@/lib/consent";
+import { updateMetrika } from "@/lib/metrika";
+import { Metrika } from "./metrika";
 
-import { Metrika } from "@/components/site/metrika";
-import { CONSENT_KEY } from "@/lib/consent";
+vi.mock("next/navigation", () => ({ usePathname: () => "/lab" }));
+vi.mock("@/lib/metrika", () => ({ updateMetrika: vi.fn() }));
 
-/* next/script вставляет тег мимо контейнера (и кеширует по id) — подменяем его
-   обычным <script>, чтобы проверять сам gate, а не внутренности Next. */
-vi.mock("next/script", () => ({
-  default: ({ id, children }: { id?: string; children?: string }) => (
-    <script id={id} dangerouslySetInnerHTML={{ __html: String(children) }} />
-  ),
-}));
+afterEach(() => { localStorage.clear(); vi.clearAllMocks(); });
 
-/* Счётчик подключается только при согласии «all» (в т. ч. легаси «granted»).
-   Загрузку внешнего скрипта проверяет e2e/consent.spec.ts. */
-describe("Metrika", () => {
-  beforeEach(() => {
-    localStorage.clear();
-    vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
+it("пересчитывает счётчик после выбора и отзыва в соседней вкладке", () => {
+  render(<Metrika />);
+  expect(updateMetrika).toHaveBeenCalledWith("/lab");
+  act(() => setConsent("all"));
+  expect(updateMetrika).toHaveBeenCalledTimes(2);
+  act(() => {
+    localStorage.setItem("zazemli-consent", "necessary");
+    window.dispatchEvent(new StorageEvent("storage", { key: "zazemli-consent" }));
   });
-  afterEach(() => vi.unstubAllEnvs());
-
-  it("без выбора пользователя не подключается", () => {
-    const { container } = render(<Metrika />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it("при «necessary» не подключается", () => {
-    localStorage.setItem(CONSENT_KEY, "necessary");
-    const { container } = render(<Metrika />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it("при легаси «denied» не подключается", () => {
-    localStorage.setItem(CONSENT_KEY, "denied");
-    const { container } = render(<Metrika />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it("при «all», но без ID счётчика не подключается", () => {
-    vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "");
-    localStorage.setItem(CONSENT_KEY, "all");
-    const { container } = render(<Metrika />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it("при «all» и заданном ID подключается", () => {
-    localStorage.setItem(CONSENT_KEY, "all");
-    const { container } = render(<Metrika />);
-    expect(container.querySelector("#yandex-metrika")?.innerHTML).toContain(
-      "mc.yandex.ru/metrika/tag.js",
-    );
-  });
-
-  it("при легаси «granted» подключается", () => {
-    localStorage.setItem(CONSENT_KEY, "granted");
-    const { container } = render(<Metrika />);
-    expect(container.querySelector("#yandex-metrika")).not.toBeNull();
-  });
+  expect(updateMetrika).toHaveBeenCalledTimes(3);
 });

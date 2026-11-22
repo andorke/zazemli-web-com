@@ -1,57 +1,27 @@
 import type { Metadata } from "next";
-
-import { Echo } from "@/components/sections/diary/echo";
-import { Inside } from "@/components/sections/diary/inside";
-import { SignupForm } from "@/components/sections/diary/signup-form";
-import { Why } from "@/components/sections/diary/why";
-import { KickerHeader } from "@/components/ui/kicker-header";
-import { diary } from "@/content/diary";
+import { DiaryHeader, SimpleFooter } from "@/components/sections/paper/chrome-content";
+import { PaperCookies } from "@/components/sections/paper/cookie";
+import { DiaryContent } from "@/components/sections/paper/diary-content";
+import { PaperStyle } from "@/components/sections/paper/paper-style";
 import { openGraphFor } from "@/lib/metadata";
 
-/*
- * Вход только по QR со страницы III печатного дневника (бриф §2):
- * страницы нет в навигации, sitemap и индексе.
- * Копи: Маркетинг/Каналы/Сайт/diary-signup.md v1.1 §Meta-content
- */
 export const metadata: Metadata = {
-  title: { absolute: "Дневник растения · ЗАЗЕМЛИ" },
-  description:
-    "Земля и забота — всё, что нужно растению. Дневник — мост. 7 писем за год от Day 0 до Day +365.",
+  title: "Дневник растения",
+  description: "Письма к бумажному дневнику о поливе, подкормках и заботе о растении в разные сезоны.",
   alternates: { canonical: "/diary-signup" },
   openGraph: openGraphFor("/diary-signup"),
   robots: { index: false, follow: false },
 };
 
-/*
- * Страница-форма по прототипу diary-signup.html v3: hero (выгода-результат) высоко,
- * форма above the fold на мобиле, затем «Почему тебе» (3 выгоды) → «Что внутри»
- * (таймлайн 7 писем) → эхо + повтор CTA — секции разделены border-top в одной колонке.
- * Реальный сетевой submit (POST на РФ-эндпоинт) — интеграционная точка task 3.2. Копи — из diary.ts.
- */
 export default function DiarySignupPage() {
-  const { hero, gift } = diary;
   return (
-    <main id="main" className="flex-1 px-6 py-16 lg:px-30">
-      {/* Каскад встречи QR-входа: ack → h1 → sub → тейк-подарок → форма
-          последней; форма фокусируема с момента появления (задача 6.1) */}
-      <section data-fx className="welcome-cascade mx-auto flex max-w-2xl flex-col">
-        <KickerHeader>{hero.eyebrow}</KickerHeader>
-        <p className="text-charcoal/60 mt-4 text-ui">{hero.ack}</p>
-        <h1 className="leading-hero tracking-display-page text-charcoal mt-4 font-voice text-display-page font-light">
-          {hero.title}
-        </h1>
-        <p className="leading-narrative text-charcoal/90 mt-6 max-w-xl font-voice text-take font-light">
-          {hero.sub}
-        </p>
-        <p className="border-moss leading-body text-charcoal/70 mt-6 max-w-xl border-l-2 pl-4 text-ui">
-          <span className="text-charcoal font-medium">{gift.lead}</span>{" "}
-          {gift.body}
-        </p>
-        <SignupForm />
-      </section>
-      <Why />
-      <Inside />
-      <Echo />
-    </main>
+    <>
+      <PaperStyle page="diary" />
+      <a className="skip" href="#main">К содержанию</a>
+      <DiaryHeader />
+      <PaperCookies />
+      <DiaryContent />
+      <SimpleFooter />
+    </>
   );
 }

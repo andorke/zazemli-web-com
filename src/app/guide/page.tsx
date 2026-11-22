@@ -1,53 +1,34 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-
-import { GuideFlowBar } from "@/components/sections/guide/flow-bar";
-import { GuideFork } from "@/components/sections/guide/fork";
-import { GuideHero } from "@/components/sections/guide/hero";
-import { GuideKit } from "@/components/sections/guide/kit";
-import { GuideOzonCta } from "@/components/sections/guide/ozon-cta";
-import { GuideRouteStages } from "@/components/sections/guide/route-stages";
-import { guideEntry } from "@/content/guide";
+import { GuideFooter, ReadingHeader } from "@/components/sections/paper/chrome-content";
+import { PaperCookies } from "@/components/sections/paper/cookie";
+import { PaperStyle } from "@/components/sections/paper/paper-style";
+import { GuideContent } from "@/components/sections/paper/reading-content";
+import { JsonLd } from "@/components/site/json-ld";
+import steps from "@/content/paper/guide-steps.json";
 import { openGraphFor } from "@/lib/metadata";
 
-/* Meta-content — канон guide.md v4.0 §Meta (= прототип guide.html <title>/<meta>) */
+const title = "Как пересадить растение с полной заменой грунта";
+const description = "Как пересадить комнатное растение с полной заменой грунта: подготовка горшка, осмотр корней, посадка и первый полив.";
+
 export const metadata: Metadata = {
-  title: {
-    absolute: "Пересадка растения шаг за шагом · гайд · ЗАЗЕМЛИ",
-  },
-  description:
-    "Как пересадить комнатное растение: подготовка, корни, дренаж, грунт, дневник. Универсальный ритуал для любого растения с боксом ЗАЗЕМЛИ.",
+  title, description,
   alternates: { canonical: "/guide" },
   openGraph: openGraphFor("/guide"),
 };
 
-/*
- * /guide — вход гайда v4.0: hero → флоу → инвентарь → стадии 00–01 → развилка
- * → Ozon → «На главную». Шаги 02–04 живут на маршрутах: выбрать способ можно
- * только после осмотра кома, поэтому развилка стоит сразу за стадией 01.
- * HowTo здесь нет намеренно — страница не описывает линейный порядок (design 3).
- */
 export default function GuidePage() {
   return (
-    <main id="main" className="flex-1">
-      <GuideHero hero={guideEntry.hero} />
-      <GuideFlowBar items={guideEntry.flow} />
-      <GuideKit kit={guideEntry.kit} />
-      <section className="bg-bone text-charcoal pb-[clamp(3.5rem,7vw,6rem)]">
-        <div className="mx-auto max-w-[1080px] px-6 sm:px-8 lg:px-16">
-          <GuideRouteStages stages={guideEntry.stages} />
-          <GuideFork fork={guideEntry.fork} />
-        </div>
-      </section>
-      <GuideOzonCta />
-      <div className="bg-bone pb-16 text-center">
-        <Link
-          href="/"
-          className="text-moss-ink font-ui text-small underline decoration-dotted underline-offset-4 transition-opacity hover:opacity-70"
-        >
-          ← На главную
-        </Link>
-      </div>
-    </main>
+    <>
+      <PaperStyle page="guide" />
+      <JsonLd data={{
+        "@context": "https://schema.org", "@type": "HowTo", name: title, description,
+        step: steps.map(step => ({ "@type": "HowToStep", name: step.name, text: step.text, url: `https://zazemli.com/guide#${step.id}` })),
+      }} />
+      <a className="skip" href="#main">К содержанию</a>
+      <ReadingHeader section="guide" />
+      <PaperCookies />
+      <GuideContent />
+      <GuideFooter />
+    </>
   );
 }

@@ -1,0 +1,16 @@
+# Подключить после настройки DNS и выпуска TLS для обоих имён.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name zazemli.space www.zazemli.space;
+    return 301 https://zazemli.com$request_uri;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name zazemli.space www.zazemli.space;
+    ssl_certificate /etc/letsencrypt/live/zazemli.space/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zazemli.space/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    return 301 https://zazemli.com$request_uri;
+}

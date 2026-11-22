@@ -1,5 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -34,17 +33,4 @@ describe("SoilVial — растр через next/image", () => {
     expect(source).toContain("sizes=");
   });
 
-  it.skipIf(!existsSync("out"))(
-    "в экспорте колба — ленивый тег на сам ассет, без слоя оптимизации",
-    () => {
-      /* Колбы живут на входе /lab: с главной трио снято в home-restructure (FIX-78) */
-      const html = readFileSync(join("out", "lab.html"), "utf8");
-      const glass = html.match(/<img[^>]*src="\/soil-vial\.png"[^>]*>/)?.[0];
-
-      expect(glass).toBeDefined();
-      expect(glass).toContain('loading="lazy"');
-      expect(glass).toContain('decoding="async"');
-      expect(html).not.toContain("/_next/image?url=");
-    },
-  );
 });

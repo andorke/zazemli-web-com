@@ -78,19 +78,12 @@ describe("JSON-LD статического экспорта", () => {
   );
 
   it.skipIf(!existsSync("out"))(
-    "Product несёт латынь рода в имени и offers по каждому объёму в RUB",
+    "Product не публикует неподтверждённые предложения",
     () => {
       const [product] = typed(join("out", "collectio", "monstera.html"), "Product");
-      expect(product.name).toContain("Монстера");
-      expect(product.name).toContain("Monstera");
-      const offers = product.offers as Record<string, unknown>[];
-      /* монстера — два объёма: 2,2 л и 3,5 л */
-      expect(offers.map((offer) => offer.name)).toEqual(["2,2 л", "3,5 л"]);
-      for (const offer of offers) {
-        expect(offer.priceCurrency).toBe("RUB");
-        /* магазин ещё не открыт: ozonListingUrl везде null */
-        expect(offer.availability).toBe("https://schema.org/PreOrder");
-      }
+      expect(product.name).toBe("Бокс для монстеры");
+      expect(product.image).toBe("https://zazemli.com/warm-paper/assets/scene-monstera.webp");
+      expect(product.offers).toBeUndefined();
     },
   );
 });

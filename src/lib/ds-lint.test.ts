@@ -235,10 +235,11 @@ describe("DS-инвариант по src/", () => {
     expect(offenders).toEqual({});
   });
 
-  it("каждый h1/h2 набран с ролевым токеном трекинга", () => {
+  it("заголовки старой системы используют её ролевые токены", () => {
     const offenders: Record<string, string[]> = {};
     for (const root of roots) {
       for (const file of collect(root)) {
+        if (file.startsWith("src/components/sections/paper/")) continue;
         const violations = checkHeadingTracking(readFileSync(file, "utf8"));
         if (violations.length) offenders[file] = violations;
       }

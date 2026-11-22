@@ -1,35 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { expect, it } from "vitest";
+import Page, { metadata } from "./page";
 
-import DiarySignupPage, { metadata } from "@/app/diary-signup/page";
-import sitemap from "@/app/sitemap";
-import { diary } from "@/content/diary";
-
-/*
- * /diary-signup — страница-форма по прототипу (заглушка снята, task 2.1).
- * Инварианты site-shell сохраняются: noindex + страницы нет в sitemap (вход по QR).
- * Один h1. Тексты — из diary.ts (хардкод в JSX запрещён, DEVELOPMENT.md).
- */
-describe("/diary-signup — роут страницы-формы", () => {
-  it("noindex сохранён — вход только по QR", () => {
-    expect(metadata.robots).toMatchObject({ index: false });
-  });
-
-  it("вне sitemap — вход только по QR", () => {
-    const urls = sitemap().map((entry) => entry.url);
-    expect(urls).not.toContain("https://zazemli.com/diary-signup");
-  });
-
-  it("ровно один h1, несёт заголовок hero из diary.ts", () => {
-    const { container } = render(<DiarySignupPage />);
-    const headings = container.querySelectorAll("h1");
-    expect(headings).toHaveLength(1);
-    expect(headings[0]).toHaveTextContent(diary.hero.title);
-  });
-
-  it("рендерит hero-контент из diary.ts (eyebrow, sub)", () => {
-    render(<DiarySignupPage />);
-    expect(screen.getByText(diary.hero.eyebrow)).toBeInTheDocument();
-    expect(screen.getByText(diary.hero.sub)).toBeInTheDocument();
-  });
+it("дневник сохраняет текст эталона и два пустых согласия", () => {
+  render(<Page />);
+  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Земля и забота — всё, что нужно");
+  expect(screen.getByRole("textbox", { name: "Твоя почта" })).toHaveAttribute("type", "email");
+  const consents = screen.getAllByRole("checkbox");
+  expect(consents).toHaveLength(2);
+  for (const checkbox of consents) { expect(checkbox).toBeRequired(); expect(checkbox).not.toBeChecked(); }
+  expect(metadata.robots).toMatchObject({ index: false });
 });

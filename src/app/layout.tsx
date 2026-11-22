@@ -1,65 +1,27 @@
 import type { Metadata } from "next";
-
-import { CookieBanner } from "@/components/site/cookie-banner";
 import { OrganizationJsonLd } from "@/components/site/json-ld";
 import { Metrika } from "@/components/site/metrika";
-import { SiteFooter } from "@/components/site/site-footer";
-import { CursorCompanion } from "@/components/site/cursor-companion";
-import { SkipLink } from "@/components/site/skip-link";
-import { SiteHeader } from "@/components/site/site-header";
 import { openGraphFor } from "@/lib/metadata";
-import { welcomeGateScript } from "@/lib/welcome-gate";
-import { ui, voice } from "./fonts";
-import "./globals.css";
+import { firstPaperFrame } from "@/components/sections/paper/first-frame";
 
-/* Meta-content — утверждённая копи: Маркетинг/Каналы/Сайт/home.md v1.1 §Meta-content */
 export const metadata: Metadata = {
   metadataBase: new URL("https://zazemli.com"),
-  title: {
-    default: "ЗАЗЕМЛИ · Бокс на одну пересадку растения",
-    template: "%s · ЗАЗЕМЛИ",
-  },
-  description:
-    "Коллекция боксов на одну пересадку. Земля под ваш род растения + всё для ритуала + дневник на год. Цифровому человеку — заземление через ритуал руками.",
+  title: { default: "Авторский грунт под твои растения · ЗАЗЕМЛИ", template: "%s · ЗАЗЕМЛИ" },
+  description: "Авторский грунт под комнатные растения и боксы для пересадки. Выбери растение, узнай состав смеси и подбери комплект.",
   alternates: { canonical: "/" },
-  /* max-image-preview:large — крупные превью в выдаче и Discover (seo-research.md ч.1 §1) */
   robots: { index: true, follow: true, "max-image-preview": "large" },
-  /*
-   * OG без title/description: per-page значения Next резолвит из metadata
-   * страницы (og:title ← title и т.д.). Остальное — общий блок openGraphFor,
-   * его же вызывает каждая страница со своим canonical (см. lib/metadata.ts).
-   */
   openGraph: openGraphFor("/"),
   twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="ru"
-      className={`${voice.variable} ${ui.variable} h-full font-ui antialiased`}
-    >
+    <html lang="ru" data-flow="direct" data-chooser="paths" data-studio="paper" data-fill="joined" suppressHydrationWarning>
       <head>
-        {/* Show-once гейт встречи: класс на <html> до первой отрисовки (D1) */}
-        <script dangerouslySetInnerHTML={{ __html: welcomeGateScript }} />
-        {/* Один Organization на весь сайт — отсюда он попадает на каждую страницу */}
+        <script dangerouslySetInnerHTML={{ __html: firstPaperFrame }} />
         <OrganizationJsonLd />
       </head>
-      <body className="flex min-h-full flex-col">
-        {/* Первый фокусируемый элемент документа — до шапки (FIX-25) */}
-        <SkipLink />
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-        <CookieBanner />
-        <Metrika />
-        {/* Декоративный слой: монтируется только на мыши и при no-preference (D7) */}
-        <CursorCompanion />
-      </body>
+      <body>{children}<Metrika /></body>
     </html>
   );
 }

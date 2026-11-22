@@ -4,8 +4,9 @@
  */
 
 import { useSyncExternalStore } from "react";
+import { CONSENT_KEY } from "./consent-storage";
 
-export const CONSENT_KEY = "zazemli-consent";
+export { CONSENT_KEY } from "./consent-storage";
 export const CONSENT_EVENT = "zazemli-consent";
 
 export type Consent = "necessary" | "all";
@@ -19,7 +20,12 @@ const LEGACY: Record<string, Consent> = {
 
 export function getConsent(): Consent | null {
   if (typeof localStorage === "undefined") return null;
-  const value = localStorage.getItem(CONSENT_KEY);
+  let value: string | null;
+  try {
+    value = localStorage.getItem(CONSENT_KEY);
+  } catch {
+    return null;
+  }
   if (value === "necessary" || value === "all") return value;
   return value !== null ? (LEGACY[value] ?? null) : null;
 }
@@ -32,7 +38,14 @@ export function setConsent(value: Consent): void {
 
 function subscribe(onChange: () => void): () => void {
   window.addEventListener(CONSENT_EVENT, onChange);
-  return () => window.removeEventListener(CONSENT_EVENT, onChange);
+  function onStorage(event: StorageEvent) {
+    if (event.key === CONSENT_KEY || event.key === null) onChange();
+  }
+  window.addEventListener("storage", onStorage);
+  return () => {
+    window.removeEventListener(CONSENT_EVENT, onChange);
+    window.removeEventListener("storage", onStorage);
+  };
 }
 
 /* Реактивное чтение согласия. Внешнее хранилище = localStorage + CONSENT_EVENT.

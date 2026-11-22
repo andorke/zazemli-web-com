@@ -1,3 +1,4 @@
+import { reachGoal } from "@/lib/metrika";
 import { readFileSync } from "node:fs";
 
 import { render, screen } from "@testing-library/react";
@@ -22,6 +23,8 @@ afterEach(() => {
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });
+
+vi.mock("@/lib/metrika", () => ({ reachGoal: vi.fn() }));
 
 describe("WaitlistForm — шаг 1 в плитке N°08 (task 2.1)", () => {
   it("без API формы в плитке нет — сбор не публикуется", () => {
@@ -99,21 +102,20 @@ describe("WaitlistForm — шаг 1 ведёт в попап (task 2.1)", () => 
 describe("WaitlistForm — цели Метрики (task 2.3)", () => {
   it("шаг 1 шлёт waitlist_plant_input{plant} и waitlist_form_open — и только их", async () => {
     vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
-    const ym = vi.fn();
-    vi.stubGlobal("ym", ym);
+    const ym = vi.mocked(reachGoal);
+    ym.mockClear();
+
     const user = userEvent.setup();
     render(<WaitlistForm />);
 
     await user.type(screen.getByLabelText(step1.label), "калатея");
     await user.click(screen.getByRole("button", { name: step1.submit }));
 
-    expect(ym.mock.calls.map((call) => call[2])).toEqual([
+    expect(ym.mock.calls.map((call) => call[0])).toEqual([
       "waitlist_plant_input",
       "waitlist_form_open",
     ]);
     expect(ym).toHaveBeenCalledWith(
-      12345,
-      "reachGoal",
       "waitlist_plant_input",
       {
         plant: "калатея",
@@ -123,8 +125,9 @@ describe("WaitlistForm — цели Метрики (task 2.3)", () => {
 
   it("пустой ввод целей не шлёт", async () => {
     vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
-    const ym = vi.fn();
-    vi.stubGlobal("ym", ym);
+    const ym = vi.mocked(reachGoal);
+    ym.mockClear();
+
     const user = userEvent.setup();
     render(<WaitlistForm />);
 

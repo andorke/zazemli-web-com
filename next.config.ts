@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Static export: сайт полностью статичен, деплой на любой статик-хостинг (ARCHITECTURE.md §6 D1)
   output: "export",
+  devIndicators: false,
   images: {
     unoptimized: true,
   },

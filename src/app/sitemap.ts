@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import type { MetadataRoute } from "next";
 
-import { skus } from "@/content/sku";
+import { plantSlugs } from "@/content/paper/catalog";
 
 export const dynamic = "force-static";
 
@@ -16,30 +16,28 @@ const pageSources: Record<string, string[]> = {
   "/": [
     "src/app/page.tsx",
     "src/app/layout.tsx",
-    "src/content/home.ts",
-    "src/content/site.ts",
-    "src/content/sku.ts",
-    "src/components/sections/home",
+    "src/content/paper",
+    "src/components/sections/paper",
   ],
   "/lab": [
     "src/app/lab/page.tsx",
-    "src/content/lab.ts",
-    "src/components/sections/lab",
+    "src/content/paper/materials.json",
+    "src/components/sections/paper/lab.tsx",
   ],
   "/guide": [
     "src/app/guide/page.tsx",
-    "src/content/guide.ts",
-    "src/components/sections/guide",
+    "src/content/paper/guide-steps.json",
+    "src/components/sections/paper/reading-content.tsx",
   ],
-  "/privacy": ["src/app/privacy/page.tsx", "src/content/privacy.ts"],
-  "/terms": ["src/app/terms/page.tsx", "src/content/terms.ts"],
+  "/privacy": ["src/app/privacy/page.tsx", "src/components/sections/paper/legal-content.tsx"],
+  "/terms": ["src/app/terms/page.tsx", "src/components/sections/paper/legal-content.tsx"],
 };
 
 /* Все 7 товарных страниц собираются из одного шаблона и sku.ts — lastmod у них общий. */
 const productSources = [
   "src/app/collectio/[slug]/page.tsx",
-  "src/content/sku.ts",
-  "src/components/sections/product",
+  "src/content/paper",
+  "src/components/sections/paper/catalog.tsx",
 ];
 
 function gitLastModified(sources: string[]): Date | undefined {
@@ -65,8 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `https://zazemli.com${path === "/" ? "" : path}`,
       lastModified: gitLastModified(sources),
     })),
-    ...skus.map((sku) => ({
-      url: `https://zazemli.com/collectio/${sku.slug}`,
+    ...plantSlugs.map((slug) => ({
+      url: `https://zazemli.com/collectio/${slug}`,
       lastModified: productLastMod,
     })),
   ];

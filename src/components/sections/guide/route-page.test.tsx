@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import GuidePerevalkaPage from "@/app/guide/perevalka/page";
-import GuidePolnayaZamenaPage from "@/app/guide/polnaya-zamena/page";
+import { GuideRoutePage } from "./route-page";
 import {
   diaryStage,
   drainageStage,
@@ -14,8 +13,8 @@ import {
 
 /* Обе ветки собираются одним рендером — проверяем их одним набором ожиданий */
 const routes: [string, () => React.ReactElement, GuideRouteContent][] = [
-  ["/guide/perevalka", GuidePerevalkaPage, guidePerevalka],
-  ["/guide/polnaya-zamena", GuidePolnayaZamenaPage, guidePolnayaZamena],
+  ["/guide/perevalka", () => <GuideRoutePage route={guidePerevalka} />, guidePerevalka],
+  ["/guide/polnaya-zamena", () => <GuideRoutePage route={guidePolnayaZamena} />, guidePolnayaZamena],
 ];
 
 describe.each(routes)("%s: страница маршрута", (_url, Page, route) => {
@@ -105,14 +104,14 @@ describe("общие куски маршрутов", () => {
     [drainageStage.title, drainageStage.id],
     [diaryStage.title, diaryStage.id],
   ])("шаг «%s» рендерится на ветках посимвольно одинаково", (_title, id) => {
-    const perevalka = render(<GuidePerevalkaPage />).container;
-    const polnayaZamena = render(<GuidePolnayaZamenaPage />).container;
+    const perevalka = render(<GuideRoutePage route={guidePerevalka} />).container;
+    const polnayaZamena = render(<GuideRoutePage route={guidePolnayaZamena} />).container;
     expect(stageMarkup(perevalka, id)).toBe(stageMarkup(polnayaZamena, id));
   });
 
   it(`подсказка «${soilLeftoverTip.summary}» рендерится на ветках посимвольно одинаково`, () => {
-    const perevalka = render(<GuidePerevalkaPage />).container;
-    const polnayaZamena = render(<GuidePolnayaZamenaPage />).container;
+    const perevalka = render(<GuideRoutePage route={guidePerevalka} />).container;
+    const polnayaZamena = render(<GuideRoutePage route={guidePolnayaZamena} />).container;
     expect(tipMarkup(perevalka, soilLeftoverTip.summary)).toBe(
       tipMarkup(polnayaZamena, soilLeftoverTip.summary),
     );

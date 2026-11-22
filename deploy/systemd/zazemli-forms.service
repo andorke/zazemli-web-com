@@ -1,0 +1,25 @@
+[Unit]
+Description=Zazemli forms API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=true
+StateDirectory=zazemli-forms
+StateDirectoryMode=0700
+WorkingDirectory=/opt/zazemli/forms
+EnvironmentFile=/etc/zazemli/forms.env
+ExecStart=/usr/bin/python3 -X utf8 /opt/zazemli/forms/wish-server.py --live --db /var/lib/zazemli-forms/live.sqlite3 --copy /opt/zazemli/forms/launch-copy.json
+Restart=on-failure
+RestartSec=10s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

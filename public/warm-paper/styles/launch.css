@@ -1,0 +1,517 @@
+/* «Тёплая бумага», eb3276d: исходный каскад страницы. */
+/* Shared launch forms. Uses the selected ZAZEMLI paper palette and existing fonts. */
+.launch-cookie,
+.launch-dialog,
+.launch-diary {
+  --launch-paper: #f6f4f0;
+  --launch-ink: #1c1c1c;
+  color: var(--launch-ink);
+  font-family: Commissioner, Arial, sans-serif;
+  line-height: 1.5;
+}
+.launch-cookie[hidden] {
+  display: none;
+}
+.launch-cookie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px 22px;
+  background: var(--launch-paper);
+  border-bottom: 1px solid #bfb9b0;
+  padding: 12px var(--pad, var(--gutter, 5vw));
+  font-size: 15px;
+}
+.launch-cookie-message {
+  min-width: 0;
+  max-width: 75ch;
+}
+.launch-cookie p {
+  margin: 0 0 5px;
+}
+.launch-cookie p:last-child {
+  margin-bottom: 0;
+}
+.launch-cookie-actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.launch-button {
+  appearance: none;
+  background: var(--launch-ink);
+  color: var(--launch-paper);
+  border: 1px solid var(--launch-ink);
+  min-height: 48px;
+  font:
+    500 16px/1.3 Commissioner,
+    Arial,
+    sans-serif;
+  padding: 12px 20px;
+  cursor: pointer;
+  white-space: normal;
+}
+.launch-button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.launch-secondary {
+  background: transparent;
+  color: var(--launch-ink);
+}
+.launch-cookie-settings {
+  appearance: none;
+  font:
+    400 14px Commissioner,
+    Arial,
+    sans-serif;
+  min-height: 44px;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.launch-dialog {
+  width: min(610px, calc(100% - 28px));
+  max-height: calc(100dvh - 28px);
+  overflow: auto;
+  padding: clamp(22px, 4vw, 42px);
+  border: 1px solid #bfb9b0;
+  background: var(--launch-paper);
+  margin: auto;
+  box-shadow: 0 20px 90px #0004;
+}
+.launch-dialog::backdrop {
+  background: #1c1c1c80;
+}
+.launch-close {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: 28px Arial;
+  cursor: pointer;
+}
+.launch-kicker {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin: 0 36px 18px 0 !important;
+}
+.launch-dialog h2 {
+  font:
+    400 clamp(26px, 3.2vw, 38px)/1.12 Mulish,
+    Arial,
+    sans-serif;
+  letter-spacing: -0.035em;
+  margin: 0 0 12px;
+}
+.launch-plant {
+  font-size: 20px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  margin: 0 0 10px !important;
+}
+.launch-modal-note {
+  font-size: 16px;
+  margin: 0 0 18px !important;
+  max-width: 38ch;
+}
+.launch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+.launch-email-label {
+  font-size: 16px;
+}
+.launch-email {
+  width: 100%;
+  min-height: 50px;
+  padding: 11px 13px;
+  border: 1px solid #716d65;
+  background: #fffdf8;
+  color: #1c1c1c;
+  font:
+    18px Commissioner,
+    Arial,
+    sans-serif;
+  border-radius: 0;
+}
+.launch-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 15px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.launch-consent input {
+  appearance: auto;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  margin: 3px 0;
+  accent-color: var(--launch-ink);
+}
+.launch-consent span {
+  display: block;
+  min-width: 0;
+}
+.launch-consent a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.launch-form .launch-button {
+  align-self: start;
+  max-width: 100%;
+}
+.launch-status {
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  margin: 0 !important;
+}
+.launch-status:empty {
+  display: none;
+}
+.launch-preview {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #5d5a55;
+  margin: 0 !important;
+}
+.launch-preview[hidden] {
+  display: none;
+}
+.launch-form :focus-visible,
+.launch-cookie :focus-visible,
+.launch-close:focus-visible,
+.launch-cookie-settings:focus-visible {
+  outline: 3px solid #4a7c59;
+  outline-offset: 3px;
+}
+.launch-diary {
+  background: #f6f4f0;
+  min-height: 80dvh;
+  padding: clamp(32px, 7vw, 100px) var(--gutter, 5vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 8vw, 120px);
+}
+.launch-diary h1 {
+  font:
+    300 clamp(37px, 5vw, 64px)/1.05 Mulish,
+    Arial,
+    sans-serif;
+  letter-spacing: -0.05em;
+  max-width: 10ch;
+}
+.launch-diary .launch-sub {
+  font-size: clamp(20px, 2vw, 27px);
+  margin: 26px 0 14px;
+  max-width: 27ch;
+}
+.launch-diary .launch-context {
+  font-size: 18px;
+  max-width: 36ch;
+}
+.launch-diary aside {
+  max-width: 530px;
+}
+.launch-diary h2 {
+  font:
+    400 28px/1.1 Mulish,
+    Arial,
+    sans-serif;
+  letter-spacing: -0.03em;
+}
+.launch-diary .launch-form {
+  margin-top: 24px;
+}
+.launch-diary [data-diary-mount] {
+  display: flow-root;
+}
+.launch-diary .launch-status {
+  display: block;
+  min-block-size: 3lh;
+}
+@media (max-width: 650px) {
+  .launch-cookie {
+    display: block;
+    padding-block: 10px;
+    font-size: 14px;
+  }
+  .launch-cookie-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 8px;
+  }
+  .launch-cookie .launch-button {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  .launch-diary {
+    grid-template-columns: 1fr;
+    padding: 28px 20px 50px;
+    gap: 24px;
+  }
+  .launch-diary h1 {
+    max-width: 16ch;
+  }
+  .launch-diary .launch-sub {
+    margin-block: 14px 10px;
+  }
+  .launch-dialog {
+    padding: 28px 20px;
+  }
+  .launch-dialog h2 {
+    font-size: 28px;
+  }
+  .launch-consent {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 651px) and (max-width: 900px) {
+  .launch-cookie {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.launch-result {
+  max-width: 36rem;
+  min-width: 0;
+  border-top: 1px solid #bfb9b0;
+  padding-top: 21px;
+  margin-top: 24px;
+}
+.launch-result h2 {
+  margin: 0 0 12px;
+  font:
+    400 clamp(26px, 3.2vw, 38px)/1.12 Mulish,
+    Arial,
+    sans-serif;
+  letter-spacing: -0.035em;
+}
+.launch-dialog .launch-result {
+  margin-top: 19px;
+  border: 0;
+  padding-top: 0;
+}
+.launch-result .launch-result-detail {
+  margin: 0 0 12px;
+  line-height: 1.5;
+  font-size: 17px;
+}
+.launch-result-email,
+.launch-result-plant {
+  overflow-wrap: anywhere;
+}
+.launch-result-plant {
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+.launch-result-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 8px;
+}
+.launch-result > .launch-button {
+  margin-top: 16px;
+}
+.launch-dialog [data-waitlist-intro][hidden] {
+  display: none;
+}
+.launch-dialog > [data-waitlist-intro]:first-of-type {
+  padding-right: 28px;
+}
+
+:root[data-paper-consent="saved"] .launch-cookie[data-before-hydration] {
+  display: none;
+}
+:root[data-paper-waiting-for^="lab-"] :is(.lab-mix-photo, .lab-plant-picker, .lab-board, .materials, #lab-product),
+:root[data-paper-waiting-for^="catalog-"] .direct-catalog :is(.direct-chips, .direct-formats, .direct-photo-window > *, .direct-photo-controls, .direct-product-copy, .direct-details) {
+  visibility: hidden;
+}
+
+.soil-target,
+.lab-target {
+  cursor: crosshair;
+  fill: transparent;
+  stroke: none;
+  outline: none;
+}
+.soil-highlight {
+  transform-box: fill-box;
+  transform-origin: 0 0;
+  transition: none;
+  opacity: 0;
+  fill: #fff8e8;
+  fill-opacity: 0.09;
+  stroke: #fff9e8;
+  stroke-width: 1.6px;
+  stroke-opacity: 0.95;
+}
+.soil-highlight[data-visible="true"] {
+  opacity: 1;
+}
+.soil-highlight[data-focus-only="true"] {
+  fill: none;
+  opacity: 0;
+}
+svg:has(:is(.soil-target, .lab-target)[aria-pressed="true"]:focus-visible) .soil-highlight[data-visible="true"],
+svg:has(:is(.soil-target, .lab-target):focus-visible) .soil-highlight[data-visible="true"][data-focus-only="true"] {
+  opacity: 1;
+  stroke-width: 2.5px;
+  stroke-dasharray: 4 3;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .soil-highlight {
+    transition:
+      transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 160ms ease-out;
+  }
+  @starting-style {
+    .soil-highlight[data-visible="true"] {
+      opacity: 0;
+    }
+  }
+  .sample-inner[data-sample-selected],
+  #material-info .soil-material-reading {
+    animation: soil-reading-in 170ms ease-out both;
+  }
+  @keyframes soil-reading-in {
+    from {
+      opacity: 0.7;
+      transform: translateY(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  :root:has(.direct-catalog, .lab-intro, .launch-diary) {
+    view-transition-name: none;
+  }
+  .direct-catalog .direct-photo-window {
+    view-transition-name: plant-photo;
+  }
+  .lab-photo-frame {
+    view-transition-name: lab-photo;
+  }
+  ::view-transition {
+    pointer-events: none;
+  }
+  :root:active-view-transition-type(diary-result) [data-diary-mount] {
+    view-transition-name: diary-form;
+    background: #f6f4f0;
+  }
+  ::view-transition-old(diary-form) {
+    mix-blend-mode: normal;
+    animation: none;
+  }
+  ::view-transition-new(diary-form) {
+    mix-blend-mode: normal;
+    animation: plant-fade-in 230ms ease-out both;
+  }
+  .launch-diary .launch-status:not(:empty),
+  .launch-diary .launch-result[data-launch-result] {
+    animation: recipe-row-in 180ms ease-out both;
+  }
+  :root:active-view-transition-type(diary-result) .launch-diary .launch-result {
+    animation: none;
+  }
+  ::view-transition-group(plant-photo),
+  ::view-transition-group(lab-photo) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  ::view-transition-old(plant-photo),
+  ::view-transition-old(lab-photo) {
+    mix-blend-mode: normal;
+    animation: none;
+  }
+  ::view-transition-new(plant-photo),
+  ::view-transition-new(lab-photo) {
+    mix-blend-mode: normal;
+    animation: plant-fade-in 260ms ease-out both;
+  }
+  :root:active-view-transition-type(recipe-morph) .direct-soil .soil-plate,
+  :root:active-view-transition-type(recipe-morph) #lab-map {
+    view-transition-name: recipe-map;
+  }
+  :root:active-view-transition-type(recipe-morph) .direct-recipe > li,
+  :root:active-view-transition-type(recipe-morph) #lab-list > li {
+    view-transition-name: var(--recipe-transition);
+    view-transition-class: recipe-row;
+    background: var(--catalog-surface, var(--paper));
+  }
+  :root:active-view-transition-type(recipe-morph) :is(#mix-title, #mix-purpose) {
+    view-transition-class: recipe-row;
+    background: var(--chalk);
+  }
+  :root:active-view-transition-type(recipe-morph) #mix-title {
+    view-transition-name: lab-title;
+  }
+  :root:active-view-transition-type(recipe-morph) #mix-purpose {
+    view-transition-name: lab-purpose;
+  }
+  ::view-transition-group(recipe-map),
+  ::view-transition-group(.recipe-row) {
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  ::view-transition-old(recipe-map) {
+    mix-blend-mode: normal;
+    animation: none;
+  }
+  ::view-transition-new(recipe-map) {
+    mix-blend-mode: normal;
+    animation: plant-fade-in 300ms ease-out both;
+  }
+  ::view-transition-old(.recipe-row) {
+    mix-blend-mode: normal;
+    animation: none;
+  }
+  ::view-transition-old(.recipe-row):only-child {
+    animation: plant-fade-in 150ms ease-in reverse both;
+  }
+  ::view-transition-new(.recipe-row) {
+    mix-blend-mode: normal;
+    animation: plant-fade-in 220ms ease-out both;
+  }
+  ::view-transition-new(.recipe-row):only-child {
+    animation: recipe-row-in 220ms ease-out 70ms both;
+  }
+  @keyframes recipe-row-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes plant-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

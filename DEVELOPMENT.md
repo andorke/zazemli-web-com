@@ -4,6 +4,14 @@
 
 > **Пример заполнения:** `example_docs/DEVELOPMENT.md`
 
+## Сборка «Тёплая бумага»
+
+Исходный вид и контент берутся из утверждённого архива vault, коммит `eb3276d9d8778d4a0528f386cebe7357a8737350`. Новые компоненты в `src/components/sections/paper/`, контент в `src/content/paper/`, оригинальные ресурсы в `public/warm-paper/`. Статика по-прежнему собирается командой `npm run build`.
+
+Формы используют same-origin API `server/forms/wish-server.py`. Локально запусти `python3 -X utf8 server/forms/wish-server.py --db research/forms-preview.sqlite3` и проксируй `/api/` с того же адреса, с которого открыт статический экспорт. Preview принимает тестовые записи в SQLite и не обращается в Sendsay. Продовые переменные и команды описаны в [deploy/WARM-PAPER.md](deploy/WARM-PAPER.md).
+
+Проверки: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run ds-lint`, `npm run test:built`, `npm run test:e2e`, `python3 -X utf8 -m unittest discover -s server/forms -p 'test_*.py'`. E2E использует 390/1440 px и по умолчанию dev-порт 28300. Для готовой сборки можно передать `PLAYWRIGHT_TEST_BASE_URL`. Старые компоненты и токены ниже используются только там, где они ещё подключены, например в сохранённой перевалке.
+
 ## Технологический стек
 | Слой | Выбор | Примечание |
 |------|-------|------------|
@@ -59,8 +67,7 @@ npm run lint       # eslint
 ```
 Переменные окружения:
 - `NEXT_PUBLIC_METRIKA_ID` — опциональна; без неё Метрика не подключается (так и должно быть в дев-режиме).
-- `NEXT_PUBLIC_DIARY_SUBMIT_ENDPOINT` — РФ-эндпоинт сбора почты на `/diary-signup`; пусто → форма валидируется, но POST с ПДн не уходит.
-- `NEXT_PUBLIC_WAITLIST_API` — база API листа ожидания N°08 (`/api/waitlist`); пусто → формы в плитке N°08 нет вовсе. Чтобы посмотреть форму локально: `NEXT_PUBLIC_WAITLIST_API=/api/waitlist npm run dev` (запросы уйдут в 404, пока нет бэкенда). Для e2e переменная выставляется в `playwright.config.ts`, сами запросы перехватываются в спеке.
+- Старые переменные эндпоинтов относятся к прежним компонентам. Новые формы используют фиксированные same-origin маршруты из передачи. Для e2e запросы перехватываются в спеке.
 
 ## Паттерны кода
 - **RSC по умолчанию.** `'use client'` — только там, где есть интерактив: CookieBanner, мобильный burger, форма подписки.

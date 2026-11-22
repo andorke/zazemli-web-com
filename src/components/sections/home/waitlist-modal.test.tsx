@@ -1,3 +1,4 @@
+import { reachGoal } from "@/lib/metrika";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -30,11 +31,12 @@ function setup(
 }
 
 /* Метрика: цели уходят через lib/metrika, здесь наблюдаем сам вызов ym */
+vi.mock("@/lib/metrika", () => ({ reachGoal: vi.fn() }));
+
 function stubMetrika() {
-  vi.stubEnv("NEXT_PUBLIC_METRIKA_ID", "12345");
-  const ym = vi.fn();
-  vi.stubGlobal("ym", ym);
-  return ym;
+  const goal = vi.mocked(reachGoal);
+  goal.mockClear();
+  return goal;
 }
 
 describe("WaitlistModal — разметка попапа (task 3.1)", () => {
@@ -201,9 +203,9 @@ describe("WaitlistModal — цели Метрики (task 3.4)", () => {
     await user.click(screen.getAllByRole("checkbox")[1]);
     await user.click(screen.getByRole("button", { name: modal.submit }));
 
-    const goals = ym.mock.calls.map((call) => call[2]);
+    const goals = ym.mock.calls.map((call) => call[0]);
     expect(goals).toEqual(["waitlist_submit"]);
-    expect(ym).toHaveBeenCalledWith(12345, "reachGoal", "waitlist_submit", {
+    expect(ym).toHaveBeenCalledWith("waitlist_submit", {
       plant: "калатея",
     });
   });
@@ -213,7 +215,7 @@ describe("WaitlistModal — цели Метрики (task 3.4)", () => {
     const { user } = setup();
     await user.click(screen.getByRole("button", { name: modal.submit }));
 
-    expect(ym.mock.calls.map((call) => call[2])).toEqual(["waitlist_error"]);
+    expect(ym.mock.calls.map((call) => call[0])).toEqual(["waitlist_error"]);
   });
 
   it("ведущее согласие в тексте обещает одно письмо", () => {

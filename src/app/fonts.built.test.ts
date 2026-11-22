@@ -34,38 +34,10 @@ onBuild("Приёмка §7.2: шрифт в сборке", () => {
     expect(bad.map((p) => p.route)).toEqual([]);
   });
 
-  it("трекинг заголовков отрицательный — нулевой патч считает ошибкой сборки", () => {
-    const bundle = cssBundle();
-    expect(bundle, "css-бандла в сборке нет").not.toBe("");
-    /* токены трекинга из font-mulish: от −0.035em на display до +0.2em на eyebrow */
-    const tracking = [...bundle.matchAll(/(--tracking-[a-z0-9-]+):\s*(-?[\d.]+)em/g)].map((m) => ({
-      token: m[1],
-      value: Number(m[2]),
-    }));
-    expect(tracking.length, "токенов трекинга в бандле нет").toBeGreaterThan(0);
-    const headings = tracking.filter(({ token }) => /display|h1|h2|take/.test(token));
-    expect(headings.length).toBeGreaterThan(0);
-    for (const { token, value } of headings) {
-      expect(value, `${token} должен быть отрицательным`).toBeLessThan(0);
-    }
-    const eyebrow = tracking.find(({ token }) => /eyebrow/.test(token));
-    if (eyebrow) expect(eyebrow.value).toBeGreaterThan(0);
+  it("файлы шрифтов передачи входят в итоговый каскад", () => {
+    const css = readFileSync("out/warm-paper/styles/home.css", "utf8");
+    expect(css).toContain("/warm-paper/assets/mulish.woff2");
+    expect(css).toContain("/warm-paper/assets/commissioner.woff2");
+    expect(existsSync("out/warm-paper/assets/mulish-italic.woff2")).toBe(true);
   });
 });
-
-/** CSS статического экспорта лежит в _next/static/chunks, а не в отдельной css-папке. */
-function cssBundle(): string {
-  const root = resolve(process.cwd(), "out", "_next", "static");
-  if (!existsSync(root)) return "";
-  const stack = [root];
-  const parts: string[] = [];
-  while (stack.length) {
-    const dir = stack.pop() as string;
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const full = resolve(dir, entry.name);
-      if (entry.isDirectory()) stack.push(full);
-      else if (entry.name.endsWith(".css")) parts.push(readFileSync(full, "utf8"));
-    }
-  }
-  return parts.join("\n");
-}

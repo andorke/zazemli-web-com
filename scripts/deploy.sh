@@ -1,45 +1,46 @@
 #!/usr/bin/env bash
-# Деплой статики на VPS Рег.облака (ssh-хост `zazemli` из ~/.ssh/config).
+# Этапы выкладки статического экспорта ЗАЗЕМЛИ на VPS.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# Публичные переменные Next инлайнятся В МОМЕНТ СБОРКИ. Деплой идёт с машины
-# разработчика, и без этого файла `process.env.NEXT_PUBLIC_*` уезжает в бандл
-# необработанным обращением — счётчик Метрики тогда не грузится вообще, молча.
-# Файл не в git (.gitignore: .env*), значения берутся у владельца.
-if [ -f .env.production ]; then
-  set -a
-  # shellcheck disable=SC1091
-  . ./.env.production
-  set +a
-  echo "→ env сборки: .env.production подхвачен"
-else
-  echo "→ .env.production нет: Метрика и эндпоинт формы останутся выключенными"
+case "${1:-}" in
+  stage)
+    release="${2:-$(date -u +%Y%m%dT%H%M%SZ)-$(git rev-parse --short HEAD)}"
+    ;;
+  activate)
+    release="${2:?Укажи идентификатор подготовленного релиза}"
+    ;;
+  *)
+    printf '%s\n' 'Использование: scripts/deploy.sh stage [release] | activate release' >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! "$release" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$ ]]; then
+  printf '%s\n' 'Неверный идентификатор релиза' >&2
+  exit 2
 fi
 
-npm run build
+if [[ "$1" == stage ]]; then
+  if [[ -f .env.production ]]; then
+    set -a
+    . ./.env.production
+    set +a
+  fi
+  npm run build
+  if [[ -n "${NEXT_PUBLIC_METRIKA_ID:-}" ]]; then
+    [[ "$NEXT_PUBLIC_METRIKA_ID" =~ ^[1-9][0-9]*$ ]]
+    rg -Fq "$NEXT_PUBLIC_METRIKA_ID" out/_next/static
+  fi
 
-# Сборка молча уносит незаданные переменные в бандл как есть — проверяем итог,
-# а не намерение: если ID задан, он должен оказаться в статике.
-if [ -n "${NEXT_PUBLIC_METRIKA_ID:-}" ]; then
-  if grep -rq "$NEXT_PUBLIC_METRIKA_ID" out/_next/static 2>/dev/null; then
-    echo "✓ Метрика: ID $NEXT_PUBLIC_METRIKA_ID в сборке"
-  else
-    echo "✗ Метрика: ID задан, но в сборку не попал — деплой остановлен" >&2
+  if [[ -n "$(find out -type f \( -name '*.py' -o -name '*.sqlite*' -o -name '.env*' -o -name 'start-cjm.html' -o -name 'unsubscribe-*.html' \) -print -quit)" ]]; then
+    printf '%s\n' 'В экспорте обнаружены непубличные файлы' >&2
     exit 1
   fi
+  ssh zazemli "install -d -m 0755 /var/www/zazemli-releases && mkdir -- /var/www/zazemli-releases/$release"
+  rsync -az out/ "zazemli:/var/www/zazemli-releases/$release/"
+  ssh zazemli "test -s /var/www/zazemli-releases/$release/index.html && touch /var/www/zazemli-releases/$release/.ready"
+  printf 'Кандидат %s загружен\n' "$release"
+else
+  ssh zazemli "test -f /var/www/zazemli-releases/$release/.ready && nginx -t && bash -s -- /var/www/zazemli-releases/$release /var/www/zazemli-current" < scripts/switch-zazemli-release.sh
 fi
-rsync -az --delete out/ zazemli:/var/www/zazemli/
-
-# IndexNow-пинг Яндекса: ускоряет переобход после публикации (Google протокол
-# не поддерживает — ему хватает sitemap). Ключ публичный, лежит в public/<key>.txt.
-# Фейл пинга деплой не роняет.
-INDEXNOW_KEY="29ebd8867fd547e41d2648eb988c44b2"
-urls=$(grep -o '<loc>[^<]*</loc>' out/sitemap.xml | sed 's/<[^>]*>//g' \
-  | python3 -c 'import json,sys; print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
-curl -sS -m 20 -X POST "https://yandex.com/indexnow" \
-  -H 'Content-Type: application/json; charset=utf-8' \
-  -d "{\"host\":\"zazemli.com\",\"key\":\"$INDEXNOW_KEY\",\"urlList\":$urls}" \
-  && echo " IndexNow: ok" || echo "IndexNow ping failed (не критично)"
-
-echo "Deployed: http://zazemli.com/ (195.19.12.196)"
