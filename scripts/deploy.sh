@@ -27,6 +27,7 @@ if [[ "$1" == stage ]]; then
     . ./.env.production
     set +a
   fi
+  export NEXT_PUBLIC_METRIKA_ID="${NEXT_PUBLIC_METRIKA_ID-114508903}"
   npm run build
   if [[ -n "${NEXT_PUBLIC_METRIKA_ID:-}" ]]; then
     [[ "$NEXT_PUBLIC_METRIKA_ID" =~ ^[1-9][0-9]*$ ]]
