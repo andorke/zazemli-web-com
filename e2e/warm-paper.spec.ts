@@ -36,6 +36,44 @@ test("брендовый вход: главное меню, каталог, ма
   await expect(page.locator("#kit-legend")).toHaveText("Что входит в бокс");
 });
 
+test("шапка ждёт новую раскладку и переносит выделенный материал", async ({ page }) => {
+  let releasePhoto!: () => void;
+  const photoReady = new Promise<void>((resolve) => { releasePhoto = resolve; });
+  await page.route("**/soil-ficus.webp", async (route) => {
+    await photoReady;
+    await route.continue();
+  });
+
+  try {
+    await page.goto("/");
+    const hero = page.locator(".hero");
+    const choices = hero.getByRole("group", { name: "Раскладки грунта" });
+    const ficus = choices.getByRole("button", { name: "Фикус", exact: true });
+    await expect(ficus).toBeEnabled();
+    await expect(choices.getByRole("button")).toHaveCount(plants.length);
+    await hero.locator("#targets [data-key=bark]").focus();
+    await expect(hero.locator("#sample")).toContainText("Сосновая кора");
+
+    const image = hero.locator("#mosaic image");
+    const stage = hero.locator(".material-stage");
+    await ficus.scrollIntoViewIfNeeded();
+    const before = await stage.boundingBox();
+    const requested = page.waitForRequest("**/soil-ficus.webp");
+    await ficus.click();
+    await requested;
+    await expect(image).toHaveAttribute("href", /soil-anthurium\.webp$/);
+
+    releasePhoto();
+    await expect(ficus).toHaveAttribute("aria-pressed", "true");
+    await expect(hero).toHaveAttribute("data-plant", "ficus");
+    await expect(hero.locator("#targets [data-key=bark]")).toHaveAttribute("aria-pressed", "true");
+    await expect(hero.locator(".soil-highlight[data-visible=true]")).toHaveCount(1);
+    expect(await stage.boundingBox()).toEqual(before);
+  } finally {
+    releasePhoto();
+  }
+});
+
 test("рамка материала плавно переходит к другой области на главной и в лаборатории", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const [path, map, attribute, material] of [

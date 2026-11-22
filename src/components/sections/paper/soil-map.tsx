@@ -10,6 +10,7 @@ import {
   type Rectangle,
   type Zone,
 } from "@/content/paper/catalog";
+import { rectangles, soilBounds as svgBounds, soilPhotoSize, soilPhotoViewport } from "./soil-geometry";
 
 export function inspectWithPointer(event: PointerEvent, action: () => void) {
   if (event.pointerType === "mouse") action();
@@ -26,20 +27,6 @@ export function inspectWithKeys(
   } else if (event.key === "Escape") {
     close();
   }
-}
-
-function rectangles(shape: Rectangle | Rectangle[] | undefined): Rectangle[] {
-  if (!shape) return [];
-  return Array.isArray(shape[0]) ? (shape as Rectangle[]) : [shape as Rectangle];
-}
-
-function svgBounds([left, top, right, bottom]: Rectangle) {
-  return {
-    x: left * 10,
-    y: top * 6.96,
-    width: (right - left) * 10,
-    height: (bottom - top) * 6.96,
-  };
 }
 
 function SoilHighlight({ rectangle, focusOnly }: { rectangle?: Rectangle; focusOnly: boolean }) {
@@ -65,12 +52,16 @@ export function SoilMap({
   plant,
   variant,
   active,
+  activeIndex = 0,
+  showPhoto = true,
   onInspect,
 }: {
   plant: Plant;
   variant: "hero" | "catalog" | "lab";
   active: Zone | null;
-  onInspect: (zone: Zone | null) => void;
+  activeIndex?: number;
+  showPhoto?: boolean;
+  onInspect: (zone: Zone | null, index?: number) => void;
 }) {
   const [focused, setFocused] = useState<{ zone: Zone; index: number } | null>(null);
   const id =
@@ -87,16 +78,18 @@ export function SoilMap({
   const selected = rectangles(active === null ? undefined : plant.zones[active]);
   const focusedRectangle = focused ? rectangles(plant.zones[focused.zone])[focused.index] : undefined;
   const focusOnly = selected.length === 0 && focusedRectangle !== undefined;
-  const highlighted = focusOnly ? [focusedRectangle] : selected;
-  const slots = Math.max(...zones.map(([, shape]) => rectangles(shape).length));
+  const highlighted = focusOnly ? [focusedRectangle]
+    : variant === "hero" ? selected.slice(activeIndex, activeIndex + 1) : selected;
+  const slots = variant === "hero" ? 1 : Math.max(...zones.map(([, shape]) => rectangles(shape).length));
   const content = (
     <>
-      <image
-        width="1000"
-        height="696"
-        preserveAspectRatio="none"
-        href={paperAsset(`soil-${plant.slug}.webp`)}
-      />
+      {showPhoto && (
+        <image
+          {...soilPhotoSize}
+          preserveAspectRatio="none"
+          href={paperAsset(`soil-${plant.slug}.webp`)}
+        />
+      )}
       <g aria-hidden="true" pointerEvents="none">
         {Array.from({ length: slots }, (_, index) => (
           <SoilHighlight
@@ -136,23 +129,23 @@ export function SoilMap({
               role="button"
               tabIndex={0}
               aria-label={label}
-              aria-pressed={active === zone}
+              aria-pressed={active === zone && (variant !== "hero" || activeIndex === i)}
               data-key={variant === "lab" ? undefined : zone}
               data-region={variant === "lab" ? zone : undefined}
-              data-active={active === zone}
+              data-active={active === zone && (variant !== "hero" || activeIndex === i)}
               onPointerEnter={(event) =>
-                inspectWithPointer(event, () => onInspect(zone))
+                inspectWithPointer(event, () => onInspect(zone, i))
               }
               onFocus={() => {
                 setFocused({ zone, index: i });
-                onInspect(zone);
+                onInspect(zone, i);
               }}
               onBlur={() => setFocused(null)}
-              onClick={() => onInspect(zone)}
+              onClick={() => onInspect(zone, i)}
               onKeyDown={(event) =>
                 inspectWithKeys(
                   event,
-                  () => onInspect(zone),
+                  () => onInspect(zone, i),
                   () => onInspect(null),
                 )
               }
@@ -167,7 +160,7 @@ export function SoilMap({
   return (
     <svg
       id={id}
-      viewBox="40 27.84 920 640.32"
+      viewBox={Object.values(soilPhotoViewport).join(" ")}
       preserveAspectRatio={variant === "hero" ? "xMidYMid slice" : undefined}
       role="group"
       aria-label={description}

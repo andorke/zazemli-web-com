@@ -14,7 +14,7 @@ export function labImageFiles(slug: PlantSlug) {
 export function decodePaperImage(file: string) {
   const image = new Image();
   image.src = paperAsset(file);
-  return image.decode();
+  return image.decode().then(() => image);
 }
 
 export function useFirstPaperImages(page: "catalog" | "lab", slug: PlantSlug, format?: Format) {

@@ -8,7 +8,7 @@ export function PaperStyle({
     <>
       <link
         rel="stylesheet"
-        href={`/warm-paper/styles/${page}.css${page === "home" ? "?v=2" : ""}`}
+        href={`/warm-paper/styles/${page}.css${page === "home" ? "?v=3" : ""}`}
         precedence="paper"
       />
       <link
